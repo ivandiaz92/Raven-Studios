@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Portfolio, BlogPost, StrapiProject, StrapiResponse } from '@/types/strapi';
+import type { Portfolio, StrapiProject, StrapiResponse, StrapiBlogPost } from '@/types/strapi';
 
 const API_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337/api';
 const API_TOKEN = process.env.STRAPI_API_TOKEN;
@@ -121,60 +121,41 @@ export async function getPortfolioBySlug(slug: string): Promise<Portfolio | null
   }
 }
 
-// Blog API
-export async function getBlogPosts(filters?: {
-  tag?: string;
-  limit?: number;
-}): Promise<BlogPost[]> {
-  const params: any = {
-    populate: ['featuredImage'],
-    sort: ['publishedAt:desc'],
-  };
-
-  if (filters?.tag) {
-    params.filters = { tags: { $contains: filters.tag } };
+// Blog API (Strapi "Blog Post": post_title, post_content, main_image, date_created, author)
+export async function getBlogPosts(limit?: number): Promise<StrapiBlogPost[]> {
+  try {
+    const params: Record<string, unknown> = {
+      populate: ['main_image'],
+      sort: ['date_created:desc'],
+    };
+    if (limit) params.pagination = { limit };
+    const response = await api.get<StrapiResponse<StrapiBlogPost[]>>('/blog-posts', {
+      params,
+      timeout: 3000,
+    });
+    return response.data.data ?? [];
+  } catch (err: unknown) {
+    if (process.env.NODE_ENV === 'development' && err && typeof err === 'object' && 'code' in err && err.code === 'ECONNREFUSED') {
+      console.warn('Strapi not running — blog posts unavailable');
+    }
+    return [];
   }
-
-  if (filters?.limit) {
-    params.pagination = { limit: filters.limit };
-  }
-
-  const response = await api.get<StrapiResponse<BlogPost[]>>('/blog-posts', { params });
-  return response.data.data;
 }
 
-export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+export async function getBlogPostById(id: string): Promise<StrapiBlogPost | null> {
   try {
-    const response = await api.get<StrapiResponse<BlogPost>>('/blog-posts', {
-      params: {
-        filters: { slug: { $eq: slug } },
-        populate: ['featuredImage'],
-      },
+    const response = await api.get<StrapiResponse<StrapiBlogPost>>(`/blog-posts/${id}`, {
+      params: { populate: ['main_image'] },
     });
-
-    if (response.data.data && response.data.data.length > 0) {
-      return response.data.data[0];
-    }
-    return null;
+    return response.data.data ?? null;
   } catch (error) {
     console.error('Error fetching blog post:', error);
     return null;
   }
 }
 
-export async function getAllBlogSlugs(): Promise<string[]> {
-  try {
-    const response = await api.get<StrapiResponse<BlogPost[]>>('/blog-posts', {
-      params: {
-        fields: ['slug'],
-        pagination: { limit: 100 },
-      },
-    });
-    return response.data.data.map((post) => post.attributes.slug);
-  } catch (error) {
-    console.error('Error fetching blog slugs:', error);
-    return [];
-  }
+export function getBlogPostImageUrl(post: StrapiBlogPost): string {
+  return getStrapiImageUrl(post?.attributes?.main_image);
 }
 
 export async function getAllPortfolioSlugs(): Promise<string[]> {

@@ -70,6 +70,21 @@ html {
   background: #555;
 }
 
+/* Entrance animations: start hidden so GSAP ScrollTrigger can animate in */
+.fade-in-up {
+  opacity: 0;
+}
+
+.title-entrance {
+  opacity: 0;
+}
+
+/* Hero titles: start hidden for entrance animation */
+.hero-title,
+.hero-subtitle {
+  opacity: 0;
+}
+
 /* Circuit: line traveling along the border of service cards */
 @keyframes circuit-travel {
   to {

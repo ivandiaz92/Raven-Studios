@@ -1,6 +1,8 @@
 import { getProjects } from '@/lib/strapi'
 import PortfolioCard from '@/components/PortfolioCard'
 
+export const revalidate = 300 // ISR: refresh from Strapi every 5 minutes
+
 export const metadata = {
   title: 'Portfolio - Raven Studios',
   description: 'Explore our portfolio of web development and design projects',

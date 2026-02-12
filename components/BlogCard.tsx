@@ -3,16 +3,15 @@
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { format } from 'date-fns'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { getStrapiImageUrl } from '@/lib/strapi'
-import type { BlogPost } from '@/types/strapi'
+import { getBlogPostImageUrl } from '@/lib/strapi'
+import type { StrapiBlogPost } from '@/types/strapi'
 
 gsap.registerPlugin(ScrollTrigger)
 
 interface BlogCardProps {
-  post: BlogPost
+  post: StrapiBlogPost
   index?: number
 }
 
@@ -23,65 +22,62 @@ export default function BlogCard({ post, index = 0 }: BlogCardProps) {
     if (cardRef.current) {
       gsap.fromTo(
         cardRef.current,
-        { opacity: 0, y: 50 },
+        { opacity: 0, y: 40 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.6,
-          delay: index * 0.1,
+          duration: 0.7,
+          delay: index * 0.08,
+          ease: 'power2.out',
           scrollTrigger: {
             trigger: cardRef.current,
-            start: 'top 80%',
+            start: 'top 85%',
           },
         }
       )
     }
   }, [index])
 
-  const imageUrl = getStrapiImageUrl(post.attributes.featuredImage?.data)
-  const publishedDate = format(new Date(post.attributes.publishedAt), 'MMM dd, yyyy')
+  const imageUrl = getBlogPostImageUrl(post)
+  const dateStr = new Date(post.attributes.date_created).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })
 
   return (
-    <Link href={`/blog/${post.attributes.slug}`}>
+    <Link href={`/blog/${post.id}`}>
       <div
         ref={cardRef}
-        className="group overflow-hidden rounded-lg border border-gray-800 bg-gradient-to-br from-gray-900 to-black hover:border-purple-500/50 transition-all duration-300"
+        className="group relative overflow-hidden rounded-lg border border-gray-800 bg-gray-900/80 hover:border-[#7dd3fc]/50 transition-all duration-300"
       >
-        {imageUrl && (
-          <div className="relative h-48 overflow-hidden">
+        {imageUrl ? (
+          <div className="relative aspect-[16/10] overflow-hidden">
             <Image
               src={imageUrl}
-              alt={post.attributes.title}
+              alt={post.attributes.post_title}
               fill
-              className="object-cover transition-transform duration-500 group-hover:scale-110"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              unoptimized
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+          </div>
+        ) : (
+          <div className="relative aspect-[16/10] bg-gray-800/80 flex items-center justify-center">
+            <span className="text-gray-600 font-mono text-sm">No image</span>
           </div>
         )}
         <div className="p-6">
-          <div className="flex items-center justify-between mb-2 text-sm text-gray-400">
-            <span>{publishedDate}</span>
-            <span>By {post.attributes.author}</span>
-          </div>
-          <h3 className="text-xl font-bold mb-2 text-white group-hover:text-purple-400 transition-colors">
-            {post.attributes.title}
+          <p className="font-mono text-xs text-white/60 mb-2">{dateStr}</p>
+          <h3 className="text-xl font-display font-light mb-2 text-white group-hover:text-[#7dd3fc] transition-colors line-clamp-2">
+            {post.attributes.post_title}
           </h3>
-          <p className="text-gray-400 text-sm mb-4 line-clamp-2">
-            {post.attributes.excerpt}
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {post.attributes.tags.slice(0, 3).map((tag, i) => (
-              <span
-                key={i}
-                className="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
+          {post.attributes.author && (
+            <p className="text-white/70 text-sm">By {post.attributes.author}</p>
+          )}
         </div>
       </div>
     </Link>
   )
 }
-

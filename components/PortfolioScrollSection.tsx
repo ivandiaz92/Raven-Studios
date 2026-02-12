@@ -20,10 +20,10 @@ export default function PortfolioScrollSection({ projects }: PortfolioScrollSect
     >
       {/* Left: sticky title + subtitle */}
       <div className="lg:col-span-5 flex flex-col justify-center px-6 sm:px-10 lg:px-14 py-16 lg:py-0 lg:sticky lg:top-0 lg:h-screen">
-        <h2 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-display font-light text-white leading-tight">
+        <h2 className="title-entrance text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-display font-light text-white leading-tight">
           Portfolio
         </h2>
-        <p className="text-lg sm:text-xl text-white/70 mt-4 max-w-md">
+        <p className="fade-in-up text-lg sm:text-xl text-white/70 mt-4 max-w-md" data-delay="0.1">
           Selected work — scroll to explore
         </p>
       </div>

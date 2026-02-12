@@ -91,6 +91,35 @@ export interface StrapiProject {
   };
 }
 
+/** Strapi "Blog Post" content type: post_title, post_content (Blocks), main_image, date_created, author */
+export interface StrapiBlogPost {
+  id: number;
+  attributes: {
+    post_title: string;
+    post_content?: StrapiBlocks; // Rich text (Blocks)
+    main_image?: {
+      data?: { id: number; attributes: StrapiImage['attributes'] } | null;
+    } | null;
+    date_created: string;
+    author: string;
+    createdAt?: string;
+    updatedAt?: string;
+  };
+}
+
+/** Strapi Blocks (rich text) – array of block nodes */
+export type StrapiBlocks = StrapiBlock[];
+
+export interface StrapiBlock {
+  type: string;
+  children?: { type: string; text?: string }[];
+  format?: string;
+  url?: string;
+  level?: number;
+  [key: string]: unknown;
+}
+
+/** @deprecated Use StrapiBlogPost for Blog Post API */
 export interface BlogPost {
   id: number;
   attributes: {

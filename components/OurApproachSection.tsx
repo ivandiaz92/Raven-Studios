@@ -46,7 +46,7 @@ export default function OurApproachSection() {
   return (
     <section className="py-16 sm:py-20 lg:py-24">
       <div className="w-[90%] max-w-[90vw] mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl sm:text-5xl lg:text-6xl font-display font-light text-white mb-12 sm:mb-16">
+        <h2 className="title-entrance text-4xl sm:text-5xl lg:text-6xl font-display font-light text-white mb-12 sm:mb-16">
           Our Approach
         </h2>
 

@@ -10,18 +10,20 @@ import PortfolioScrollSection from '@/components/PortfolioScrollSection'
 import OurApproachSection from '@/components/OurApproachSection'
 import ContactSection from '@/components/ContactSection'
 import ServiceCard from '@/components/ServiceCard'
-import type { StrapiProject } from '@/types/strapi'
+import { getBlogPostImageUrl } from '@/lib/strapi'
+import type { StrapiProject, StrapiBlogPost } from '@/types/strapi'
 
 gsap.registerPlugin(ScrollTrigger)
 
 interface HomeClientProps {
   projects: StrapiProject[]
+  blogPosts: StrapiBlogPost[]
 }
 
 const HERO_CTA_TEXT = 'Start your project'
 const SLOT_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-export default function HomeClient({ projects }: HomeClientProps) {
+export default function HomeClient({ projects, blogPosts = [] }: HomeClientProps) {
   const asteroidRef = useRef<HTMLDivElement>(null)
   const [ctaHovered, setCtaHovered] = useState(false)
   const [ctaDisplay, setCtaDisplay] = useState(HERO_CTA_TEXT)
@@ -66,16 +68,16 @@ export default function HomeClient({ projects }: HomeClientProps) {
   }, [ctaHovered])
 
   useEffect(() => {
-    // Hero entrance
+    // Hero entrance (same blur + fade + rise as section titles)
     gsap.fromTo(
       '.hero-title',
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }
+      { opacity: 0, y: 28, filter: 'blur(10px)' },
+      { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.1, ease: 'power2.out' }
     )
     gsap.fromTo(
       '.hero-subtitle',
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 1, delay: 0.3, ease: 'power3.out' }
+      { opacity: 0, y: 28, filter: 'blur(10px)' },
+      { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.1, delay: 0.28, ease: 'power2.out' }
     )
     gsap.fromTo(
       '.hero-cta',
@@ -95,18 +97,40 @@ export default function HomeClient({ projects }: HomeClientProps) {
       })
     }
 
-    // Section animations
+    // Section body / content: fade + rise
     gsap.utils.toArray('.fade-in-up').forEach((element: any) => {
+      const delay = parseFloat(element.getAttribute?.('data-delay')) || 0
       gsap.fromTo(
         element,
-        { opacity: 0, y: 50 },
+        { opacity: 0, y: 40 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.8,
+          duration: 0.85,
+          delay,
+          ease: 'power2.out',
           scrollTrigger: {
             trigger: element,
-            start: 'top 80%',
+            start: 'top 85%',
+          },
+        }
+      )
+    })
+
+    // Section titles: blur + fade + rise (cooler entrance)
+    gsap.utils.toArray('.title-entrance').forEach((element: any) => {
+      gsap.fromTo(
+        element,
+        { opacity: 0, y: 28, filter: 'blur(10px)' },
+        {
+          opacity: 1,
+          y: 0,
+          filter: 'blur(0px)',
+          duration: 1.1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: element,
+            start: 'top 85%',
           },
         }
       )
@@ -177,11 +201,11 @@ export default function HomeClient({ projects }: HomeClientProps) {
       {/* Strategy / Services Section — circuit borders, hover _bg images */}
       <section className="py-16 sm:py-20 lg:py-24">
         <div className="w-[90%] max-w-[90vw] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="fade-in-up mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-6xl lg:text-5xl xl:text-[3.75rem] font-display font-light text-white leading-tight">
+          <div className="mb-12 sm:mb-16">
+            <h2 className="title-entrance text-3xl sm:text-6xl lg:text-5xl xl:text-[3.75rem] font-display font-light text-white leading-tight">
               Strategy, <span className="text-[#7dd3fc]">design</span> & <span className="text-[#7dd3fc]">performance</span>
             </h2>
-            <p className="text-xl sm:text-6xl font-display font-light text-white/90 mt-2">
+            <p className="fade-in-up text-xl sm:text-6xl font-display font-light text-white/90 mt-2" data-delay="0.12">
               aligned with your objectives
             </p>
           </div>
@@ -230,26 +254,81 @@ export default function HomeClient({ projects }: HomeClientProps) {
       {/* Our Approach — two columns: step list left, content (image + text) right */}
       <OurApproachSection />
 
-      {/* Latest Blog Posts Section */}
+      {/* Latest Insights */}
       <section className="py-16 sm:py-20 lg:py-24">
         <div className="w-[90%] max-w-[90vw] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="fade-in-up text-center mb-8 sm:mb-12">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-light mb-4 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+          <header className="mb-12 sm:mb-16">
+            <h2 className="title-entrance text-4xl sm:text-5xl lg:text-6xl font-display font-light text-white leading-tight mb-4">
               Latest Insights
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto text-sm sm:text-base">
+            <p className="fade-in-up text-white/80 text-base sm:text-lg max-w-2xl leading-relaxed" data-delay="0.1">
               Thoughts, tutorials, and insights on web development and design
             </p>
-          </div>
-          <div className="fade-in-up text-center">
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors font-semibold text-sm sm:text-base"
-            >
-              Read All Posts
-              <span className="text-lg">→</span>
-            </Link>
-          </div>
+          </header>
+          {blogPosts.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-10 sm:mb-12">
+                {blogPosts.map((post, index) => (
+                  <Link
+                    key={post.id}
+                    href={`/blog/${post.id}`}
+                    className="fade-in-up group block"
+                    data-delay={index * 0.08}
+                  >
+                    <article className="h-full rounded-lg border border-gray-800 bg-gray-900/80 overflow-hidden hover:border-[#7dd3fc]/50 transition-all duration-300">
+                      {post.attributes.main_image?.data?.attributes?.url && (
+                        <div className="relative aspect-[16/10] overflow-hidden">
+                          <Image
+                            src={getBlogPostImageUrl(post)}
+                            alt={post.attributes.post_title}
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                            unoptimized
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                        </div>
+                      )}
+                      <div className="p-5 sm:p-6">
+                        <p className="font-mono text-xs text-white/60 mb-2">
+                          {new Date(post.attributes.date_created).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                          })}
+                        </p>
+                        <h3 className="font-display font-light text-lg sm:text-xl text-white group-hover:text-[#7dd3fc] transition-colors line-clamp-2">
+                          {post.attributes.post_title}
+                        </h3>
+                        {post.attributes.author && (
+                          <p className="text-white/60 text-sm mt-2">By {post.attributes.author}</p>
+                        )}
+                      </div>
+                    </article>
+                  </Link>
+                ))}
+              </div>
+              <div className="fade-in-up">
+                <Link
+                  href="/blog"
+                  className="inline-flex items-center gap-2 text-white font-mono text-xs sm:text-sm tracking-[0.2em] uppercase hover:text-[#7dd3fc] transition-colors border-b border-white/60 pb-1.5 hover:border-[#7dd3fc]"
+                >
+                  Read All Posts
+                  <span className="text-base ml-0.5" aria-hidden>→</span>
+                </Link>
+              </div>
+            </>
+          ) : (
+            <div className="fade-in-up">
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-2 text-white font-mono text-xs sm:text-sm tracking-[0.2em] uppercase hover:text-[#7dd3fc] transition-colors border-b border-white/60 pb-1.5 hover:border-[#7dd3fc]"
+              >
+                Read All Posts
+                <span className="text-base ml-0.5" aria-hidden>→</span>
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 

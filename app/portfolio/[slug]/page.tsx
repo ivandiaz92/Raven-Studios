@@ -3,6 +3,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { getProjectById, getProjects, getProjectImageUrl } from '@/lib/strapi'
 
+export const revalidate = 300 // ISR: refresh project detail from Strapi every 5 minutes
+
 export async function generateStaticParams() {
   const projects = await getProjects()
   return projects.map((p) => ({ slug: String(p.id) }))

@@ -43,6 +43,19 @@ export default function RootLayout({
             style={{ backgroundImage: 'url(/images/dynamic_noise.png)', backgroundSize: 'auto' }}
           />
         </div>
+        {/* Vertical branding on right edge (prototype-style) */}
+        <div
+          className="fixed right-4 sm:right-6 top-0 bottom-0 z-[1] w-6 flex items-center justify-center pointer-events-none"
+          aria-hidden
+        >
+          <span
+            className="font-mono text-[10px] sm:text-sm tracking-[0.12em] sm:tracking-[0.15em] text-white/30 uppercase whitespace-nowrap"
+            style={{ transform: 'rotate(-90deg)' }}
+          >
+            RAVEN DIGITAL STUDIO
+          </span>
+        </div>
+
         <Header />
         <main className="relative z-10 min-h-screen">
           {children}
