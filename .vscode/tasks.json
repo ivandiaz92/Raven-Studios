@@ -1,0 +1,45 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start dev server",
+      "type": "shell",
+      "command": "export NVM_DIR=\"${env:HOME}/.nvm\" && [ -s \"${env:HOME}/.nvm/nvm.sh\" ] && . \"${env:HOME}/.nvm/nvm.sh\" && npm run dev",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "isBackground": true,
+        "problemMatcher": {
+          "pattern": { "regexp": "^$" },
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": ".",
+            "endsPattern": "Ready in|started server"
+          }
+        }
+      },
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Setup (install Node + deps, then start dev)",
+      "type": "shell",
+      "command": "bash -c './setup.sh && export NVM_DIR=\"$HOME/.nvm\" && [ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\" && npm run dev'",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "isBackground": true,
+        "problemMatcher": {
+          "pattern": { "regexp": "^$" },
+          "background": { "activeOnStart": true, "beginsPattern": ".", "endsPattern": "Ready in|started server" }
+        }
+      },
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    }
+  ]
+}
