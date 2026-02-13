@@ -21,10 +21,60 @@ const kodeMono = Kode_Mono({
 // For now, we'll use a fallback serif font
 const displayFontClass = 'font-serif'
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ravenstudios.com'
+
 export const metadata: Metadata = {
-  title: 'RAVEN - Digital Crafts for Ambitious Brands',
-  description: 'We design and develop clear, functional, and well-structured digital experiences.',
-  keywords: ['web development', 'design', 'portfolio', 'digital agency', 'next.js', 'react'],
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: 'RAVEN - Digital Crafts for Ambitious Brands',
+    template: '%s | RAVEN',
+  },
+  description:
+    'We design and develop clear, functional, and well-structured digital experiences. Strategy, design and performance aligned with your objectives.',
+  keywords: [
+    'web development',
+    'design',
+    'portfolio',
+    'digital agency',
+    'next.js',
+    'react',
+    'branding',
+    'UX',
+    'UI',
+  ],
+  authors: [{ name: 'Raven Studios', url: siteUrl }],
+  creator: 'Raven Studios',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: siteUrl,
+    siteName: 'RAVEN',
+    title: 'RAVEN - Digital Crafts for Ambitious Brands',
+    description:
+      'We design and develop clear, functional, and well-structured digital experiences.',
+    images: [
+      {
+        url: '/images/Raven-white.svg',
+        width: 512,
+        height: 512,
+        alt: 'RAVEN',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'RAVEN - Digital Crafts for Ambitious Brands',
+    description:
+      'We design and develop clear, functional, and well-structured digital experiences.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  icons: {
+    icon: '/images/Raven-white.svg',
+    apple: '/images/Raven-white.svg',
+  },
 }
 
 export default function RootLayout({

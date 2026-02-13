@@ -27,7 +27,7 @@ Current state of the Raven Studios Next.js site (as of the latest updates).
 
 ## Header & Navigation
 
-- **Layout:** RAVEN (left) + center logo (`/images/raven-logo.avif`) + Menu (right). Sizes scale (e.g. `text-3xl`–`text-4xl`, logo `h-12`–`h-14`).
+- **Layout:** RAVEN (left) + center logo (`/images/Raven-white.svg`) + Menu (right). Sizes scale (e.g. `text-3xl`–`text-4xl`, logo `h-12`–`h-14`).
 - **Side menu (SideMenu.tsx):**
   - Opens from the right with GSAP; **smooth close** (panel slides out, overlay fades).
   - Nav links (Home, Portfolio, Blog, Contact) + “Get in touch” + email + **logo bottom-right**.

@@ -126,7 +126,7 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
             </div>
             <Link href="/" onClick={handleClose} className="flex-shrink-0" aria-label="RAVEN Home">
               <Image
-                src="/images/raven-logo.avif"
+                src="/images/Raven-white.svg"
                 alt=""
                 width={56}
                 height={56}

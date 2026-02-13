@@ -51,7 +51,7 @@ export default function Header() {
             >
               {!logoError ? (
                 <Image
-                  src="/images/raven-logo.avif"
+                  src="/images/Raven-white.svg"
                   alt=""
                   width={72}
                   height={72}

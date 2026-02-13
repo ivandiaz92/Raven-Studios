@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "quote_requests",
+  "info": {
+    "singularName": "quote-request",
+    "pluralName": "quote-requests",
+    "displayName": "Quote Request",
+    "description": "Brief para cotización de sitio web — submissions from the contact/quote form"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "company_name": { "type": "string", "required": true },
+    "contact_name": { "type": "string", "required": true },
+    "social_networks": { "type": "text", "required": false },
+    "email": { "type": "string", "required": true },
+    "sections_needed": { "type": "text", "required": false },
+    "sections_modify": { "type": "string", "required": false },
+    "sections_specify": { "type": "text", "required": false },
+    "site_has_blog": { "type": "string", "required": false },
+    "google_analytics_global": { "type": "string", "required": false },
+    "measurement_tags": { "type": "string", "required": false },
+    "site_objective": { "type": "string", "required": false },
+    "show_products_services": { "type": "string", "required": false },
+    "quantity_approximate": { "type": "string", "required": false },
+    "info_level": { "type": "string", "required": false },
+    "has_domain": { "type": "string", "required": false },
+    "domain_provider": { "type": "string", "required": false },
+    "has_hosting": { "type": "string", "required": false },
+    "hosting_preference": { "type": "string", "required": false },
+    "project_type": { "type": "string", "required": false },
+    "current_site_url": { "type": "string", "required": false },
+    "additional_functionality": { "type": "string", "required": false },
+    "functionality_types": { "type": "json", "required": false },
+    "functionality_description": { "type": "text", "required": false },
+    "maintenance_plan": { "type": "string", "required": false },
+    "support_types": { "type": "json", "required": false }
+  }
+}

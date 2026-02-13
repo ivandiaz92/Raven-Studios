@@ -12,11 +12,31 @@ const SERVICE_OPTIONS = [
 export default function ContactSection() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'done' | 'error'>('idle')
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setStatus('sending')
-    // TODO: wire to your API or form service (e.g. Formspree, Resend, Strapi)
-    setTimeout(() => setStatus('done'), 800)
+    const form = e.currentTarget
+    const payload = {
+      name: (form.elements.namedItem('name') as HTMLInputElement).value,
+      email: (form.elements.namedItem('email') as HTMLInputElement).value,
+      service: (form.elements.namedItem('service') as HTMLSelectElement).value,
+      message: (form.elements.namedItem('message') as HTMLTextAreaElement).value,
+    }
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        setStatus('error')
+        return
+      }
+      setStatus('done')
+    } catch {
+      setStatus('error')
+    }
   }
 
   return (
@@ -119,7 +139,7 @@ export default function ContactSection() {
                     disabled={status === 'sending'}
                     className="w-full sm:w-auto px-8 py-3.5 rounded-lg bg-[#7dd3fc]/15 text-[#7dd3fc] border border-[#7dd3fc]/40 font-medium text-sm tracking-wide hover:bg-[#7dd3fc]/25 hover:border-[#7dd3fc]/60 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    {status === 'sending' ? 'Sending...' : status === 'done' ? 'Message sent' : 'Submit'}
+                    {status === 'sending' ? 'Sending...' : status === 'done' ? 'Message sent' : status === 'error' ? 'Try again' : 'Submit'}
                   </button>
                 </div>
               </form>

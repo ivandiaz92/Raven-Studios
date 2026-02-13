@@ -173,3 +173,45 @@ export async function getAllPortfolioSlugs(): Promise<string[]> {
   }
 }
 
+/** Payload for creating a Quote Request (brief cotización) in Strapi */
+export interface QuoteRequestPayload {
+  company_name: string
+  contact_name: string
+  email: string
+  social_networks?: string
+  sections_needed?: string
+  sections_modify?: string
+  sections_specify?: string
+  site_has_blog?: string
+  google_analytics_global?: string
+  measurement_tags?: string
+  site_objective?: string
+  show_products_services?: string
+  quantity_approximate?: string
+  info_level?: string
+  has_domain?: string
+  domain_provider?: string
+  has_hosting?: string
+  hosting_preference?: string
+  project_type?: string
+  current_site_url?: string
+  additional_functionality?: string
+  functionality_types?: string[]
+  functionality_description?: string
+  maintenance_plan?: string
+  support_types?: string[]
+}
+
+/** Create a quote request entry in Strapi (quote-requests collection). Requires STRAPI_API_TOKEN with create permission. */
+export async function createQuoteRequest(payload: QuoteRequestPayload): Promise<{ id: number } | null> {
+  try {
+    const response = await api.post<{ data: { id: number } }>('/quote-requests', {
+      data: payload,
+    });
+    return response.data?.data ? { id: response.data.data.id } : null;
+  } catch (err) {
+    console.error('Strapi createQuoteRequest error:', err);
+    return null;
+  }
+}
+
