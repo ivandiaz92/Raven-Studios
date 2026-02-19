@@ -78,10 +78,10 @@ export default function ServiceCard({ title, description, bgImage, index }: Serv
       </svg>
       {/* Content — adjust title/description size via the classes below */}
       <div className="relative z-10 p-6 sm:p-8 flex flex-col h-full">
-        <h3 className="text-lg sm:text-3xl font-display font-normal text-white mb-4">
+        <h3 className="text-xl sm:text-3xl lg:text-4xl font-display font-normal text-white mb-4">
           {title}
         </h3>
-        <p className="text-sm sm:text-base text-white/90 leading-relaxed mt-auto max-w-md">
+        <p className="text-base sm:text-lg text-white/90 leading-relaxed mt-auto max-w-md">
           {description}
         </p>
       </div>

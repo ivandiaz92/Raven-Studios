@@ -9,7 +9,7 @@ const STEPS = [
   {
     id: '001',
     title: 'Discovery & Research',
-    image: '/images/digital_bg.avif', // replace with approach-001.jpg when you have it
+    image: '/images/approach-discovery-3x1.jpg',
     description: "We uncover your brand's true value, identify your competitive edge, your authentic promise, and the positioning we aim to elevate you to.",
     howWeHelp: 'How we help',
     details: 'Context-driven market research. Competitive analysis and digital benchmarking. Business-relevant trend identification. Data and analytics review to generate actionable insights.',
@@ -17,7 +17,7 @@ const STEPS = [
   {
     id: '002',
     title: 'Strategy',
-    image: '/images/visual_bg.avif',
+    image: '/images/approach-strategy-3x1.jpg',
     description: 'We define clear goals, priorities, and a roadmap so every decision is aligned with your business and audience.',
     howWeHelp: 'How we help',
     details: 'Brand and positioning strategy. User and market insights. Content and channel strategy. Success metrics and KPIs.',
@@ -25,7 +25,7 @@ const STEPS = [
   {
     id: '003',
     title: 'UX/UI Design',
-    image: '/images/visual_bg.avif',
+    image: '/images/approach-design-3x1.jpg',
     description: 'We shape your product into an intuitive, cohesive experience that feels right and performs well.',
     howWeHelp: 'How we help',
     details: 'User flows and wireframes. Visual design systems. Prototyping and testing. Responsive and accessible interfaces.',
@@ -33,7 +33,7 @@ const STEPS = [
   {
     id: '004',
     title: 'Custom Development',
-    image: '/images/performance_bg.avif',
+    image: '/images/approach-development-3x1.jpg',
     description: 'We build fast, stable digital products with clean architecture and full control over your platform.',
     howWeHelp: 'How we help',
     details: 'Modern stacks (React, Next.js, etc.). APIs and integrations. Performance and SEO. Launch and iteration.',
@@ -68,7 +68,7 @@ export default function OurApproachSection() {
                 <span className="font-mono text-sm sm:text-base text-inherit opacity-80 w-10 flex-shrink-0">
                   {s.id}
                 </span>
-                <span className="font-display text-lg sm:text-xl lg:text-2xl font-normal">
+                <span className="font-sans text-lg sm:text-xl lg:text-2xl font-normal">
                   {s.title}
                 </span>
               </button>
@@ -78,11 +78,11 @@ export default function OurApproachSection() {
           {/* Right: content for selected step */}
           <div className="lg:col-span-8 lg:pl-8">
             <div key={step.id} className="transition-opacity duration-300">
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-display font-light text-white mb-6 sm:mb-8">
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-sans font-light text-white mb-6 sm:mb-8">
                 {step.title}
               </h3>
 
-              <div className="relative w-full h-[200px] sm:h-[240px] lg:h-[280px] rounded-lg overflow-hidden bg-gray-900 mb-6 sm:mb-8">
+              <div className="relative w-full aspect-[3/1] rounded-lg overflow-hidden bg-gray-900 mb-6 sm:mb-8">
                 <Image
                   src={step.image}
                   alt={step.title}
@@ -93,7 +93,7 @@ export default function OurApproachSection() {
                 />
               </div>
 
-              <p className="text-white/90 text-base sm:text-lg leading-relaxed mb-6">
+              <p className="text-white/90 text-lg sm:text-xl leading-relaxed mb-6">
                 {step.description}
               </p>
               <p className="text-white font-medium text-sm sm:text-base mb-2">
