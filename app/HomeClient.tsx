@@ -10,6 +10,7 @@ import PortfolioScrollSection from '@/components/PortfolioScrollSection'
 import OurApproachSection from '@/components/OurApproachSection'
 import ContactSection from '@/components/ContactSection'
 import ServiceCard from '@/components/ServiceCard'
+import ExternalLinkIcon from '@/components/ExternalLinkIcon'
 import { getBlogPostImageUrl } from '@/lib/strapi'
 import type { StrapiProject, StrapiBlogPost } from '@/types/strapi'
 
@@ -144,7 +145,7 @@ export default function HomeClient({ projects, blogPosts = [] }: HomeClientProps
         <div
           ref={asteroidRef}
           data-asteroid
-          className="absolute inset-0 flex items-center justify-center pointer-events-none z-[1] -translate-y-[18%]"
+          className="absolute inset-0 flex items-center justify-center pointer-events-none z-[1] -translate-y-[28%]"
           aria-hidden
         >
           <div className="w-[min(100vw,1150px)] h-auto flex justify-center items-center">
@@ -186,14 +187,14 @@ export default function HomeClient({ projects, blogPosts = [] }: HomeClientProps
                     </span>
                   ))}
                 </span>
-                <span className="text-base ml-0.5" aria-hidden>→</span>
+                <ExternalLinkIcon className="text-base ml-0.5" />
               </Link>
             </div>
           </div>
         </div>
 
         {/* Carousel inside hero, just below the CTA */}
-        <div className="relative z-10 w-full flex-shrink-0 pt-4 sm:pt-6 lg:pt-8 pb-8 sm:pb-12">
+        <div className="relative z-10 w-full flex-shrink-0 -mt-10 sm:-mt-14 lg:-mt-16 pt-0 pb-8 sm:pb-12">
           <ProjectCarousel projects={projects} />
         </div>
       </section>
@@ -242,7 +243,7 @@ export default function HomeClient({ projects, blogPosts = [] }: HomeClientProps
               className="inline-flex items-center gap-2 text-white font-mono text-xs sm:text-sm tracking-[0.2em] uppercase hover:text-[#7dd3fc] transition-colors border-b border-white/70 pb-1.5 hover:border-[#7dd3fc]"
             >
               Let&apos;s align on your objectives
-              <span className="text-base ml-0.5" aria-hidden>→</span>
+              <ExternalLinkIcon className="text-base ml-0.5" />
             </Link>
           </div>
         </div>
@@ -314,7 +315,7 @@ export default function HomeClient({ projects, blogPosts = [] }: HomeClientProps
                   className="inline-flex items-center gap-2 text-white font-mono text-xs sm:text-sm tracking-[0.2em] uppercase hover:text-[#7dd3fc] transition-colors border-b border-white/60 pb-1.5 hover:border-[#7dd3fc]"
                 >
                   Read All Posts
-                  <span className="text-base ml-0.5" aria-hidden>→</span>
+                  <ExternalLinkIcon className="text-base ml-0.5" />
                 </Link>
               </div>
             </>
@@ -325,7 +326,7 @@ export default function HomeClient({ projects, blogPosts = [] }: HomeClientProps
                 className="inline-flex items-center gap-2 text-white font-mono text-xs sm:text-sm tracking-[0.2em] uppercase hover:text-[#7dd3fc] transition-colors border-b border-white/60 pb-1.5 hover:border-[#7dd3fc]"
               >
                 Read All Posts
-                <span className="text-base ml-0.5" aria-hidden>→</span>
+                <ExternalLinkIcon className="text-base ml-0.5" />
               </Link>
             </div>
           )}

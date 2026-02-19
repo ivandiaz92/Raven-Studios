@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import ExternalLinkIcon from '@/components/ExternalLinkIcon'
 
 const STEPS = [
   {
@@ -106,7 +107,7 @@ export default function OurApproachSection() {
                 className="inline-flex items-center gap-2 text-[#7dd3fc] font-mono text-xs sm:text-sm tracking-[0.2em] uppercase hover:text-white transition-colors border-b border-[#7dd3fc]/60 pb-1.5 mt-8 hover:border-white"
               >
                 Begin with discovery
-                <span className="text-base ml-0.5" aria-hidden>→</span>
+                <ExternalLinkIcon className="text-base ml-0.5" />
               </Link>
             </div>
           </div>

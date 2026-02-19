@@ -9,8 +9,15 @@ const SERVICE_OPTIONS = [
   'Custom Development',
 ] as const
 
-export default function ContactSection() {
+interface ContactSectionProps {
+  /** When false, content is visible without GSAP (e.g. on project detail page). Default true for homepage. */
+  animate?: boolean
+}
+
+export default function ContactSection({ animate = true }: ContactSectionProps) {
   const [status, setStatus] = useState<'idle' | 'sending' | 'done' | 'error'>('idle')
+  const entrance = animate ? 'title-entrance' : ''
+  const fadeIn = animate ? 'fade-in-up' : ''
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -57,19 +64,19 @@ export default function ContactSection() {
           <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 p-8 sm:p-10 lg:p-12 xl:p-14">
             {/* Left: CTA / message */}
             <div className="lg:col-span-5 flex flex-col justify-center">
-              <h2 className="title-entrance text-3xl sm:text-6xl lg:text-[4.95rem] font-display font-light text-white leading-tight mb-4">
+              <h2 className={`${entrance} text-3xl sm:text-6xl lg:text-[4.95rem] font-display font-light text-white leading-tight mb-4`}>
                 Ready to
                 <br />
                 elevate your brand?
               </h2>
-              <p className="fade-in-up text-white/80 text-base sm:text-lg leading-relaxed" data-delay="0.12">
+              <p className={`${fadeIn} text-white/80 text-base sm:text-lg leading-relaxed`} data-delay="0.12">
                 If this resonates with you, let&apos;s collaborate and bring your vision to life.
                 We&apos;re here to help!
               </p>
             </div>
 
             {/* Right: form */}
-            <div className="fade-in-up lg:col-span-7" data-delay="0.2">
+            <div className={`${fadeIn} lg:col-span-7`} data-delay="0.2">
               <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
                 <div>
                   <label htmlFor="contact-name" className="block text-sm font-medium text-white/90 mb-2">

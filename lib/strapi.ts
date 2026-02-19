@@ -28,17 +28,18 @@ export function getStrapiImageUrl(image: any): string {
   return '';
 }
 
-// Get the main image from a Project (Strapi may use main_mockup, mainMockup, or other name)
+// Get the main image from a Project (project_image)
 export function getProjectImageUrl(project: StrapiProject): string {
-  const attrs = project?.attributes as Record<string, unknown> | undefined
-  if (!attrs) return ''
-  const image =
-    attrs.main_mockup ??
-    attrs.mainMockup ??
-    attrs.image ??
-    attrs.featuredImage ??
-    attrs.thumbnail
-  return getStrapiImageUrl(image)
+  return getStrapiImageUrl(project?.attributes?.project_image)
+}
+
+// Get all gallery image URLs from a Project (project_gallery)
+export function getProjectGalleryUrls(project: StrapiProject): string[] {
+  const gallery = project?.attributes?.project_gallery
+  if (!gallery?.data || !Array.isArray(gallery.data)) return []
+  return gallery.data
+    .map((item) => getStrapiImageUrl(item?.attributes ? { data: item } : null))
+    .filter(Boolean)
 }
 
 // —— Projects API (your Strapi "Project" content type) ——

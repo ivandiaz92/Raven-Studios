@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { gsap } from 'gsap'
 import type { StrapiProject } from '@/types/strapi'
 import { getProjectImageUrl } from '@/lib/strapi'
+import ExternalLinkIcon from '@/components/ExternalLinkIcon'
 
 const GAP = 32 // gap-8
 
@@ -37,16 +38,16 @@ function CarouselCard({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <div className="relative w-[280px] sm:w-[360px] lg:w-[420px] h-[400px] sm:h-[480px] lg:h-[560px] overflow-hidden rounded-2xl sm:rounded-3xl">
+      <div className="relative w-[220px] sm:w-[280px] lg:w-[320px] h-[300px] sm:h-[360px] lg:h-[420px] overflow-hidden rounded-2xl sm:rounded-3xl">
         {imageUrl ? (
           <Image
             src={imageUrl}
-            alt={project.attributes.client_name}
+            alt={project.attributes.project_name}
             fill
             className={`object-cover transition-all duration-500 ${
               isHovered ? 'grayscale-0 scale-105' : 'grayscale scale-100'
             }`}
-            sizes="(max-width: 640px) 280px, (max-width: 1024px) 360px, 420px"
+            sizes="(max-width: 640px) 220px, (max-width: 1024px) 280px, 320px"
           />
         ) : (
           <div className="w-full h-full bg-gray-900 flex items-center justify-center">
@@ -58,17 +59,12 @@ function CarouselCard({
             isHovered ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <h3 className="text-2xl sm:text-3xl lg:text-4xl font-light text-white mb-2">
-            {project.attributes.client_name}
+          <h3 className="text-xl sm:text-2xl lg:text-3xl font-light text-white mb-2">
+            {project.attributes.project_name}
           </h3>
-          {project.attributes.project_description && (
-            <p className="text-sm sm:text-base text-gray-300 line-clamp-2 mb-4">
-              {project.attributes.project_description}
-            </p>
-          )}
           <div className="flex items-center gap-2 text-white font-mono text-xs tracking-wider">
             <span>View Project</span>
-            <span className="text-lg">→</span>
+            <ExternalLinkIcon className="text-lg" />
           </div>
         </div>
         <div

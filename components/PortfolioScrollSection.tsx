@@ -2,8 +2,20 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import ExternalLinkIcon from '@/components/ExternalLinkIcon'
 import type { StrapiProject } from '@/types/strapi'
 import { getProjectImageUrl } from '@/lib/strapi'
+
+function getProjectToolsList(tools: unknown): string[] {
+  if (tools == null) return []
+  if (Array.isArray(tools)) {
+    return tools.map((t) => (typeof t === 'string' ? t : (t as { name?: string })?.name ?? String(t)))
+  }
+  if (typeof tools === 'object' && tools !== null && 'tools' in tools && Array.isArray((tools as { tools: unknown }).tools)) {
+    return (tools as { tools: unknown[] }).tools.map((t) => (typeof t === 'string' ? t : (t as { name?: string })?.name ?? String(t)))
+  }
+  return []
+}
 
 interface PortfolioScrollSectionProps {
   projects: StrapiProject[]
@@ -47,7 +59,7 @@ export default function PortfolioScrollSection({ projects }: PortfolioScrollSect
                   {imageUrl ? (
                     <Image
                       src={imageUrl}
-                      alt={project.attributes.client_name}
+                      alt={project.attributes.project_name}
                       fill
                       className="object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500"
                       sizes="(max-width: 1024px) 100vw, 58vw"
@@ -60,16 +72,28 @@ export default function PortfolioScrollSection({ projects }: PortfolioScrollSect
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
                 <div className="relative z-10">
                   <h3 className="text-3xl sm:text-4xl lg:text-5xl font-display font-light text-white mb-3">
-                    {project.attributes.client_name}
+                    {project.attributes.project_name}
                   </h3>
-                  {project.attributes.project_description && (
-                    <p className="text-sm sm:text-base text-white/80 line-clamp-2 max-w-xl mb-4">
-                      {project.attributes.project_description}
+                  {project.attributes.project_overview && (
+                    <p className="text-sm sm:text-base text-white/80 line-clamp-2 max-w-xl mb-3">
+                      {project.attributes.project_overview}
                     </p>
+                  )}
+                  {getProjectToolsList(project.attributes.project_tools).length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {getProjectToolsList(project.attributes.project_tools).map((tool) => (
+                        <span
+                          key={tool}
+                          className="px-2.5 py-1 rounded-full bg-white/10 text-white/90 text-xs"
+                        >
+                          {tool}
+                        </span>
+                      ))}
+                    </div>
                   )}
                   <span className="inline-flex items-center gap-2 text-[#7dd3fc] font-mono text-xs sm:text-sm tracking-wider uppercase">
                     View project
-                    <span className="text-lg">→</span>
+                    <ExternalLinkIcon className="text-lg" />
                   </span>
                 </div>
               </Link>

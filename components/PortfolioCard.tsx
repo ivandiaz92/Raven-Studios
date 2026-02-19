@@ -38,6 +38,8 @@ export default function PortfolioCard({ project, index = 0 }: PortfolioCardProps
   }, [index])
 
   const imageUrl = getProjectImageUrl(project)
+  const name = project.attributes.project_name
+  const overview = project.attributes.project_overview ?? ''
 
   return (
     <Link href={`/portfolio/${project.id}`}>
@@ -49,7 +51,7 @@ export default function PortfolioCard({ project, index = 0 }: PortfolioCardProps
           <div className="relative h-64 overflow-hidden">
             <Image
               src={imageUrl}
-              alt={project.attributes.client_name}
+              alt={name}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-110"
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -64,11 +66,13 @@ export default function PortfolioCard({ project, index = 0 }: PortfolioCardProps
         )}
         <div className="p-6">
           <h3 className="text-xl font-display font-light mb-2 text-white group-hover:text-[#7dd3fc] transition-colors">
-            {project.attributes.client_name}
+            {name}
           </h3>
-          <p className="text-white/70 text-sm mb-4 line-clamp-2">
-            {project.attributes.project_description}
-          </p>
+          {overview && (
+            <p className="text-white/70 text-sm mb-4 line-clamp-2">
+              {overview}
+            </p>
+          )}
         </div>
       </div>
     </Link>

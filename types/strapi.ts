@@ -73,18 +73,22 @@ export interface Portfolio {
   };
 }
 
-/** Strapi "Project" content type (client_name, project_description, main_mockup) */
+/** Strapi "Project" content type */
 export interface StrapiProject {
   id: number;
   attributes: {
-    client_name: string;
-    project_description: string;
-    main_mockup?: {
-      data?: {
-        id: number;
-        attributes: StrapiImage['attributes'];
-      } | null;
-    };
+    project_name: string;
+    project_image?: {
+      data?: { id: number; attributes: StrapiImage['attributes'] } | null;
+    } | null;
+    project_date?: string | null;
+    project_url?: string | null;
+    project_tools?: unknown; // JSON: e.g. string[] or { name: string }[]
+    project_gallery?: {
+      data?: Array<{ id: number; attributes: StrapiImage['attributes'] }> | null;
+    } | null;
+    project_overview?: string | null;
+    project_conclusion?: string | null;
     publishedAt?: string;
     createdAt: string;
     updatedAt: string;
