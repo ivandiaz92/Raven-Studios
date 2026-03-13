@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 const CONTACT_EMAIL_TO = process.env.CONTACT_EMAIL_TO || 'ivandiazmtz@proton.me'
 const CONTACT_FROM = process.env.CONTACT_FROM || 'Raven Studios <onboarding@resend.dev>'
 
 export async function POST(request: Request) {
-  if (!process.env.RESEND_API_KEY) {
+  const apiKey = process.env.RESEND_API_KEY
+  if (!apiKey) {
     return NextResponse.json(
       { error: 'Contact form is not configured (missing RESEND_API_KEY)' },
       { status: 503 }
@@ -20,6 +19,7 @@ export async function POST(request: Request) {
       { status: 503 }
     )
   }
+  const resend = new Resend(apiKey)
 
   let body: { name?: string; email?: string; service?: string; message?: string }
   try {

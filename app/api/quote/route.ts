@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createQuoteRequest, type QuoteRequestPayload } from '@/lib/strapi'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
 const QUOTE_EMAIL_TO = process.env.CONTACT_EMAIL_TO || process.env.QUOTE_EMAIL_TO || ''
 const QUOTE_FROM = process.env.CONTACT_FROM || 'Raven Studios <onboarding@resend.dev>'
 
@@ -107,8 +106,10 @@ export async function POST(request: Request) {
 
   // Send email notification (same Resend config as contact form)
   const to = QUOTE_EMAIL_TO.trim()
-  if (process.env.RESEND_API_KEY && to) {
+  const apiKey = process.env.RESEND_API_KEY
+  if (apiKey && to) {
     try {
+      const resend = new Resend(apiKey)
       await resend.emails.send({
         from: QUOTE_FROM,
         to: [to],
