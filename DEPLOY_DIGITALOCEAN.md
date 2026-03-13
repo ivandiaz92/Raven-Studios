@@ -1,0 +1,240 @@
+# Deploy Raven Studios Next.js to a DigitalOcean Droplet
+
+This guide walks you through deploying the Next.js site to a DigitalOcean droplet and connecting it to **Strapi Cloud** (or any Strapi instance) for content.
+
+---
+
+## Overview
+
+| Component        | Where it runs                          |
+|-----------------|----------------------------------------|
+| **Next.js app** | Your DigitalOcean droplet (this guide) |
+| **Strapi CMS**  | Strapi Cloud (you already have this)   |
+
+The Next.js app on the droplet will fetch content from Strapi over HTTPS using environment variables.
+
+---
+
+## 1. Create a Droplet
+
+1. In [DigitalOcean](https://cloud.digitalocean.com/droplets/new):
+   - **Image:** Ubuntu 24.04 LTS (22.04 LTS also works if 24.04 isn’t available)
+   - **Plan:** Basic shared CPU; **$6/mo** (1 GB RAM) is enough to start; **$12/mo** (2 GB) is more comfortable for Next.js builds
+   - **Datacenter:** Choose one close to your audience
+   - **Authentication:** SSH key (recommended) or password
+   - **Hostname:** e.g. `ravenstudios-web`
+
+2. Create the droplet and note its **IP address**.
+
+---
+
+## 2. First-Time Server Setup
+
+SSH in (replace with your droplet IP and user if different):
+
+```bash
+ssh root@YOUR_DROPLET_IP
+```
+
+### Create a non-root user (recommended)
+
+```bash
+adduser deploy
+usermod -aG sudo deploy
+rsync --archive --chown=deploy:deploy ~/.ssh /home/deploy
+```
+
+Then use `deploy` for the rest:
+
+```bash
+su - deploy
+```
+
+### Basic security (optional but recommended)
+
+```bash
+sudo ufw allow OpenSSH
+sudo ufw allow 'Nginx Full'   # if you'll use Nginx; or later: sudo ufw allow 3000
+sudo ufw enable
+```
+
+---
+
+## 3. Install Node.js (LTS)
+
+```bash
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+node -v   # should be v20.x
+```
+
+---
+
+## 4. Install Git and Clone Your Repo
+
+```bash
+sudo apt-get install -y git
+git clone https://github.com/ivandiaz92/Raven-Studios.git ravenstudios-next
+cd ravenstudios-next
+```
+
+If the repo is private, set up SSH keys or a deploy key for this server and clone via SSH URL.
+
+---
+
+## 5. Environment Variables (Production)
+
+Create a production env file **on the server** (do not commit real secrets to Git):
+
+```bash
+cd ~/ravenstudios-next
+nano .env.production
+```
+
+Add (replace with your real values):
+
+```env
+# Your live site URL (for SEO, Open Graph, etc.)
+NEXT_PUBLIC_SITE_URL=https://yourdomain.com
+
+# Strapi — use your Strapi Cloud URL (must end with /api)
+NEXT_PUBLIC_STRAPI_API_URL=https://your-project.strapiapp.com/api
+STRAPI_API_TOKEN=your_strapi_api_token_from_strapi_cloud_admin
+
+# Contact form (Resend)
+RESEND_API_KEY=re_xxxxx
+CONTACT_EMAIL_TO=hello@yourdomain.com
+# CONTACT_FROM=Raven Studios <contact@yourdomain.com>
+```
+
+- Get **Strapi Cloud URL** from your Strapi Cloud dashboard (e.g. `https://xxx.strapiapp.com` → API is `https://xxx.strapiapp.com/api`).
+- Create an **API token** in Strapi Cloud: Admin → Settings → API Tokens → Create (e.g. “Production Next.js”), copy the token into `STRAPI_API_TOKEN`.
+
+Save and exit (`Ctrl+X`, then `Y`, then `Enter`).
+
+---
+
+## 6. Build and Run with PM2
+
+Install PM2 and build the app:
+
+```bash
+sudo npm install -g pm2
+npm ci
+npm run build
+```
+
+Start the app with the production env file:
+
+```bash
+pm2 start npm --name "ravenstudios" -- start
+pm2 save
+pm2 startup
+```
+
+Follow the command PM2 prints (e.g. run the `sudo env PATH=...` line) so the app restarts on reboot.
+
+- App listens on **port 3000** by default.
+- Visit `http://YOUR_DROPLET_IP:3000` to confirm it loads and content comes from Strapi.
+
+---
+
+## 7. (Optional) Nginx + SSL with Let’s Encrypt
+
+To use a domain and HTTPS (e.g. `https://yourdomain.com`):
+
+### Point your domain to the droplet
+
+- Add an **A record**: `yourdomain.com` → `YOUR_DROPLET_IP`.
+
+### Install Nginx and Certbot
+
+```bash
+sudo apt-get install -y nginx certbot python3-certbot-nginx
+```
+
+### Nginx site config
+
+```bash
+sudo nano /etc/nginx/sites-available/ravenstudios
+```
+
+Paste (replace `yourdomain.com`):
+
+```nginx
+server {
+    listen 80;
+    server_name yourdomain.com www.yourdomain.com;
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+Enable and test:
+
+```bash
+sudo ln -s /etc/nginx/sites-available/ravenstudios /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+### Get SSL certificate
+
+```bash
+sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+```
+
+Follow the prompts. Certbot will configure HTTPS and auto-renewal.
+
+---
+
+## 8. Updating the Site (Deploy Script)
+
+From your **local machine**, you can deploy updates with:
+
+```bash
+ssh deploy@YOUR_DROPLET_IP 'cd ravenstudios-next && git pull && npm ci && npm run build && pm2 restart ravenstudios'
+```
+
+Or on the **server** you can use the included script:
+
+```bash
+cd ~/ravenstudios-next
+./scripts/deploy.sh
+```
+
+(Ensure `scripts/deploy.sh` is executable: `chmod +x scripts/deploy.sh`.)
+
+**Note:** Next.js is configured with `assetPrefix: '/next'` for local/Cursor. If you serve the app at the root of your domain (e.g. `https://yourdomain.com`) and static assets don’t load, set `assetPrefix: ''` in `next.config.js` on the server (or use an env-based prefix).
+
+---
+
+## 9. Checklist
+
+- [ ] Droplet created (Ubuntu 24.04 LTS)
+- [ ] Node 20 and Git installed
+- [ ] Repo cloned
+- [ ] `.env.production` created with Strapi Cloud URL, Strapi token, Resend, and `NEXT_PUBLIC_SITE_URL`
+- [ ] `npm run build` and PM2 start work; site loads at `http://IP:3000`
+- [ ] (Optional) Domain A record → droplet IP
+- [ ] (Optional) Nginx + Certbot for HTTPS
+
+---
+
+## Strapi: Keep Using Strapi Cloud
+
+You don’t need to install Strapi on the droplet. The Next.js app only needs:
+
+- `NEXT_PUBLIC_STRAPI_API_URL` = your Strapi Cloud API URL (e.g. `https://xxx.strapiapp.com/api`)
+- `STRAPI_API_TOKEN` = a token from Strapi Cloud admin with read access to your content types
+
+Content is managed in Strapi Cloud; the droplet just fetches it over the internet.

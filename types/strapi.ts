@@ -95,7 +95,7 @@ export interface StrapiProject {
   };
 }
 
-/** Strapi "Blog Post" content type: post_title, post_content (Blocks), main_image, date_created, author */
+/** Strapi "Blog Post" content type: post_title, post_content (Blocks), main_image, date_created, author; optional slug/excerpt/content/tags for slug-based routes */
 export interface StrapiBlogPost {
   id: number;
   attributes: {
@@ -106,6 +106,15 @@ export interface StrapiBlogPost {
     } | null;
     date_created: string;
     author: string;
+    slug?: string;
+    excerpt?: string;
+    content?: string;
+    tags?: string[];
+    publishedAt?: string;
+    featuredImage?: {
+      data?: { id: number; attributes: StrapiImage['attributes'] } | null;
+    } | null;
+    title?: string;
     createdAt?: string;
     updatedAt?: string;
   };

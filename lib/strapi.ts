@@ -159,6 +159,43 @@ export function getBlogPostImageUrl(post: StrapiBlogPost): string {
   return getStrapiImageUrl(post?.attributes?.main_image);
 }
 
+export async function getBlogPostBySlug(slug: string): Promise<StrapiBlogPost | null> {
+  try {
+    const response = await api.get<StrapiResponse<StrapiBlogPost[]>>('/blog-posts', {
+      params: {
+        filters: { slug: { $eq: slug } },
+        populate: ['main_image', 'featuredImage'],
+      },
+      timeout: 3000,
+    });
+    const data = response.data.data;
+    if (Array.isArray(data) && data.length > 0) return data[0];
+    return null;
+  } catch (error) {
+    console.error('Error fetching blog post by slug:', error);
+    return null;
+  }
+}
+
+export async function getAllBlogSlugs(): Promise<string[]> {
+  try {
+    const response = await api.get<StrapiResponse<StrapiBlogPost[]>>('/blog-posts', {
+      params: {
+        fields: ['slug'],
+        pagination: { limit: 100 },
+      },
+      timeout: 3000,
+    });
+    const data = response.data.data ?? [];
+    return data
+      .map((p) => p.attributes?.slug)
+      .filter((s): s is string => typeof s === 'string' && s.length > 0);
+  } catch (error) {
+    console.error('Error fetching blog slugs:', error);
+    return [];
+  }
+}
+
 export async function getAllPortfolioSlugs(): Promise<string[]> {
   try {
     const response = await api.get<StrapiResponse<Portfolio[]>>('/portfolios', {
