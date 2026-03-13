@@ -149,6 +149,7 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
       >
         {duplicatedProjects.map((project, i) => (
           <CarouselCard
+            key={i}
             project={project}
             index={i}
             copyIndex={i >= projects.length ? 1 : 0}
