@@ -105,15 +105,16 @@ export async function getPortfolios(filters?: {
 
 export async function getPortfolioBySlug(slug: string): Promise<Portfolio | null> {
   try {
-    const response = await api.get<StrapiResponse<Portfolio>>('/portfolios', {
+    const response = await api.get<StrapiResponse<Portfolio[]>>('/portfolios', {
       params: {
         filters: { slug: { $eq: slug } },
         populate: ['featuredImage', 'images'],
       },
     });
 
-    if (response.data.data && response.data.data.length > 0) {
-      return response.data.data[0];
+    const data = response.data.data;
+    if (Array.isArray(data) && data.length > 0) {
+      return data[0];
     }
     return null;
   } catch (error) {
