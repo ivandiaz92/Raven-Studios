@@ -60,8 +60,8 @@ export default function PortfolioCard({ project, index = 0 }: PortfolioCardProps
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
           </div>
         ) : (
-          <div className="relative h-64 bg-gray-900 flex items-center justify-center">
-            <span className="text-gray-600 font-mono text-sm">No image</span>
+          <div className="relative h-64 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center border-b border-gray-800">
+            <span className="text-gray-500 font-mono text-xs">Project</span>
           </div>
         )}
         <div className="p-6">

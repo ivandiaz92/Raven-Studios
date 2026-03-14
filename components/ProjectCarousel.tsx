@@ -50,8 +50,8 @@ function CarouselCard({
             sizes="(max-width: 640px) 220px, (max-width: 1024px) 280px, 320px"
           />
         ) : (
-          <div className="w-full h-full bg-gray-900 flex items-center justify-center">
-            <span className="text-gray-600 font-mono text-sm">No image</span>
+          <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+            <span className="text-gray-500 font-mono text-xs">Project</span>
           </div>
         )}
         <div

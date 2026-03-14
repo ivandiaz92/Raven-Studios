@@ -43,11 +43,10 @@ export function getProjectGalleryUrls(project: StrapiProject): string[] {
 }
 
 // —— Projects API (your Strapi "Project" content type) ——
-// Populate only project_image (avoid populate: '*' which can 503 on Strapi Cloud)
+// No populate: Strapi Cloud returns 503 when populate is used; projects show, images need placeholder
 export async function getProjects(limit?: number): Promise<StrapiProject[]> {
   try {
     const params: Record<string, unknown> = {
-      populate: ['project_image'],
       sort: ['publishedAt:desc'],
     };
     if (limit) params.pagination = { limit };
@@ -72,7 +71,7 @@ export async function getProjects(limit?: number): Promise<StrapiProject[]> {
 export async function getProjectById(id: string): Promise<StrapiProject | null> {
   try {
     const response = await api.get<StrapiResponse<StrapiProject>>(`/projects/${id}`, {
-      params: { populate: ['project_image', 'project_gallery'] },
+      params: {}, // no populate: Strapi Cloud 503s with populate
     });
     return response.data.data ?? null;
   } catch (error) {

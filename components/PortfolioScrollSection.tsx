@@ -66,7 +66,7 @@ export default function PortfolioScrollSection({ projects }: PortfolioScrollSect
                       unoptimized
                     />
                   ) : (
-                    <div className="absolute inset-0 bg-gray-900/80" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-gray-900" />
                   )}
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
