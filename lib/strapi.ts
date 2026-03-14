@@ -14,6 +14,10 @@ const api = axios.create({
 
 const STRAPI_MEDIA_BASE = process.env.NEXT_PUBLIC_STRAPI_API_URL?.replace(/\/api\/?$/, '') || 'http://localhost:1337'
 
+// Skip Strapi during build so 503s don't fail the build; data loads at runtime (ISR).
+const skipStrapiDuringBuild =
+  process.env.SKIP_STRAPI_BUILD === '1' || process.env.NEXT_PHASE === 'phase-production-build'
+
 // Helper to get image URL (handles Strapi media: data as object or array, relation { data: { attributes } }, or flat attributes)
 export function getStrapiImageUrl(image: any): string {
   if (!image) return '';
@@ -45,6 +49,7 @@ export function getProjectGalleryUrls(project: StrapiProject): string[] {
 // —— Projects API (your Strapi "Project" content type) ——
 // No populate: Strapi Cloud returns 503 when populate is used; projects show, images need placeholder
 export async function getProjects(limit?: number): Promise<StrapiProject[]> {
+  if (skipStrapiDuringBuild) return []
   try {
     const params: Record<string, unknown> = {
       sort: ['publishedAt:desc'],
@@ -69,6 +74,7 @@ export async function getProjects(limit?: number): Promise<StrapiProject[]> {
 }
 
 export async function getProjectById(id: string): Promise<StrapiProject | null> {
+  if (skipStrapiDuringBuild) return null
   try {
     const response = await api.get<StrapiResponse<StrapiProject>>(`/projects/${id}`, {
       params: {}, // no populate: Strapi Cloud 503s with populate
@@ -86,6 +92,7 @@ export async function getPortfolios(filters?: {
   category?: string;
   limit?: number;
 }): Promise<Portfolio[]> {
+  if (skipStrapiDuringBuild) return []
   const params: any = {
     populate: ['featuredImage', 'images'],
     sort: ['publishedAt:desc'],
@@ -108,6 +115,7 @@ export async function getPortfolios(filters?: {
 }
 
 export async function getPortfolioBySlug(slug: string): Promise<Portfolio | null> {
+  if (skipStrapiDuringBuild) return null
   try {
     const response = await api.get<StrapiResponse<Portfolio[]>>('/portfolios', {
       params: {
@@ -129,6 +137,7 @@ export async function getPortfolioBySlug(slug: string): Promise<Portfolio | null
 
 // Blog API (Strapi "Blog Post": post_title, post_content, main_image, date_created, author)
 export async function getBlogPosts(limit?: number): Promise<StrapiBlogPost[]> {
+  if (skipStrapiDuringBuild) return []
   try {
     const params: Record<string, unknown> = {
       populate: ['main_image'],
@@ -165,6 +174,7 @@ export function getBlogPostImageUrl(post: StrapiBlogPost): string {
 }
 
 export async function getBlogPostBySlug(slug: string): Promise<StrapiBlogPost | null> {
+  if (skipStrapiDuringBuild) return null
   try {
     const response = await api.get<StrapiResponse<StrapiBlogPost[]>>('/blog-posts', {
       params: {
@@ -183,6 +193,7 @@ export async function getBlogPostBySlug(slug: string): Promise<StrapiBlogPost | 
 }
 
 export async function getAllBlogSlugs(): Promise<string[]> {
+  if (skipStrapiDuringBuild) return []
   try {
     const response = await api.get<StrapiResponse<StrapiBlogPost[]>>('/blog-posts', {
       params: {
@@ -202,6 +213,7 @@ export async function getAllBlogSlugs(): Promise<string[]> {
 }
 
 export async function getAllPortfolioSlugs(): Promise<string[]> {
+  if (skipStrapiDuringBuild) return []
   try {
     const response = await api.get<StrapiResponse<Portfolio[]>>('/portfolios', {
       params: {
