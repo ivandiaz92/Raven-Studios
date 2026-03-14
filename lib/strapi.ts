@@ -43,11 +43,11 @@ export function getProjectGalleryUrls(project: StrapiProject): string[] {
 }
 
 // —— Projects API (your Strapi "Project" content type) ——
-// Populate all relations so media (e.g. main_mockup) is included whatever its name
+// Use explicit populate (project_image) — Strapi Cloud can 500 on populate: '*'
 export async function getProjects(limit?: number): Promise<StrapiProject[]> {
   try {
     const params: Record<string, unknown> = {
-      populate: '*',
+      populate: ['project_image'],
       sort: ['publishedAt:desc'],
     };
     if (limit) params.pagination = { limit };
@@ -60,6 +60,11 @@ export async function getProjects(limit?: number): Promise<StrapiProject[]> {
     if (process.env.NODE_ENV === 'development' && err && typeof err === 'object' && 'code' in err && err.code === 'ECONNREFUSED') {
       console.warn('Strapi not running — start it with: cd ../ravenstudios-strapi && npm run develop');
     }
+    // Log so you can see 403/401 in server logs (e.g. PM2) when Project permissions are missing
+    const msg = err && typeof err === 'object' && 'response' in err
+      ? (err as { response?: { status?: number; data?: unknown } }).response?.status
+      : err;
+    console.error('getProjects failed:', msg);
     return [];
   }
 }
@@ -67,7 +72,7 @@ export async function getProjects(limit?: number): Promise<StrapiProject[]> {
 export async function getProjectById(id: string): Promise<StrapiProject | null> {
   try {
     const response = await api.get<StrapiResponse<StrapiProject>>(`/projects/${id}`, {
-      params: { populate: '*' },
+      params: { populate: ['project_image', 'project_gallery'] },
     });
     return response.data.data ?? null;
   } catch (error) {
