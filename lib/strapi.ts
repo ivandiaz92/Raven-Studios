@@ -43,17 +43,16 @@ export function getProjectGalleryUrls(project: StrapiProject): string[] {
 }
 
 // —— Projects API (your Strapi "Project" content type) ——
-// Use explicit populate (project_image) — Strapi Cloud can 500 on populate: '*'
+// Minimal request (no populate) — Strapi Cloud often 503s with populate; we still get list, images may be empty
 export async function getProjects(limit?: number): Promise<StrapiProject[]> {
   try {
     const params: Record<string, unknown> = {
-      populate: ['project_image'],
       sort: ['publishedAt:desc'],
     };
     if (limit) params.pagination = { limit };
     const response = await api.get<StrapiResponse<StrapiProject[]>>('/projects', {
       params,
-      timeout: 3000,
+      timeout: 5000,
     });
     return response.data.data ?? [];
   } catch (err: unknown) {
