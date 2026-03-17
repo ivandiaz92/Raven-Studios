@@ -213,22 +213,32 @@ both files are named `page.tsx`. The second one **overwrites** the first, so you
 
 ### Safe way to deploy (recommended)
 
-From your **local machine** (after you push to Git):
-
-```bash
-ssh deploy@YOUR_DROPLET_IP 'cd ravenstudios-next && git pull && npm ci && SKIP_STRAPI_BUILD=1 npm run build && pm2 restart ravenstudios'
-```
-
-Or on the **server**:
+**Push from your machine first**, then on the **server**:
 
 ```bash
 cd ~/ravenstudios-next
+chmod +x scripts/deploy.sh   # once
 ./scripts/deploy.sh
 ```
 
-(Ensure `scripts/deploy.sh` is executable: `chmod +x scripts/deploy.sh`.)
+The script **fetches and `git reset --hard origin/main`**. That way:
 
-This way the server always gets the exact code from the repo and the correct `app/page.tsx` and `app/portfolio/page.tsx` are preserved.
+- Edits made only on the server (e.g. accidental `scp`) never block updates — they are replaced by GitHub.
+- Production always matches the commit you pushed.
+
+From your **local machine** (same as running deploy on the server):
+
+```bash
+ssh root@YOUR_DROPLET_IP 'cd ~/ravenstudios-next && ./scripts/deploy.sh'
+```
+
+**If `git pull` ever fails** with “local changes would be overwritten”, don’t edit files on the droplet to fix it. Either run `./scripts/deploy.sh` (after it includes the reset logic), or once:
+
+```bash
+cd ~/ravenstudios-next && git fetch origin main && git reset --hard origin/main && ./scripts/deploy.sh
+```
+
+`.env.production` is not in Git — it is **not** removed by reset.
 
 **Note:** Next.js is configured with `assetPrefix: '/next'` for local/Cursor. If you serve the app at the root of your domain (e.g. `https://yourdomain.com`) and static assets don’t load, set `assetPrefix: ''` in `next.config.js` on the server (or use an env-based prefix).
 
