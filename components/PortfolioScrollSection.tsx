@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import ExternalLinkIcon from '@/components/ExternalLinkIcon'
 import type { StrapiProject } from '@/types/strapi'
-import { getProjectImageUrl } from '@/lib/strapi'
+import { getProjectImageUrl, getProjectDetailSlug } from '@/lib/strapi'
 
 function getProjectToolsList(tools: unknown): string[] {
   if (tools == null) return []
@@ -52,7 +52,7 @@ export default function PortfolioScrollSection({ projects }: PortfolioScrollSect
             return (
               <Link
                 key={project.id}
-                href={`/portfolio/${project.id}`}
+                href={`/portfolio/${getProjectDetailSlug(project)}`}
                 className="group relative min-h-screen flex flex-col justify-end p-6 sm:p-10 lg:p-14 border-t border-gray-800/50 first:border-t-0 overflow-hidden"
               >
                 <div className="absolute inset-0">

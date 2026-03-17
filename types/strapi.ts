@@ -76,6 +76,8 @@ export interface Portfolio {
 /** Strapi "Project" content type */
 export interface StrapiProject {
   id: number;
+  /** Strapi v5 REST: single-document routes use documentId, not numeric id */
+  documentId?: string;
   attributes: {
     project_name: string;
     project_image?: {

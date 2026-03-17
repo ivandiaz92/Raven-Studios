@@ -1,16 +1,22 @@
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { getProjectById, getProjects, getProjectImageUrl, getProjectGalleryUrls } from '@/lib/strapi'
+import {
+  getProjectById,
+  getProjects,
+  getProjectImageUrl,
+  getProjectGalleryUrls,
+  getProjectDetailSlug,
+} from '@/lib/strapi'
 import PortfolioCard from '@/components/PortfolioCard'
 import ContactSection from '@/components/ContactSection'
 import ExternalLinkIcon from '@/components/ExternalLinkIcon'
 
-export const revalidate = 300 // ISR: refresh project detail from Strapi every 5 minutes
+export const dynamic = 'force-dynamic' // always resolve detail + Strapi v5 documentId at runtime
 
 export async function generateStaticParams() {
   const projects = await getProjects()
-  return projects.map((p) => ({ slug: String(p.id) }))
+  return projects.map((p) => ({ slug: getProjectDetailSlug(p) }))
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {

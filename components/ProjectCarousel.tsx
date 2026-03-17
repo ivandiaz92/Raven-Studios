@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { gsap } from 'gsap'
 import type { StrapiProject } from '@/types/strapi'
-import { getProjectImageUrl } from '@/lib/strapi'
+import { getProjectImageUrl, getProjectDetailSlug } from '@/lib/strapi'
 import ExternalLinkIcon from '@/components/ExternalLinkIcon'
 
 const GAP = 32 // gap-8
@@ -33,7 +33,7 @@ function CarouselCard({
   return (
     <Link
       key={`${project.id}-${copyIndex}-${index}`}
-      href={`/portfolio/${project.id}`}
+      href={`/portfolio/${getProjectDetailSlug(project)}`}
       className="relative flex-shrink-0 group"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}

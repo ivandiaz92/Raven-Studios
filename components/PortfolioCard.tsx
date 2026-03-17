@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { getProjectImageUrl } from '@/lib/strapi'
+import { getProjectImageUrl, getProjectDetailSlug } from '@/lib/strapi'
 import type { StrapiProject } from '@/types/strapi'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -42,7 +42,7 @@ export default function PortfolioCard({ project, index = 0 }: PortfolioCardProps
   const overview = project.attributes.project_overview ?? ''
 
   return (
-    <Link href={`/portfolio/${project.id}`}>
+    <Link href={`/portfolio/${getProjectDetailSlug(project)}`}>
       <div
         ref={cardRef}
         className="group relative overflow-hidden rounded-lg border border-gray-800 bg-gray-900/80 hover:border-[#7dd3fc]/50 transition-all duration-300"

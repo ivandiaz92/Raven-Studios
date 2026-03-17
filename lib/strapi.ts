@@ -97,23 +97,67 @@ export async function getProjects(limit?: number): Promise<StrapiProject[]> {
   }
 }
 
-export async function getProjectById(id: string): Promise<StrapiProject | null> {
+/** URL segment for /portfolio/[slug] — Strapi v5 needs documentId for GET /projects/:id */
+export function getProjectDetailSlug(project: StrapiProject): string {
+  const doc = project.documentId?.trim()
+  if (doc) return doc
+  return String(project.id)
+}
+
+function axiosStatus(err: unknown): number | undefined {
+  if (err && typeof err === 'object' && 'response' in err) {
+    return (err as { response?: { status?: number } }).response?.status
+  }
+  return undefined
+}
+
+export async function getProjectById(idOrSlug: string): Promise<StrapiProject | null> {
   if (skipStrapiDuringBuild) return null
-  try {
-    const response = await api.get<StrapiResponse<StrapiProject>>(`/projects/${id}`, {
-      params: { populate: ['project_image'] },
-    });
-    return response.data.data ?? null;
-  } catch {
-    try {
-      const response = await api.get<StrapiResponse<StrapiProject>>(`/projects/${id}`, {
-        params: {},
-      });
-      return response.data.data ?? null;
-    } catch (error) {
-      console.error('Error fetching project:', error);
-      return null;
+
+  const fetchOne = async (key: string, populate: string[]) => {
+    const params = populate.length ? { populate } : {}
+    const { data } = await api.get<StrapiResponse<StrapiProject>>(`/projects/${encodeURIComponent(key)}`, {
+      params,
+      timeout: 15000,
+    })
+    return data?.data ?? null
+  }
+
+  const tryKey = async (key: string): Promise<StrapiProject | null> => {
+    let saw404 = false
+    for (const pop of [['project_image', 'project_gallery'], ['project_image'], []] as string[][]) {
+      try {
+        const p = await fetchOne(key, pop)
+        if (p) return p
+      } catch (e) {
+        if (axiosStatus(e) === 404) {
+          saw404 = true
+          break
+        }
+      }
     }
+    if (saw404) return null
+    return null
+  }
+
+  let project = await tryKey(idOrSlug)
+  if (project) return project
+
+  // Strapi v5: /projects/123 often 404s; list still returns id + documentId — resolve then refetch
+  try {
+    const all = await getProjects(100)
+    const match = all.find(
+      (p) => String(p.id) === idOrSlug || (p.documentId && p.documentId === idOrSlug)
+    )
+    if (!match) return null
+    if (match.documentId && match.documentId !== idOrSlug) {
+      project = await tryKey(match.documentId)
+      if (project) return project
+    }
+    return match
+  } catch (e) {
+    console.error('getProjectById resolve failed:', axiosStatus(e) ?? e)
+    return null
   }
 }
 
