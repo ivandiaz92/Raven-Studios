@@ -39,11 +39,36 @@ export function getProjectImageUrl(project: StrapiProject): string {
 
 // Get all gallery image URLs from a Project (project_gallery)
 export function getProjectGalleryUrls(project: StrapiProject): string[] {
-  const gallery = project?.attributes?.project_gallery
-  if (!gallery?.data || !Array.isArray(gallery.data)) return []
-  return gallery.data
-    .map((item) => getStrapiImageUrl(item?.attributes ? { data: item } : null))
-    .filter(Boolean)
+  const gallery = project?.attributes?.project_gallery as
+    | { data?: unknown[] | null }
+    | unknown[]
+    | null
+    | undefined
+  if (!gallery) return []
+
+  const urlFromMediaItem = (item: unknown): string => {
+    if (!item || typeof item !== 'object') return ''
+    const o = item as Record<string, unknown>
+    // Strapi v4: { id, attributes: { url, formats } }
+    if (o.attributes && typeof o.attributes === 'object') {
+      return getStrapiImageUrl({ data: item })
+    }
+    // Strapi v5 flat media: { url, formats, ... }
+    if (typeof o.url === 'string' || o.formats) {
+      return getStrapiImageUrl({ attributes: o })
+    }
+    return ''
+  }
+
+  // v4 / nested: { data: [...] }
+  if (typeof gallery === 'object' && !Array.isArray(gallery) && Array.isArray((gallery as { data?: unknown[] }).data)) {
+    return (gallery as { data: unknown[] }).data.map(urlFromMediaItem).filter(Boolean)
+  }
+  // v5: gallery as array of media docs
+  if (Array.isArray(gallery)) {
+    return gallery.map(urlFromMediaItem).filter(Boolean)
+  }
+  return []
 }
 
 // —— Projects API (your Strapi "Project" content type) ——
@@ -172,8 +197,31 @@ export async function getProjectById(idOrSlug: string): Promise<StrapiProject | 
     return null
   }
 
+  /** Strapi often 503s on multi-populate; we then load without gallery — fetch gallery alone */
+  const mergeProjectGallery = async (p: StrapiProject): Promise<StrapiProject> => {
+    if (getProjectGalleryUrls(p).length > 0) return p
+    const key = p.documentId?.trim() || String(p.id)
+    try {
+      const { data } = await api.get<StrapiResponse<StrapiProject>>(`/projects/${encodeURIComponent(key)}`, {
+        params: { populate: ['project_gallery'] },
+        timeout: 15000,
+      })
+      const doc = data?.data as StrapiProject & { project_gallery?: unknown }
+      const g = doc?.attributes?.project_gallery ?? doc?.project_gallery
+      if (g) {
+        return {
+          ...p,
+          attributes: { ...p.attributes, project_gallery: g as StrapiProject['attributes']['project_gallery'] },
+        }
+      }
+    } catch {
+      /* gallery-only populate can still fail on some Strapi Cloud tiers */
+    }
+    return p
+  }
+
   let project = await tryKey(idOrSlug)
-  if (project) return project
+  if (project) return mergeProjectGallery(project)
 
   // Strapi v5: /projects/123 often 404s; list still returns id + documentId — resolve then refetch
   try {
@@ -184,9 +232,9 @@ export async function getProjectById(idOrSlug: string): Promise<StrapiProject | 
     if (!match) return null
     if (match.documentId && match.documentId !== idOrSlug) {
       project = await tryKey(match.documentId)
-      if (project) return project
+      if (project) return mergeProjectGallery(project)
     }
-    return match
+    return mergeProjectGallery(match)
   } catch (e) {
     console.error('getProjectById resolve failed:', axiosStatus(e) ?? e)
     return null
