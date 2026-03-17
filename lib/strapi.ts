@@ -47,7 +47,8 @@ export function getProjectGalleryUrls(project: StrapiProject): string[] {
 }
 
 // —— Projects API (your Strapi "Project" content type) ——
-// Strapi Cloud often 503s on populate; if that fails we fetch without populate so projects still show.
+// Strapi Cloud: populated requests may 503, error, or oddly return 200 + empty data.
+// Always fall back to a plain list when the populated result is empty so projects still show.
 export async function getProjects(limit?: number): Promise<StrapiProject[]> {
   if (skipStrapiDuringBuild) return []
 
@@ -67,33 +68,64 @@ export async function getProjects(limit?: number): Promise<StrapiProject[]> {
     return response.data?.data ?? []
   }
 
+  let withPop: StrapiProject[] = []
   try {
-    const data = await fetchProjects(['project_image'])
-    if (data.length > 0) {
-      console.log('[getProjects] ok with images, count:', data.length)
-    }
-    return data
+    withPop = await fetchProjects(['project_image'])
   } catch (first: unknown) {
     const status =
       first && typeof first === 'object' && 'response' in first
         ? (first as { response?: { status?: number } }).response?.status
         : undefined
-    console.warn('[getProjects] populate failed (' + (status ?? 'network') + '), retrying without images')
+    console.warn('[getProjects] populate request failed (' + (status ?? 'network') + '), will try plain list')
+  }
 
-    try {
-      const data = await fetchProjects()
-      if (data.length > 0) console.log('[getProjects] ok without populate, count:', data.length)
-      return data
-    } catch (err: unknown) {
-      if (process.env.NODE_ENV === 'development' && err && typeof err === 'object' && 'code' in err && err.code === 'ECONNREFUSED') {
-        console.warn('Strapi not running — start it with: cd ../ravenstudios-strapi && npm run develop');
+  if (withPop.length > 0) {
+    console.log('[getProjects] with images, count:', withPop.length)
+    return withPop
+  }
+
+  try {
+    let plain = await fetchProjects()
+    if (plain.length === 0) {
+      const bareParams: Record<string, unknown> = {}
+      if (limit) bareParams.pagination = { limit }
+      const { data } = await api.get<StrapiResponse<StrapiProject[]>>('/projects', {
+        params: bareParams,
+        timeout: 15000,
+      })
+      plain = data?.data ?? []
+      if (plain.length > 0) {
+        console.log('[getProjects] minimal query (no sort), count:', plain.length)
       }
-      const msg = err && typeof err === 'object' && 'response' in err
-        ? (err as { response?: { status?: number; data?: unknown } }).response?.status
-        : err;
-      console.error('getProjects failed (both attempts):', msg);
-      return [];
     }
+    if (plain.length > 0) {
+      console.log('[getProjects] final count:', plain.length)
+    } else {
+      console.warn('[getProjects] no projects after all fallbacks')
+    }
+    return plain
+  } catch (err: unknown) {
+    try {
+      const bareParams: Record<string, unknown> = {}
+      if (limit) bareParams.pagination = { limit }
+      const { data } = await api.get<StrapiResponse<StrapiProject[]>>('/projects', {
+        params: bareParams,
+        timeout: 15000,
+      })
+      const last = data?.data ?? []
+      if (last.length > 0) console.log('[getProjects] recovered via minimal query, count:', last.length)
+      return last
+    } catch {
+      /* fall through */
+    }
+    if (process.env.NODE_ENV === 'development' && err && typeof err === 'object' && 'code' in err && err.code === 'ECONNREFUSED') {
+      console.warn('Strapi not running — start it with: cd ../ravenstudios-strapi && npm run develop');
+    }
+    const msg = err && typeof err === 'object' && 'response' in err
+      ? (err as { response?: { status?: number; data?: unknown } }).response?.status
+      : err;
+    console.error('getProjects failed:', msg);
+    return [];
   }
 }
 
