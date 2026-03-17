@@ -47,29 +47,53 @@ export function getProjectGalleryUrls(project: StrapiProject): string[] {
 }
 
 // —— Projects API (your Strapi "Project" content type) ——
-// No populate: Strapi Cloud returns 503 when populate is used; projects show, images need placeholder
+// Strapi Cloud often 503s on populate; if that fails we fetch without populate so projects still show.
 export async function getProjects(limit?: number): Promise<StrapiProject[]> {
   if (skipStrapiDuringBuild) return []
-  try {
-    const params: Record<string, unknown> = {
-      sort: ['publishedAt:desc'],
-    };
-    if (limit) params.pagination = { limit };
+
+  const baseParams: Record<string, unknown> = {
+    sort: ['publishedAt:desc'],
+  }
+  if (limit) baseParams.pagination = { limit }
+
+  const fetchProjects = async (populate?: string[]) => {
+    const params = populate?.length
+      ? { ...baseParams, populate }
+      : baseParams
     const response = await api.get<StrapiResponse<StrapiProject[]>>('/projects', {
       params,
-      timeout: 5000,
-    });
-    return response.data.data ?? [];
-  } catch (err: unknown) {
-    if (process.env.NODE_ENV === 'development' && err && typeof err === 'object' && 'code' in err && err.code === 'ECONNREFUSED') {
-      console.warn('Strapi not running — start it with: cd ../ravenstudios-strapi && npm run develop');
+      timeout: 15000,
+    })
+    return response.data?.data ?? []
+  }
+
+  try {
+    const data = await fetchProjects(['project_image'])
+    if (data.length > 0) {
+      console.log('[getProjects] ok with images, count:', data.length)
     }
-    // Log so you can see 403/401 in server logs (e.g. PM2) when Project permissions are missing
-    const msg = err && typeof err === 'object' && 'response' in err
-      ? (err as { response?: { status?: number; data?: unknown } }).response?.status
-      : err;
-    console.error('getProjects failed:', msg);
-    return [];
+    return data
+  } catch (first: unknown) {
+    const status =
+      first && typeof first === 'object' && 'response' in first
+        ? (first as { response?: { status?: number } }).response?.status
+        : undefined
+    console.warn('[getProjects] populate failed (' + (status ?? 'network') + '), retrying without images')
+
+    try {
+      const data = await fetchProjects()
+      if (data.length > 0) console.log('[getProjects] ok without populate, count:', data.length)
+      return data
+    } catch (err: unknown) {
+      if (process.env.NODE_ENV === 'development' && err && typeof err === 'object' && 'code' in err && err.code === 'ECONNREFUSED') {
+        console.warn('Strapi not running — start it with: cd ../ravenstudios-strapi && npm run develop');
+      }
+      const msg = err && typeof err === 'object' && 'response' in err
+        ? (err as { response?: { status?: number; data?: unknown } }).response?.status
+        : err;
+      console.error('getProjects failed (both attempts):', msg);
+      return [];
+    }
   }
 }
 
@@ -77,12 +101,19 @@ export async function getProjectById(id: string): Promise<StrapiProject | null> 
   if (skipStrapiDuringBuild) return null
   try {
     const response = await api.get<StrapiResponse<StrapiProject>>(`/projects/${id}`, {
-      params: {}, // no populate: Strapi Cloud 503s with populate
+      params: { populate: ['project_image'] },
     });
     return response.data.data ?? null;
-  } catch (error) {
-    console.error('Error fetching project:', error);
-    return null;
+  } catch {
+    try {
+      const response = await api.get<StrapiResponse<StrapiProject>>(`/projects/${id}`, {
+        params: {},
+      });
+      return response.data.data ?? null;
+    } catch (error) {
+      console.error('Error fetching project:', error);
+      return null;
+    }
   }
 }
 

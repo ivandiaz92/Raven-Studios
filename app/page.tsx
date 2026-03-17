@@ -1,7 +1,7 @@
 import { getProjects, getBlogPosts } from '@/lib/strapi'
 import HomeClient from './HomeClient'
 
-export const revalidate = 300 // ISR: refresh from Strapi every 5 minutes
+export const dynamic = 'force-dynamic' // always fetch from Strapi so projects show after build-with-skip
 
 export default async function HomePage() {
   const [projects, blogPosts] = await Promise.all([

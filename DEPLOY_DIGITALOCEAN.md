@@ -199,13 +199,27 @@ Follow the prompts. Certbot will configure HTTPS and auto-renewal.
 
 ## 8. Updating the Site (Deploy Script)
 
-From your **local machine**, you can deploy updates with:
+**Always deploy via Git + build.** Do not copy individual files (e.g. `page.tsx`) with `scp` into the app directory.
+
+### Why the homepage can break if you copy files manually
+
+If you run something like:
 
 ```bash
-ssh deploy@YOUR_DROPLET_IP 'cd ravenstudios-next && git pull && npm ci && npm run build && pm2 restart ravenstudios'
+scp app/page.tsx app/portfolio/page.tsx user@server:/root/ravenstudios-next/app/
 ```
 
-Or on the **server** you can use the included script:
+both files are named `page.tsx`. The second one **overwrites** the first, so you end up with two copies of the portfolio page and the real homepage is gone. The same risk exists any time you `scp` multiple files that share the same filename into the same destination directory.
+
+### Safe way to deploy (recommended)
+
+From your **local machine** (after you push to Git):
+
+```bash
+ssh deploy@YOUR_DROPLET_IP 'cd ravenstudios-next && git pull && npm ci && SKIP_STRAPI_BUILD=1 npm run build && pm2 restart ravenstudios'
+```
+
+Or on the **server**:
 
 ```bash
 cd ~/ravenstudios-next
@@ -213,6 +227,8 @@ cd ~/ravenstudios-next
 ```
 
 (Ensure `scripts/deploy.sh` is executable: `chmod +x scripts/deploy.sh`.)
+
+This way the server always gets the exact code from the repo and the correct `app/page.tsx` and `app/portfolio/page.tsx` are preserved.
 
 **Note:** Next.js is configured with `assetPrefix: '/next'` for local/Cursor. If you serve the app at the root of your domain (e.g. `https://yourdomain.com`) and static assets don’t load, set `assetPrefix: ''` in `next.config.js` on the server (or use an env-based prefix).
 
@@ -227,6 +243,7 @@ cd ~/ravenstudios-next
 - [ ] `npm run build` and PM2 start work; site loads at `http://IP:3000`
 - [ ] (Optional) Domain A record → droplet IP
 - [ ] (Optional) Nginx + Certbot for HTTPS
+- [ ] **Updates:** Always use `git pull` + build + PM2 restart (or `./scripts/deploy.sh`); never overwrite `app/` with `scp` of multiple same-named files
 
 ---
 
