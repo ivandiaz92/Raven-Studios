@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { getBlogPostImageUrl } from '@/lib/strapi'
+import { getBlogPostImageUrl } from '@/lib/strapi-helpers'
 import type { StrapiBlogPost } from '@/types/strapi'
 
 gsap.registerPlugin(ScrollTrigger)

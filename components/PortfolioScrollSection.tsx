@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import ExternalLinkIcon from '@/components/ExternalLinkIcon'
 import type { StrapiProject } from '@/types/strapi'
-import { getProjectImageUrl, getProjectDetailSlug } from '@/lib/strapi'
+import { getProjectImageUrl, getProjectDetailSlug } from '@/lib/strapi-helpers'
 
 function getProjectToolsList(tools: unknown): string[] {
   if (tools == null) return []

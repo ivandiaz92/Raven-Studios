@@ -1,6 +1,7 @@
 import axios from 'axios';
 import type { Portfolio, StrapiProject, StrapiResponse, StrapiBlogPost } from '@/types/strapi';
 import { readProjectsCache, writeProjectsCache } from '@/lib/strapi-project-cache';
+import { getStrapiImageUrl, getProjectGalleryUrls } from '@/lib/strapi-helpers';
 
 const API_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337/api';
 const API_TOKEN = process.env.STRAPI_API_TOKEN;
@@ -13,64 +14,9 @@ const api = axios.create({
   },
 });
 
-const STRAPI_MEDIA_BASE = process.env.NEXT_PUBLIC_STRAPI_API_URL?.replace(/\/api\/?$/, '') || 'http://localhost:1337'
-
 // Skip Strapi during build so 503s don't fail the build; data loads at runtime (ISR).
 const skipStrapiDuringBuild =
   process.env.SKIP_STRAPI_BUILD === '1' || process.env.NEXT_PHASE === 'phase-production-build'
-
-// Helper to get image URL (handles Strapi media: data as object or array, relation { data: { attributes } }, or flat attributes)
-export function getStrapiImageUrl(image: any): string {
-  if (!image) return '';
-  if (typeof image === 'string') return image.startsWith('http') ? image : `${STRAPI_MEDIA_BASE}${image.startsWith('/') ? image : '/' + image}`;
-  // Strapi can return data as single object or as array (e.g. main_mockup.data: [{ id, attributes }])
-  const data = image?.data;
-  const attrs = Array.isArray(data) ? data[0]?.attributes : data?.attributes ?? image?.attributes;
-  const url = attrs?.url ?? attrs?.formats?.large?.url ?? attrs?.formats?.medium?.url ?? attrs?.formats?.small?.url;
-  if (url) {
-    return url.startsWith('http') ? url : `${STRAPI_MEDIA_BASE}${url.startsWith('/') ? url : '/' + url}`;
-  }
-  return '';
-}
-
-// Get the main image from a Project (project_image)
-export function getProjectImageUrl(project: StrapiProject): string {
-  return getStrapiImageUrl(project?.attributes?.project_image)
-}
-
-// Get all gallery image URLs from a Project (project_gallery)
-export function getProjectGalleryUrls(project: StrapiProject): string[] {
-  const gallery = project?.attributes?.project_gallery as
-    | { data?: unknown[] | null }
-    | unknown[]
-    | null
-    | undefined
-  if (!gallery) return []
-
-  const urlFromMediaItem = (item: unknown): string => {
-    if (!item || typeof item !== 'object') return ''
-    const o = item as Record<string, unknown>
-    // Strapi v4: { id, attributes: { url, formats } }
-    if (o.attributes && typeof o.attributes === 'object') {
-      return getStrapiImageUrl({ data: item })
-    }
-    // Strapi v5 flat media: { url, formats, ... }
-    if (typeof o.url === 'string' || o.formats) {
-      return getStrapiImageUrl({ attributes: o })
-    }
-    return ''
-  }
-
-  // v4 / nested: { data: [...] }
-  if (typeof gallery === 'object' && !Array.isArray(gallery) && Array.isArray((gallery as { data?: unknown[] }).data)) {
-    return (gallery as { data: unknown[] }).data.map(urlFromMediaItem).filter(Boolean)
-  }
-  // v5: gallery as array of media docs
-  if (Array.isArray(gallery)) {
-    return gallery.map(urlFromMediaItem).filter(Boolean)
-  }
-  return []
-}
 
 // —— Projects API (your Strapi "Project" content type) ——
 // Strapi Cloud is flaky (503, empty 200, timeouts). We retry, chain fallbacks, then disk cache.
@@ -166,7 +112,6 @@ export async function getProjects(limit?: number): Promise<StrapiProject[]> {
   }
 
   if (best.length > 0) {
-    // Only cache full fetches so home/portfolio don't wipe cache with partial pages
     if (limit === undefined) await writeProjectsCache(best)
     return limit ? best.slice(0, limit) : best
   }
@@ -177,13 +122,6 @@ export async function getProjects(limit?: number): Promise<StrapiProject[]> {
   }
 
   return []
-}
-
-/** URL segment for /portfolio/[slug] — Strapi v5 needs documentId for GET /projects/:id */
-export function getProjectDetailSlug(project: StrapiProject): string {
-  const doc = project.documentId?.trim()
-  if (doc) return doc
-  return String(project.id)
 }
 
 function axiosStatus(err: unknown): number | undefined {
@@ -349,10 +287,6 @@ export async function getBlogPostById(id: string): Promise<StrapiBlogPost | null
   }
 }
 
-export function getBlogPostImageUrl(post: StrapiBlogPost): string {
-  return getStrapiImageUrl(post?.attributes?.main_image);
-}
-
 export async function getBlogPostBySlug(slug: string): Promise<StrapiBlogPost | null> {
   if (skipStrapiDuringBuild) return null
   try {
@@ -450,3 +384,11 @@ export async function createQuoteRequest(payload: QuoteRequestPayload): Promise<
   }
 }
 
+/** Re-export for server modules; client components must import from `@/lib/strapi-helpers` only. */
+export {
+  getStrapiImageUrl,
+  getProjectImageUrl,
+  getProjectGalleryUrls,
+  getProjectDetailSlug,
+  getBlogPostImageUrl,
+} from '@/lib/strapi-helpers'

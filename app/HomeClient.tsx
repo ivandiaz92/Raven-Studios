@@ -11,7 +11,7 @@ import OurApproachSection from '@/components/OurApproachSection'
 import ContactSection from '@/components/ContactSection'
 import ServiceCard from '@/components/ServiceCard'
 import ExternalLinkIcon from '@/components/ExternalLinkIcon'
-import { getBlogPostImageUrl } from '@/lib/strapi'
+import { getBlogPostImageUrl } from '@/lib/strapi-helpers'
 import type { StrapiProject, StrapiBlogPost } from '@/types/strapi'
 
 gsap.registerPlugin(ScrollTrigger)
