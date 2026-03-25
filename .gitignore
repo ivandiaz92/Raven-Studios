@@ -16,6 +16,9 @@
 # production
 /build
 
+# Strapi projects fallback cache (production droplet)
+.cache/
+
 # misc
 .DS_Store
 *.pem

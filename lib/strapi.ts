@@ -1,5 +1,6 @@
 import axios from 'axios';
 import type { Portfolio, StrapiProject, StrapiResponse, StrapiBlogPost } from '@/types/strapi';
+import { readProjectsCache, writeProjectsCache } from '@/lib/strapi-project-cache';
 
 const API_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL || 'http://localhost:1337/api';
 const API_TOKEN = process.env.STRAPI_API_TOKEN;
@@ -72,23 +73,18 @@ export function getProjectGalleryUrls(project: StrapiProject): string[] {
 }
 
 // —— Projects API (your Strapi "Project" content type) ——
-// Strapi Cloud: populated requests may 503, error, or oddly return 200 + empty data.
-// Always fall back to a plain list when the populated result is empty so projects still show.
-export async function getProjects(limit?: number): Promise<StrapiProject[]> {
-  if (skipStrapiDuringBuild) return []
-
+// Strapi Cloud is flaky (503, empty 200, timeouts). We retry, chain fallbacks, then disk cache.
+async function fetchProjectsFromStrapiAttempt(limit?: number): Promise<StrapiProject[]> {
   const baseParams: Record<string, unknown> = {
     sort: ['publishedAt:desc'],
   }
   if (limit) baseParams.pagination = { limit }
 
   const fetchProjects = async (populate?: string[]) => {
-    const params = populate?.length
-      ? { ...baseParams, populate }
-      : baseParams
+    const params = populate?.length ? { ...baseParams, populate } : baseParams
     const response = await api.get<StrapiResponse<StrapiProject[]>>('/projects', {
       params,
-      timeout: 15000,
+      timeout: 20000,
     })
     return response.data?.data ?? []
   }
@@ -101,7 +97,7 @@ export async function getProjects(limit?: number): Promise<StrapiProject[]> {
       first && typeof first === 'object' && 'response' in first
         ? (first as { response?: { status?: number } }).response?.status
         : undefined
-    console.warn('[getProjects] populate request failed (' + (status ?? 'network') + '), will try plain list')
+    console.warn('[getProjects] populate failed (' + (status ?? 'network') + '), trying plain list')
   }
 
   if (withPop.length > 0) {
@@ -116,7 +112,7 @@ export async function getProjects(limit?: number): Promise<StrapiProject[]> {
       if (limit) bareParams.pagination = { limit }
       const { data } = await api.get<StrapiResponse<StrapiProject[]>>('/projects', {
         params: bareParams,
-        timeout: 15000,
+        timeout: 20000,
       })
       plain = data?.data ?? []
       if (plain.length > 0) {
@@ -126,7 +122,7 @@ export async function getProjects(limit?: number): Promise<StrapiProject[]> {
     if (plain.length > 0) {
       console.log('[getProjects] final count:', plain.length)
     } else {
-      console.warn('[getProjects] no projects after all fallbacks')
+      console.warn('[getProjects] Strapi returned 0 projects this attempt')
     }
     return plain
   } catch (err: unknown) {
@@ -135,10 +131,10 @@ export async function getProjects(limit?: number): Promise<StrapiProject[]> {
       if (limit) bareParams.pagination = { limit }
       const { data } = await api.get<StrapiResponse<StrapiProject[]>>('/projects', {
         params: bareParams,
-        timeout: 15000,
+        timeout: 20000,
       })
       const last = data?.data ?? []
-      if (last.length > 0) console.log('[getProjects] recovered via minimal query, count:', last.length)
+      if (last.length > 0) console.log('[getProjects] recovered minimal query, count:', last.length)
       return last
     } catch {
       /* fall through */
@@ -149,9 +145,38 @@ export async function getProjects(limit?: number): Promise<StrapiProject[]> {
     const msg = err && typeof err === 'object' && 'response' in err
       ? (err as { response?: { status?: number; data?: unknown } }).response?.status
       : err;
-    console.error('getProjects failed:', msg);
+    console.error('[getProjects] attempt failed:', msg);
     return [];
   }
+}
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
+
+export async function getProjects(limit?: number): Promise<StrapiProject[]> {
+  if (skipStrapiDuringBuild) return []
+
+  let best: StrapiProject[] = []
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    best = await fetchProjectsFromStrapiAttempt(limit)
+    if (best.length > 0) break
+    if (attempt < 3) {
+      console.warn('[getProjects] retry', attempt + 1, '/ 3 after empty/error')
+      await sleep(600 * attempt)
+    }
+  }
+
+  if (best.length > 0) {
+    // Only cache full fetches so home/portfolio don't wipe cache with partial pages
+    if (limit === undefined) await writeProjectsCache(best)
+    return limit ? best.slice(0, limit) : best
+  }
+
+  const cached = await readProjectsCache()
+  if (cached && cached.length > 0) {
+    return limit ? cached.slice(0, limit) : cached
+  }
+
+  return []
 }
 
 /** URL segment for /portfolio/[slug] — Strapi v5 needs documentId for GET /projects/:id */

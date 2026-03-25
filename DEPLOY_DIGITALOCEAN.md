@@ -240,6 +240,10 @@ cd ~/ravenstudios-next && git fetch origin main && git reset --hard origin/main 
 
 `.env.production` is not in Git — it is **not** removed by reset.
 
+### Projects disappearing when Strapi Cloud is flaky
+
+The app writes a **disk cache** at `.cache/strapi-projects.json` after successful full project list loads (home + portfolio use a full fetch). If Strapi returns errors or empty data for days, the site still shows the **last good list** (up to ~90 days). Ensure the app can write under the project root (`ravenstudios-next/.cache/`). After the first successful visit when Strapi is up, the cache is populated.
+
 **Note:** Next.js is configured with `assetPrefix: '/next'` for local/Cursor. If you serve the app at the root of your domain (e.g. `https://yourdomain.com`) and static assets don’t load, set `assetPrefix: ''` in `next.config.js` on the server (or use an env-based prefix).
 
 ---
