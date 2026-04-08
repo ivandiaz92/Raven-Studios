@@ -32,12 +32,12 @@ export default function Footer() {
               <Image
                 src={LOGO_WHITE}
                 alt=""
-                width={48}
-                height={48}
-                className="h-10 w-10 sm:h-12 sm:w-12 object-contain"
+                width={200}
+                height={64}
+                className="h-12 sm:h-14 w-auto object-contain shrink-0"
                 unoptimized
               />
-              <h3 className="text-2xl sm:text-3xl font-display font-normal tracking-wider text-white">
+              <h3 className="text-2xl sm:text-3xl font-sans font-semibold tracking-[0.18em] text-white">
                 {SITE_NAME_MARK}
               </h3>
             </Link>

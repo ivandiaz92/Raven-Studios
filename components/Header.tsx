@@ -39,29 +39,33 @@ export default function Header() {
       >
         <nav className="w-[90%] max-w-[90vw] mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
           <div className="flex items-center justify-between relative">
-            {/* Left: wordmark text (always visible) */}
-            <Link href="/" className="header-item text-3xl sm:text-4xl font-display font-normal tracking-wider text-white z-10">
+            {/* Left: wordmark — sans (Hanken), not display serif */}
+            <Link
+              href="/"
+              className="header-item text-xl sm:text-2xl font-sans font-semibold tracking-[0.18em] text-white z-10"
+            >
               {SITE_NAME_MARK}
             </Link>
 
-            {/* Center: logo (white on dark header) */}
+            {/* Center: logo SVG (wide wordmark — height-led sizing, not a tiny square) */}
             <Link
               href="/"
-              className="header-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center"
+              className="header-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center max-w-[55vw]"
               aria-label={`${SITE_NAME_MARK} — home`}
             >
               {!logoError ? (
                 <Image
                   src={LOGO_WHITE}
                   alt=""
-                  width={72}
-                  height={72}
-                  className="h-12 w-12 sm:h-14 sm:w-14 object-contain"
+                  width={320}
+                  height={96}
+                  className="h-11 sm:h-14 md:h-16 w-auto max-h-[4rem] sm:max-h-[4.5rem] object-contain object-center"
                   unoptimized
+                  priority
                   onError={() => setLogoError(true)}
                 />
               ) : (
-                <span className="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-white/10" aria-hidden />
+                <span className="h-14 w-32 rounded-md bg-white/10" aria-hidden />
               )}
             </Link>
 

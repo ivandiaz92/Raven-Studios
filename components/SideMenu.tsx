@@ -129,9 +129,9 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
               <Image
                 src={LOGO_WHITE}
                 alt=""
-                width={56}
-                height={56}
-                className="h-12 w-12 sm:h-14 sm:w-14 object-contain opacity-90"
+                width={280}
+                height={84}
+                className="h-14 sm:h-16 w-auto max-w-[min(70vw,260px)] object-contain opacity-90"
                 unoptimized
               />
             </Link>

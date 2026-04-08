@@ -1,10 +1,12 @@
 /** @type {import('next').NextConfig} */
+const isProd = process.env.NODE_ENV === 'production'
+
 const nextConfig = {
   // Allow production build on server when ESLint/TS deps are broken
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
-  // Use /next so asset URLs work in Cursor/browsers that strip leading underscore from _next
-  assetPrefix: '/next',
+  // Only in production: /next prefix for hosts that rewrite _next (e.g. some proxies). Breaks local dev if always on.
+  ...(isProd ? { assetPrefix: '/next' } : {}),
   images: {
     remotePatterns: [
       {
