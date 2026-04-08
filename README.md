@@ -1,4 +1,4 @@
-# Raven Studios - Next.js Portfolio Site
+# Aspect — Next.js portfolio site
 
 A modern portfolio and blog website built with Next.js, Strapi CMS, and GSAP animations.
 

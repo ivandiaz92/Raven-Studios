@@ -4,7 +4,7 @@ import BlogCard from '@/components/BlogCard'
 export const revalidate = 300 // ISR: refresh from Strapi every 5 minutes
 
 export const metadata = {
-  title: 'Blog - Raven Studios',
+  title: 'Blog - Aspect',
   description: 'Insights, tutorials, and thoughts on web development, design, and technology',
 }
 

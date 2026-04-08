@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { gsap } from 'gsap'
+import { SITE_NAME_MARK, LOGO_WHITE } from '@/lib/site-branding'
 
 interface SideMenuProps {
   isOpen: boolean
@@ -118,15 +119,15 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
             <div className="space-y-4 text-sm text-gray-400">
               <p className="font-mono text-xs tracking-wider uppercase text-gray-500">Get in touch</p>
               <a
-                href="mailto:hello@raven.studio"
+                href="mailto:hello@aspect.studio"
                 className="block hover:text-cyan-400 transition-colors"
               >
-                hello@raven.studio
+                hello@aspect.studio
               </a>
             </div>
-            <Link href="/" onClick={handleClose} className="flex-shrink-0" aria-label="RAVEN Home">
+            <Link href="/" onClick={handleClose} className="flex-shrink-0" aria-label={`${SITE_NAME_MARK} home`}>
               <Image
-                src="/images/Raven-white.svg"
+                src={LOGO_WHITE}
                 alt=""
                 width={56}
                 height={56}

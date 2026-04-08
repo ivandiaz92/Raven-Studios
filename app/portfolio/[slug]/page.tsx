@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   if (!project) return { title: 'Project Not Found' }
   const desc = project.attributes.project_overview ?? project.attributes.project_conclusion ?? ''
   return {
-    title: `${project.attributes.project_name} - Raven Studios`,
+    title: `${project.attributes.project_name} - Aspect`,
     description: desc.slice(0, 160),
   }
 }

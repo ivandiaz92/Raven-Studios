@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { gsap } from 'gsap'
 import SideMenu from './SideMenu'
+import { SITE_NAME_MARK, LOGO_WHITE } from '@/lib/site-branding'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -38,20 +39,20 @@ export default function Header() {
       >
         <nav className="w-[90%] max-w-[90vw] mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
           <div className="flex items-center justify-between relative">
-            {/* Left: RAVEN text (always visible) */}
+            {/* Left: wordmark text (always visible) */}
             <Link href="/" className="header-item text-3xl sm:text-4xl font-display font-normal tracking-wider text-white z-10">
-              RAVEN
+              {SITE_NAME_MARK}
             </Link>
 
-            {/* Center: logo graphic (centered in header) */}
+            {/* Center: logo (white on dark header) */}
             <Link
               href="/"
               className="header-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center"
-              aria-label="RAVEN Digital Studio"
+              aria-label={`${SITE_NAME_MARK} — home`}
             >
               {!logoError ? (
                 <Image
-                  src="/images/Raven-white.svg"
+                  src={LOGO_WHITE}
                   alt=""
                   width={72}
                   height={72}

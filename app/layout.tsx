@@ -3,6 +3,14 @@ import type { Metadata } from 'next'
 import { Hanken_Grotesk, Kode_Mono } from 'next/font/google'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import {
+  SITE_NAME,
+  SITE_NAME_MARK,
+  SITE_TAGLINE,
+  SITE_EDGE_LABEL,
+  LOGO_DARK,
+  DEFAULT_SITE_URL,
+} from '@/lib/site-branding'
 
 const hankenGrotesk = Hanken_Grotesk({ 
   subsets: ['latin'],
@@ -21,13 +29,13 @@ const kodeMono = Kode_Mono({
 // For now, we'll use a fallback serif font
 const displayFontClass = 'font-serif'
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ravenstudios.com'
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || DEFAULT_SITE_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'RAVEN - Digital Crafts for Ambitious Brands',
-    template: '%s | RAVEN',
+    default: `${SITE_NAME_MARK} — ${SITE_TAGLINE}`,
+    template: `%s | ${SITE_NAME}`,
   },
   description:
     'We design and develop clear, functional, and well-structured digital experiences. Strategy, design and performance aligned with your objectives.',
@@ -42,28 +50,28 @@ export const metadata: Metadata = {
     'UX',
     'UI',
   ],
-  authors: [{ name: 'Raven Studios', url: siteUrl }],
-  creator: 'Raven Studios',
+  authors: [{ name: SITE_NAME, url: siteUrl }],
+  creator: SITE_NAME,
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: siteUrl,
-    siteName: 'RAVEN',
-    title: 'RAVEN - Digital Crafts for Ambitious Brands',
+    siteName: SITE_NAME,
+    title: `${SITE_NAME_MARK} — ${SITE_TAGLINE}`,
     description:
       'We design and develop clear, functional, and well-structured digital experiences.',
     images: [
       {
-        url: '/images/Raven-white.svg',
+        url: LOGO_DARK,
         width: 512,
         height: 512,
-        alt: 'RAVEN',
+        alt: SITE_NAME_MARK,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'RAVEN - Digital Crafts for Ambitious Brands',
+    title: `${SITE_NAME_MARK} — ${SITE_TAGLINE}`,
     description:
       'We design and develop clear, functional, and well-structured digital experiences.',
   },
@@ -72,8 +80,8 @@ export const metadata: Metadata = {
     follow: true,
   },
   icons: {
-    icon: '/images/Raven-white.svg',
-    apple: '/images/Raven-white.svg',
+    icon: LOGO_DARK,
+    apple: LOGO_DARK,
   },
 }
 
@@ -102,7 +110,7 @@ export default function RootLayout({
             className="font-mono text-[10px] sm:text-sm tracking-[0.12em] sm:tracking-[0.15em] text-white/30 uppercase whitespace-nowrap"
             style={{ transform: 'rotate(-90deg)' }}
           >
-            RAVEN DIGITAL STUDIO
+            {SITE_EDGE_LABEL}
           </span>
         </div>
 

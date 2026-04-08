@@ -4,7 +4,7 @@ import PortfolioCard from '@/components/PortfolioCard'
 export const dynamic = 'force-dynamic'
 
 export const metadata = {
-  title: 'Portfolio - Raven Studios',
+  title: 'Portfolio - Aspect',
   description: 'Explore our portfolio of web development and design projects',
 }
 

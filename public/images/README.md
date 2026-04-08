@@ -1,9 +1,10 @@
-# Images
+# Images / logos
 
-Place your **logo** here so the site can use it in the header.
+## Aspect logos (SVG)
 
-- **Logo (SVG):** Use the file `Raven-white.svg` in this folder.  
-  The header uses it automatically. If the file is missing, the text “RAVEN” is shown instead.  
-  (Use a name without spaces to avoid 404s.)
+- **`aspect-blanco.svg`** — wordmark for **dark** backgrounds (header, footer, mobile menu).
+- **`aspect-negro.svg`** — wordmark for **light** backgrounds, favicon, and Open Graph previews (readable on white).
 
-Path: **`public/images/Raven-white.svg`** → URL: `/images/Raven-white.svg`
+URLs: `/images/aspect-blanco.svg` and `/images/aspect-negro.svg`
+
+Central branding strings live in `lib/site-branding.ts`.

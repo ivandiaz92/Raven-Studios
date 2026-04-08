@@ -3,7 +3,7 @@ import { Resend } from 'resend'
 import { createQuoteRequest, type QuoteRequestPayload } from '@/lib/strapi'
 
 const QUOTE_EMAIL_TO = process.env.CONTACT_EMAIL_TO || process.env.QUOTE_EMAIL_TO || ''
-const QUOTE_FROM = process.env.CONTACT_FROM || 'Raven Studios <onboarding@resend.dev>'
+const QUOTE_FROM = process.env.CONTACT_FROM || 'Aspect <onboarding@resend.dev>'
 
 function escapeHtml(s: string): string {
   return s
@@ -113,7 +113,7 @@ export async function POST(request: Request) {
       await resend.emails.send({
         from: QUOTE_FROM,
         to: [to],
-        subject: `[Raven Studios] Nueva cotización: ${payload.company_name}`,
+        subject: `[Aspect] Nueva cotización: ${payload.company_name}`,
         html: buildQuoteEmailHtml(payload),
       })
     } catch (err) {

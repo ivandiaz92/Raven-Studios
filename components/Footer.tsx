@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { SITE_NAME, SITE_NAME_MARK, LOGO_WHITE } from '@/lib/site-branding'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -29,7 +30,7 @@ export default function Footer() {
           <div className="footer-item">
             <Link href="/" className="inline-flex items-center gap-3 mb-4">
               <Image
-                src="/images/Raven-white.svg"
+                src={LOGO_WHITE}
                 alt=""
                 width={48}
                 height={48}
@@ -37,7 +38,7 @@ export default function Footer() {
                 unoptimized
               />
               <h3 className="text-2xl sm:text-3xl font-display font-normal tracking-wider text-white">
-                RAVEN
+                {SITE_NAME_MARK}
               </h3>
             </Link>
             <p className="text-gray-400 text-sm">
@@ -96,7 +97,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 pt-8 border-t border-gray-800 text-center text-sm text-gray-400 footer-item">
-          <p>&copy; {currentYear} Raven Studios. All rights reserved.</p>
+          <p>&copy; {currentYear} {SITE_NAME}. All rights reserved.</p>
         </div>
       </div>
     </footer>

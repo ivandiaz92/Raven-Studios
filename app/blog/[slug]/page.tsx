@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const description = post.attributes.excerpt ?? ''
 
   return {
-    title: `${title} - Raven Studios`,
+    title: `${title} - Aspect`,
     description,
   }
 }

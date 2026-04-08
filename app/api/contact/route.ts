@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
 const CONTACT_EMAIL_TO = process.env.CONTACT_EMAIL_TO || 'ivandiazmtz@proton.me'
-const CONTACT_FROM = process.env.CONTACT_FROM || 'Raven Studios <onboarding@resend.dev>'
+const CONTACT_FROM = process.env.CONTACT_FROM || 'Aspect <onboarding@resend.dev>'
 
 export async function POST(request: Request) {
   const apiKey = process.env.RESEND_API_KEY
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
   const { data, error } = await resend.emails.send({
     from: CONTACT_FROM,
     to: [to],
-    subject: `[Raven Studios] Contact from ${name}`,
+    subject: `[Aspect] Contact from ${name}`,
     html,
   })
 
