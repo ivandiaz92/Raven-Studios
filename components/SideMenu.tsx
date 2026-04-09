@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { gsap } from 'gsap'
-import { SITE_NAME_MARK, LOGO_WHITE } from '@/lib/site-branding'
+import { LOGO_WHITE, LOGO_SVG_INTRINSIC } from '@/lib/site-branding'
 
 interface SideMenuProps {
   isOpen: boolean
@@ -125,13 +125,14 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
                 hello@aspect.studio
               </a>
             </div>
-            <Link href="/" onClick={handleClose} className="flex-shrink-0" aria-label={`${SITE_NAME_MARK} home`}>
+            <Link href="/" onClick={handleClose} className="flex-shrink-0" aria-label="Home">
               <Image
                 src={LOGO_WHITE}
                 alt=""
-                width={280}
-                height={84}
-                className="h-14 sm:h-16 w-auto max-w-[min(70vw,260px)] object-contain opacity-90"
+                width={LOGO_SVG_INTRINSIC.width}
+                height={LOGO_SVG_INTRINSIC.height}
+                className="h-10 sm:h-11 w-auto max-w-[min(70vw,220px)] object-contain opacity-90"
+                style={{ aspectRatio: `${LOGO_SVG_INTRINSIC.width} / ${LOGO_SVG_INTRINSIC.height}` }}
                 unoptimized
               />
             </Link>

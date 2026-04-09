@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Setup script for Raven Studios Next.js project
+# Setup script for Aspect Digital (Next.js)
 
 set -e
 
-echo "🚀 Setting up Raven Studios Next.js project..."
+echo "🚀 Setting up Aspect Digital Next.js project..."
 
 # Load nvm if it exists
 export NVM_DIR="$HOME/.nvm"

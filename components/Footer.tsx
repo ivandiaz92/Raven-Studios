@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { SITE_NAME, SITE_NAME_MARK, LOGO_WHITE } from '@/lib/site-branding'
+import { SITE_NAME, LOGO_WHITE, LOGO_SVG_INTRINSIC } from '@/lib/site-branding'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -22,24 +22,23 @@ export default function Footer() {
   }, [])
 
   const currentYear = new Date().getFullYear()
+  const { width: logoW, height: logoH } = LOGO_SVG_INTRINSIC
 
   return (
     <footer className="bg-black/50 border-t border-gray-800">
       <div className="w-[90%] max-w-[90vw] mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="footer-item">
-            <Link href="/" className="inline-flex items-center gap-3 mb-4">
+            <Link href="/" className="inline-block mb-4" aria-label="Home">
               <Image
                 src={LOGO_WHITE}
                 alt=""
-                width={200}
-                height={64}
-                className="h-12 sm:h-14 w-auto object-contain shrink-0"
+                width={logoW}
+                height={logoH}
+                className="h-9 sm:h-10 w-auto max-w-[min(85vw,240px)] object-contain object-left"
+                style={{ aspectRatio: `${logoW} / ${logoH}` }}
                 unoptimized
               />
-              <h3 className="text-2xl sm:text-3xl font-sans font-semibold tracking-[0.18em] text-white">
-                {SITE_NAME_MARK}
-              </h3>
             </Link>
             <p className="text-gray-400 text-sm">
               We design and develop clear, functional, and well-structured digital experiences.

@@ -1,6 +1,6 @@
 # Implementation Summary
 
-Current state of the Raven Studios Next.js site (as of the latest updates).
+Current state of the **Aspect Digital** Next.js site (as of the latest updates).
 
 ---
 
@@ -27,7 +27,7 @@ Current state of the Raven Studios Next.js site (as of the latest updates).
 
 ## Header & Navigation
 
-- **Layout:** RAVEN (left) + center logo (`/images/Raven-white.svg`) + Menu (right). Sizes scale (e.g. `text-3xl`–`text-4xl`, logo `h-12`–`h-14`).
+- **Layout:** **ASPECT** wordmark (left) + center logo (`aspect-blanco.svg`) + Menu (right). Sizes scale (e.g. `text-3xl`–`text-4xl`, logo `h-12`–`h-14`).
 - **Side menu (SideMenu.tsx):**
   - Opens from the right with GSAP; **smooth close** (panel slides out, overlay fades).
   - Nav links (Home, Portfolio, Blog, Contact) + “Get in touch” + email + **logo bottom-right**.
@@ -82,7 +82,7 @@ Current state of the Raven Studios Next.js site (as of the latest updates).
 
 | Component | Purpose |
 |----------|---------|
-| `Header.tsx` | Fixed header: RAVEN, logo, Menu (opens SideMenu) |
+| `Header.tsx` | Fixed header: ASPECT mark, logo, Menu (opens SideMenu) |
 | `SideMenu.tsx` | Slide-out nav + get in touch + logo; smooth close |
 | `ProjectCarousel.tsx` | Hero carousel of Strapi projects |
 | `PortfolioScrollSection.tsx` | Vertical scroll portfolio on home |
@@ -96,7 +96,7 @@ Current state of the Raven Studios Next.js site (as of the latest updates).
 
 ## Git & Repo
 
-- **Repository:** [github.com/ivandiaz92/Raven-Studios](https://github.com/ivandiaz92/Raven-Studios)
+- **Repository:** Prefer **`aspect-digital`** after GitHub rename — see `REPO_RENAME.md`. Legacy URL may still be `github.com/ivandiaz92/Raven-Studios` until updated.
 - **Branch:** `main`
 - **Hook:** `.git/hooks/commit-msg` strips “Co-authored-by: Cursor” from commit messages (local only; not in repo).
 
@@ -104,8 +104,8 @@ Current state of the Raven Studios Next.js site (as of the latest updates).
 
 ## Config & Assets
 
-- **Next:** `next.config.js` (e.g. `assetPrefix: '/next'` if needed for Cursor/embedded browser).
-- **Middleware:** Handles rewrites for `/_next/static` where required.
+- **Next:** `next.config.js` — **no** `assetPrefix` (avoids broken static URLs in production).
+- **Middleware:** None (removed); assets load from default `/_next/...` paths.
 - **Images:** `public/images/` (asteroid, logo, noise, service backgrounds, etc.). Project images come from Strapi.
 
 ---

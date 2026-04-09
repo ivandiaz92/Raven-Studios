@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { gsap } from 'gsap'
 import SideMenu from './SideMenu'
-import { SITE_NAME_MARK, LOGO_WHITE } from '@/lib/site-branding'
+import { LOGO_WHITE, LOGO_SVG_INTRINSIC } from '@/lib/site-branding'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -28,6 +28,8 @@ export default function Header() {
     )
   }, [])
 
+  const { width: logoW, height: logoH } = LOGO_SVG_INTRINSIC
+
   return (
     <>
       <header
@@ -38,52 +40,55 @@ export default function Header() {
         }`}
       >
         <nav className="w-[90%] max-w-[90vw] mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
-          <div className="flex items-center justify-between relative">
-            {/* Left: wordmark — sans (Hanken), not display serif */}
-            <Link
-              href="/"
-              className="header-item text-xl sm:text-2xl font-sans font-semibold tracking-[0.18em] text-white z-10"
-            >
-              {SITE_NAME_MARK}
-            </Link>
+          {/* Three columns: balance menu width so logo stays visually centered */}
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center w-full gap-4">
+            <div className="header-item" aria-hidden />
 
-            {/* Center: logo SVG (wide wordmark — height-led sizing, not a tiny square) */}
             <Link
               href="/"
-              className="header-item absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center max-w-[55vw]"
-              aria-label={`${SITE_NAME_MARK} — home`}
+              className="header-item justify-self-center flex items-center"
+              aria-label="Home"
             >
               {!logoError ? (
                 <Image
                   src={LOGO_WHITE}
                   alt=""
-                  width={320}
-                  height={96}
-                  className="h-11 sm:h-14 md:h-16 w-auto max-h-[4rem] sm:max-h-[4.5rem] object-contain object-center"
+                  width={logoW}
+                  height={logoH}
+                  className="h-7 w-auto sm:h-8 md:h-9 max-w-[min(52vw,200px)] object-contain object-center"
+                  style={{ aspectRatio: `${logoW} / ${logoH}` }}
                   unoptimized
                   priority
                   onError={() => setLogoError(true)}
                 />
               ) : (
-                <span className="h-14 w-32 rounded-md bg-white/10" aria-hidden />
+                <span
+                  className="block rounded-md bg-white/10 object-contain"
+                  style={{
+                    aspectRatio: `${logoW} / ${logoH}`,
+                    height: '2rem',
+                    width: 'auto',
+                    minWidth: '6rem',
+                  }}
+                  aria-hidden
+                />
               )}
             </Link>
 
-            {/* Right: Menu button */}
-            <button
-              className="header-item font-mono text-sm tracking-widest text-white border border-[#7dd3fc] px-5 py-2.5 hover:bg-[#7dd3fc]/10 transition-all uppercase"
-              onClick={() => setIsMenuOpen(true)}
-              aria-label="Open menu"
-            >
-              Menu
-            </button>
+            <div className="header-item justify-self-end">
+              <button
+                className="font-mono text-sm tracking-widest text-white border border-[#7dd3fc] px-5 py-2.5 hover:bg-[#7dd3fc]/10 transition-all uppercase"
+                onClick={() => setIsMenuOpen(true)}
+                aria-label="Open menu"
+              >
+                Menu
+              </button>
+            </div>
           </div>
         </nav>
       </header>
 
-      {/* Side Menu */}
       <SideMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </>
   )
 }
-

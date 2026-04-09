@@ -1,4 +1,4 @@
-# Strapi setup for Raven Studios
+# Strapi setup for Aspect Digital (Next.js)
 
 Use Strapi as the CMS to manage **Portfolio** projects and **Blog** posts. The Next.js app is already configured to read from Strapi at `http://localhost:1337/api`.
 
@@ -35,7 +35,7 @@ Use this to verify each requirement. **Quick test:** with the Next.js app runnin
 | Check | How to verify |
 |-------|----------------|
 | **1. Strapi running (port 1337)** | In a terminal you ran `npm run develop` from the Strapi project folder and left it running. Open **http://localhost:1337/admin** — you should see the Strapi login or dashboard, not “site can’t be reached”. |
-| **2. Token in .env.local** | In the **Next.js** project folder (`ravenstudios-next`), open `.env.local` (create it if missing). It must contain a line: `STRAPI_API_TOKEN=your_actual_token` (no quotes). Restart the Next.js dev server after changing it. The **strapi-check** response shows `hasToken: true` when the token is set. |
+| **2. Token in .env.local** | In the **Next.js** project folder (`aspect-digital`), open `.env.local` (create it if missing). It must contain a line: `STRAPI_API_TOKEN=your_actual_token` (no quotes). Restart the Next.js dev server after changing it. The **strapi-check** response shows `hasToken: true` when the token is set. |
 | **3. Project content type has “find” permission** | In Strapi admin go to **Settings** (left sidebar) → **Users & Permissions** → **Roles**. Open **Public** (or the role your API token uses). Under **Project**, enable **find** (and **findOne** if you use project detail pages). Click **Save**. |
 | **4. Entry published** | In Strapi admin go to **Content Manager** → **Project**. Open your project entry. If you use **Draft & Publish**, the entry must be **Published** (green). If it’s still a draft, click **Publish**. Only published entries are returned by the API. |
 
@@ -174,7 +174,7 @@ Your Next.js app only needs public read access to these two content types.
 
 ## 4. Next.js environment
 
-In the **Next.js** project (ravenstudios-next), ensure `.env.local` has:
+In the **Next.js** project (aspect-digital), ensure `.env.local` has:
 
 ```env
 NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337/api
@@ -189,7 +189,7 @@ For production, point this to your deployed Strapi URL (e.g. `https://your-strap
 1. In Strapi: **Content Manager** → **Portfolio** → **Create new entry**.  
    Fill title, slug, descriptions, featured image, technologies (as JSON array), category, optional URLs, and set **featured** if you want it on the home carousel. Then **Publish**.
 2. Create a few portfolio entries and at least one **Blog Post** (Content Manager → Blog Post).
-3. Run the Next.js app (`npm run dev` in ravenstudios-next) and open:
+3. Run the Next.js app (`npm run dev` in aspect-digital) and open:
    - Home: should show portfolios (e.g. carousel).
    - `/portfolio`: list of projects.
    - `/portfolio/[slug]`: single project.

@@ -12,7 +12,7 @@ Do this when 3000/3001 feel broken or you see 404s.
 In a terminal, from the project folder:
 
 ```bash
-cd /Users/ivandiaz/Documents/Development/ravenstudios-next
+cd /Users/ivandiaz/Documents/Development/aspect-digital   # or your clone path
 rm -rf .next
 npm run dev
 ```

@@ -1,4 +1,4 @@
-# Deploy Raven Studios Next.js to a DigitalOcean Droplet
+# Deploy Aspect Digital (Next.js) to a DigitalOcean Droplet
 
 This guide walks you through deploying the Next.js site to a DigitalOcean droplet and connecting it to **Strapi Cloud** (or any Strapi instance) for content.
 
@@ -22,7 +22,7 @@ The Next.js app on the droplet will fetch content from Strapi over HTTPS using e
    - **Plan:** Basic shared CPU; **$6/mo** (1 GB RAM) is enough to start; **$12/mo** (2 GB) is more comfortable for Next.js builds
    - **Datacenter:** Choose one close to your audience
    - **Authentication:** SSH key (recommended) or password
-   - **Hostname:** e.g. `ravenstudios-web`
+   - **Hostname:** e.g. `aspect-digital-web`
 
 2. Create the droplet and note its **IP address**.
 
@@ -74,9 +74,13 @@ node -v   # should be v20.x
 
 ```bash
 sudo apt-get install -y git
-git clone https://github.com/ivandiaz92/Raven-Studios.git ravenstudios-next
-cd ravenstudios-next
+git clone https://github.com/ivandiaz92/aspect-digital.git aspect-digital
+cd aspect-digital
 ```
+
+*(If the repo is still named `Raven-Studios` on GitHub until you rename it, use that URL. After renaming, run `git remote set-url` — see `REPO_RENAME.md`.)*
+
+Existing servers may still use the folder `~/ravenstudios-next`; that’s fine — `deploy.sh` works from any clone path.
 
 If the repo is private, set up SSH keys or a deploy key for this server and clone via SSH URL.
 
@@ -87,7 +91,7 @@ If the repo is private, set up SSH keys or a deploy key for this server and clon
 Create a production env file **on the server** (do not commit real secrets to Git):
 
 ```bash
-cd ~/ravenstudios-next
+cd ~/aspect-digital   # or ~/ravenstudios-next if you never renamed the folder
 nano .env.production
 ```
 
@@ -104,7 +108,7 @@ STRAPI_API_TOKEN=your_strapi_api_token_from_strapi_cloud_admin
 # Contact form (Resend)
 RESEND_API_KEY=re_xxxxx
 CONTACT_EMAIL_TO=hello@yourdomain.com
-# CONTACT_FROM=Raven Studios <contact@yourdomain.com>
+# CONTACT_FROM=Aspect Digital <contact@yourdomain.com>
 ```
 
 - Get **Strapi Cloud URL** from your Strapi Cloud dashboard (e.g. `https://xxx.strapiapp.com` → API is `https://xxx.strapiapp.com/api`).
@@ -127,7 +131,7 @@ npm run build
 Start the app with the production env file:
 
 ```bash
-pm2 start npm --name "ravenstudios" -- start
+pm2 start npm --name "aspect-digital" -- start
 pm2 save
 pm2 startup
 ```
@@ -156,7 +160,7 @@ sudo apt-get install -y nginx certbot python3-certbot-nginx
 ### Nginx site config
 
 ```bash
-sudo nano /etc/nginx/sites-available/ravenstudios
+sudo nano /etc/nginx/sites-available/aspect-digital
 ```
 
 Paste (replace `yourdomain.com`):
@@ -182,7 +186,7 @@ server {
 Enable and test:
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/ravenstudios /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/aspect-digital /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
 ```
@@ -206,7 +210,7 @@ Follow the prompts. Certbot will configure HTTPS and auto-renewal.
 If you run something like:
 
 ```bash
-scp app/page.tsx app/portfolio/page.tsx user@server:/root/ravenstudios-next/app/
+scp app/page.tsx app/portfolio/page.tsx user@server:/root/aspect-digital/app/
 ```
 
 both files are named `page.tsx`. The second one **overwrites** the first, so you end up with two copies of the portfolio page and the real homepage is gone. The same risk exists any time you `scp` multiple files that share the same filename into the same destination directory.
@@ -216,7 +220,7 @@ both files are named `page.tsx`. The second one **overwrites** the first, so you
 **Push from your machine first**, then on the **server**:
 
 ```bash
-cd ~/ravenstudios-next
+cd ~/aspect-digital   # or ~/ravenstudios-next on older servers
 chmod +x scripts/deploy.sh   # once
 ./scripts/deploy.sh
 ```
@@ -229,22 +233,22 @@ The script **fetches and `git reset --hard origin/main`**. That way:
 From your **local machine** (same as running deploy on the server):
 
 ```bash
-ssh root@YOUR_DROPLET_IP 'cd ~/ravenstudios-next && ./scripts/deploy.sh'
+ssh root@YOUR_DROPLET_IP 'cd ~/aspect-digital && ./scripts/deploy.sh'   # use ~/ravenstudios-next if that’s your folder
 ```
 
 **If `git pull` ever fails** with “local changes would be overwritten”, don’t edit files on the droplet to fix it. Either run `./scripts/deploy.sh` (after it includes the reset logic), or once:
 
 ```bash
-cd ~/ravenstudios-next && git fetch origin main && git reset --hard origin/main && ./scripts/deploy.sh
+cd ~/aspect-digital && git fetch origin main && git reset --hard origin/main && ./scripts/deploy.sh
 ```
 
 `.env.production` is not in Git — it is **not** removed by reset.
 
 ### Projects disappearing when Strapi Cloud is flaky
 
-The app writes a **disk cache** at `.cache/strapi-projects.json` after successful full project list loads (home + portfolio use a full fetch). If Strapi returns errors or empty data for days, the site still shows the **last good list** (up to ~90 days). Ensure the app can write under the project root (`ravenstudios-next/.cache/`). After the first successful visit when Strapi is up, the cache is populated.
+The app writes a **disk cache** at `.cache/strapi-projects.json` after successful full project list loads (home + portfolio use a full fetch). If Strapi returns errors or empty data for days, the site still shows the **last good list** (up to ~90 days). Ensure the app can write under the project root (e.g. `~/aspect-digital/.cache/`). After the first successful visit when Strapi is up, the cache is populated.
 
-**Note:** Next.js is configured with `assetPrefix: '/next'` for local/Cursor. If you serve the app at the root of your domain (e.g. `https://yourdomain.com`) and static assets don’t load, set `assetPrefix: ''` in `next.config.js` on the server (or use an env-based prefix).
+**Note:** Do not set `assetPrefix` in `next.config.js` for production at the domain root — it breaks static asset URLs. The repo leaves `assetPrefix` unset for that reason.
 
 ---
 

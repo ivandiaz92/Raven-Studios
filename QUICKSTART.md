@@ -46,7 +46,7 @@ Open [http://localhost:3000](http://localhost:3000) to see your site.
 ## Project Structure
 
 ```
-ravenstudios-next/
+aspect-digital/   # or your local clone folder name
 ├── app/                    # Next.js app directory
 │   ├── page.tsx           # Homepage
 │   ├── portfolio/         # Portfolio pages

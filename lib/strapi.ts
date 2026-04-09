@@ -86,7 +86,7 @@ async function fetchProjectsFromStrapiAttempt(limit?: number): Promise<StrapiPro
       /* fall through */
     }
     if (process.env.NODE_ENV === 'development' && err && typeof err === 'object' && 'code' in err && err.code === 'ECONNREFUSED') {
-      console.warn('Strapi not running — start it with: cd ../ravenstudios-strapi && npm run develop');
+      console.warn('Strapi not running — start your Strapi app (e.g. cd ../your-strapi-folder && npm run develop)');
     }
     const msg = err && typeof err === 'object' && 'response' in err
       ? (err as { response?: { status?: number; data?: unknown } }).response?.status

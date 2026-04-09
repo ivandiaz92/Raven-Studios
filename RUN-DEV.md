@@ -7,14 +7,14 @@ If you see **404** for `layout.css`, `main-app.js`, or other `_next/static` file
 Always run commands **inside** the Next.js project:
 
 ```bash
-cd /Users/ivandiaz/Documents/Development/ravenstudios-next
+cd /Users/ivandiaz/Documents/Development/aspect-digital   # or your clone path
 ```
 
 Check you’re in the right place:
 
 ```bash
 pwd
-# Should end with: .../ravenstudios-next
+# Should end with: .../aspect-digital (or your clone folder name)
 ls package.json
 # Should show: package.json
 ```
@@ -24,7 +24,7 @@ ls package.json
 **Option A – Same terminal**
 
 ```bash
-cd /Users/ivandiaz/Documents/Development/ravenstudios-next
+cd /Users/ivandiaz/Documents/Development/aspect-digital   # or your clone path
 rm -rf .next
 npm run dev
 ```
@@ -34,7 +34,7 @@ npm run dev
 Run on another port:
 
 ```bash
-cd /Users/ivandiaz/Documents/Development/ravenstudios-next
+cd /Users/ivandiaz/Documents/Development/aspect-digital   # or your clone path
 rm -rf .next
 npm run dev -- -p 3001
 ```
@@ -65,7 +65,7 @@ Do **not** use an old tab that was open before you restarted the server.
 - In Terminal, run **only**:
 
   ```bash
-  cd /Users/ivandiaz/Documents/Development/ravenstudios-next
+  cd /Users/ivandiaz/Documents/Development/aspect-digital   # or your clone path
   rm -rf .next
   npm run dev
   ```

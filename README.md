@@ -1,4 +1,4 @@
-# Aspect — Next.js portfolio site
+# Aspect Digital — Next.js portfolio site
 
 A modern portfolio and blog website built with Next.js, Strapi CMS, and GSAP animations.
 
@@ -47,7 +47,7 @@ See `STRAPI_SETUP.md` for detailed instructions on setting up your Strapi backen
 ## Project Structure
 
 ```
-ravenstudios-next/
+aspect-digital/        # local folder name (may differ)
 ├── app/              # Next.js app directory
 ├── components/       # React components
 ├── lib/             # Utilities and API clients

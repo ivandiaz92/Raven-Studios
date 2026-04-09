@@ -9,8 +9,8 @@ import {
   SITE_TAGLINE,
   SITE_EDGE_LABEL,
   LOGO_DARK,
-  DEFAULT_SITE_URL,
 } from '@/lib/site-branding'
+import { getSiteUrl, getMetadataBaseUrl } from '@/lib/site-url'
 
 const hankenGrotesk = Hanken_Grotesk({ 
   subsets: ['latin'],
@@ -29,10 +29,10 @@ const kodeMono = Kode_Mono({
 // For now, we'll use a fallback serif font
 const displayFontClass = 'font-serif'
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || DEFAULT_SITE_URL
+const siteUrl = getSiteUrl()
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: getMetadataBaseUrl(),
   title: {
     default: `${SITE_NAME_MARK} — ${SITE_TAGLINE}`,
     template: `%s | ${SITE_NAME}`,
@@ -119,15 +119,6 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
-        {/* Only on `npm run dev` — if you don’t see this on localhost, you’re not on the dev server (or it’s stale: stop it, run: rm -rf .next && npm run dev) */}
-        {process.env.NODE_ENV === 'development' && (
-          <div
-            className="fixed bottom-3 right-3 z-[100] max-w-[min(90vw,20rem)] rounded-md bg-emerald-950/95 text-emerald-200 text-[10px] sm:text-[11px] px-2.5 py-1.5 font-mono leading-snug border border-emerald-600/50 shadow-lg"
-            title="Restart dev after next.config.js changes: Ctrl+C then rm -rf .next && npm run dev"
-          >
-            Local dev — restart server after config changes
-          </div>
-        )}
       </body>
     </html>
   )

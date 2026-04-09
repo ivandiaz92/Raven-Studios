@@ -39,7 +39,7 @@ Then close/reopen the terminal and run `node --version`.
 In your terminal, from the project folder:
 
 ```bash
-cd /Users/ivandiaz/Documents/Development/ravenstudios-next
+cd /Users/ivandiaz/Documents/Development/aspect-digital   # or your clone path
 npm install
 npm run dev
 ```
