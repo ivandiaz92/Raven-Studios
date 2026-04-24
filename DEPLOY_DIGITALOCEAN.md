@@ -199,6 +199,65 @@ sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
 
 Follow the prompts. Certbot will configure HTTPS and auto-renewal.
 
+### If you see “Welcome to nginx!” instead of your site
+
+DNS is fine; nginx is not sending **your domain** to the Next.js app yet.
+
+1. **Confirm the app is up** (on the droplet):
+   ```bash
+   curl -sI http://127.0.0.1:3000 | head -3
+   pm2 list
+   ```
+   You should see HTTP 200 (or 307) from port 3000 and your PM2 process running.
+
+2. **See which configs are active:**
+   ```bash
+   ls -la /etc/nginx/sites-enabled/
+   ```
+   If only **`default`** (or `default.conf`) is enabled, nginx serves the default welcome page for every host until you add a vhost for your domain.
+
+3. **Create a site for your real domain** (example: `aspectdigital.io`):
+   ```bash
+   sudo nano /etc/nginx/sites-available/aspectdigital.io
+   ```
+   Use **`server_name`** exactly as users type it (apex + `www` if you use it):
+
+   ```nginx
+   server {
+       listen 80;
+       server_name aspectdigital.io www.aspectdigital.io;
+       location / {
+           proxy_pass http://127.0.0.1:3000;
+           proxy_http_version 1.1;
+           proxy_set_header Upgrade $http_upgrade;
+           proxy_set_header Connection 'upgrade';
+           proxy_set_header Host $host;
+           proxy_set_header X-Real-IP $remote_addr;
+           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+           proxy_set_header X-Forwarded-Proto $scheme;
+           proxy_cache_bypass $http_upgrade;
+       }
+   }
+   ```
+
+4. **Enable it and reload:**
+   ```bash
+   sudo ln -sf /etc/nginx/sites-available/aspectdigital.io /etc/nginx/sites-enabled/aspectdigital.io
+   sudo nginx -t && sudo systemctl reload nginx
+   ```
+
+5. **Optional — turn off the default site** so nothing falls through to the welcome page on port 80:
+   ```bash
+   sudo rm /etc/nginx/sites-enabled/default
+   sudo nginx -t && sudo systemctl reload nginx
+   ```
+
+6. **HTTPS:** after HTTP works, run:
+   ```bash
+   sudo certbot --nginx -d aspectdigital.io -d www.aspectdigital.io
+   ```
+   (Skip `www` if you don’t use it.)
+
 ---
 
 ## 8. Updating the Site (Deploy Script)

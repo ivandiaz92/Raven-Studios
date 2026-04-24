@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { gsap } from 'gsap'
 import { LOGO_WHITE, LOGO_SVG_INTRINSIC } from '@/lib/site-branding'
+import { NAV_LINKS, navLinkIsActive } from '@/lib/nav-links'
 
 interface SideMenuProps {
   isOpen: boolean
@@ -15,13 +16,6 @@ interface SideMenuProps {
 export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
   const pathname = usePathname()
   const isClosingRef = useRef(false)
-
-  const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/portfolio', label: 'Portfolio' },
-    { href: '/blog', label: 'Blog' },
-    { href: '/contact', label: 'Contact' },
-  ]
 
   useEffect(() => {
     if (!isOpen) return
@@ -77,15 +71,16 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
       />
 
       {/* Side Panel */}
-      <div className="side-menu-panel fixed top-0 right-0 h-full w-full sm:w-96 bg-black border-l border-gray-800 z-50 transform translate-x-full">
-        {/* Close Button */}
+      <div className="side-menu-panel fixed top-0 right-0 z-50 h-full max-h-[100dvh] w-full overflow-y-auto overflow-x-hidden border-l border-gray-800 bg-black sm:max-w-md sm:w-96">
+        {/* Close Button — min 48×48 tap target */}
         <button
+          type="button"
           onClick={handleClose}
-          className="absolute top-8 right-8 text-white hover:text-cyan-400 transition-colors"
+          className="absolute right-4 top-4 z-10 flex h-12 w-12 items-center justify-center rounded-md text-white transition-colors hover:text-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black min-[480px]:right-6 min-[480px]:top-6"
           aria-label="Close menu"
         >
           <svg
-            className="w-8 h-8"
+            className="h-8 w-8"
             fill="none"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -98,14 +93,15 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
         </button>
 
         {/* Navigation Links */}
-        <nav className="flex flex-col items-start justify-center h-full px-12 space-y-8">
-          {navLinks.map((link) => (
+        <nav className="flex min-h-0 flex-col items-start justify-center gap-6 px-8 py-20 min-[480px]:gap-8 min-[480px]:px-12 sm:py-24">
+          {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
+              prefetch={link.href === '/contact' ? false : undefined}
               onClick={handleClose}
-              className={`side-menu-item text-4xl sm:text-5xl font-light tracking-wide transition-colors ${
-                pathname === link.href
+              className={`side-menu-item rounded-sm text-3xl min-[480px]:text-4xl sm:text-5xl font-light leading-tight tracking-wide transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${
+                navLinkIsActive(pathname, link.href)
                   ? 'text-cyan-400'
                   : 'text-white hover:text-cyan-400'
               }`}
@@ -120,7 +116,7 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
               <p className="font-mono text-xs tracking-wider uppercase text-gray-500">Get in touch</p>
               <a
                 href="mailto:hello@aspect.studio"
-                className="block hover:text-cyan-400 transition-colors"
+                className="inline-flex min-h-11 min-w-0 max-w-full items-center break-all rounded-sm py-1 text-left hover:text-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black [overflow-wrap:anywhere]"
               >
                 hello@aspect.studio
               </a>

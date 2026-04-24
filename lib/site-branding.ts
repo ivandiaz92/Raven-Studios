@@ -17,4 +17,5 @@ export const LOGO_WHITE = '/images/aspect-blanco.svg'
 /** Use on light backgrounds; favicon / OG when preview is light */
 export const LOGO_DARK = '/images/aspect-negro.svg'
 
-export const DEFAULT_SITE_URL = 'https://aspect.studio'
+/** Canonical site URL — override with NEXT_PUBLIC_SITE_URL in production */
+export const DEFAULT_SITE_URL = 'https://aspectdigital.io'

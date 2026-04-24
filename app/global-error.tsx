@@ -1,7 +1,8 @@
 'use client'
 
 /**
- * Root error UI — must include html/body when the root layout fails.
+ * Catches errors in the root layout (segment error.tsx does not).
+ * Required HTML/body shell per Next.js App Router.
  */
 export default function GlobalError({
   error,
@@ -11,27 +12,20 @@ export default function GlobalError({
   reset: () => void
 }) {
   return (
-    <html lang="en">
-      <body style={{ background: '#0a0a0a', color: '#ededed', fontFamily: 'system-ui, sans-serif', minHeight: '100vh', margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
-        <div style={{ textAlign: 'center', maxWidth: '28rem' }}>
-          <h1 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>Something went wrong</h1>
-          <p style={{ fontSize: '0.875rem', opacity: 0.85, marginBottom: '1.5rem' }}>{error.message}</p>
-          <button
-            type="button"
-            onClick={() => reset()}
-            style={{
-              padding: '0.5rem 1.25rem',
-              borderRadius: '0.5rem',
-              border: '1px solid #7dd3fc',
-              background: 'transparent',
-              color: '#7dd3fc',
-              cursor: 'pointer',
-              fontSize: '0.875rem',
-            }}
-          >
-            Try again
-          </button>
-        </div>
+    <html lang="es">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
+      <body className="min-h-screen bg-black text-white antialiased flex flex-col items-center justify-center p-8">
+        <p className="text-sm font-mono text-red-400 mb-2">Error</p>
+        <p className="text-white/80 text-sm text-center max-w-md mb-6">{error.message}</p>
+        <button
+          type="button"
+          onClick={() => reset()}
+          className="px-6 py-2 rounded-lg border border-[#7dd3fc] text-[#7dd3fc] font-mono text-sm uppercase tracking-wider hover:bg-[#7dd3fc]/10"
+        >
+          Reintentar
+        </button>
       </body>
     </html>
   )

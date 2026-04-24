@@ -13,9 +13,18 @@ const config: Config = {
         foreground: 'var(--foreground)',
       },
       fontFamily: {
-        sans: ['var(--font-hanken)', 'sans-serif'],
-        display: ['var(--font-roslindale)', 'Georgia', 'Palatino', 'serif'],
+        sans: ['var(--font-alliance)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['var(--font-alliance-2)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         mono: ['var(--font-kode)', 'monospace'],
+      },
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+      },
+      animation: {
+        marquee: 'marquee 55s linear infinite',
       },
     },
   },

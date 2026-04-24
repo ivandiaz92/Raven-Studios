@@ -1,6 +1,6 @@
+import './alliance-fonts.css'
 import './globals.css'
-import type { Metadata } from 'next'
-import { Hanken_Grotesk, Kode_Mono } from 'next/font/google'
+import type { Metadata, Viewport } from 'next'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import {
@@ -11,23 +11,6 @@ import {
   LOGO_DARK,
 } from '@/lib/site-branding'
 import { getSiteUrl, getMetadataBaseUrl } from '@/lib/site-url'
-
-const hankenGrotesk = Hanken_Grotesk({ 
-  subsets: ['latin'],
-  variable: '--font-hanken',
-  display: 'swap',
-})
-
-const kodeMono = Kode_Mono({ 
-  subsets: ['latin'],
-  variable: '--font-kode',
-  display: 'swap',
-  adjustFontFallback: false,
-})
-
-// Roslindale Display will be added when font files are provided
-// For now, we'll use a fallback serif font
-const displayFontClass = 'font-serif'
 
 const siteUrl = getSiteUrl()
 
@@ -85,17 +68,30 @@ export const metadata: Metadata = {
   },
 }
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#0a0a0a',
+}
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${hankenGrotesk.variable} ${kodeMono.variable}`}>
-      <body className={`${hankenGrotesk.className} relative`}>
+    <html lang="en">
+      <body className="relative">
         {/* Single shared background for the whole page — dark base + subtle noise */}
         <div className="fixed inset-0 z-0" aria-hidden>
           <div className="absolute inset-0 bg-black" />
+          <div className="page-bg-orbits pointer-events-none absolute inset-0 overflow-hidden">
+            <div className="page-bg-orb page-bg-orb--1" />
+            <div className="page-bg-orb page-bg-orb--2" />
+            <div className="page-bg-orb page-bg-orb--3" />
+            <div className="page-bg-orb page-bg-orb--4" />
+            <div className="page-bg-orb page-bg-orb--5" />
+          </div>
           <div
             className="absolute inset-0 bg-repeat opacity-[0.08]"
             style={{ backgroundImage: 'url(/images/dynamic_noise.png)', backgroundSize: 'auto' }}
@@ -115,7 +111,7 @@ export default function RootLayout({
         </div>
 
         <Header />
-        <main className="relative z-10 min-h-screen">
+        <main className="relative z-10 min-h-screen w-full min-w-0">
           {children}
         </main>
         <Footer />

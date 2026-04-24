@@ -36,7 +36,7 @@ export default function ServiceCard({ title, description, bgImage, index }: Serv
   return (
     <div
       ref={cardRef}
-      className="fade-in-up group relative overflow-hidden rounded-lg min-h-[280px] sm:min-h-[320px] border border-gray-500/70 hover:border-[#7dd3fc] transition-all duration-300 hover:shadow-[0_0_28px_rgba(125,211,252,0.22)]"
+      className="fade-in-up group relative flex h-full min-h-0 w-full min-w-0 overflow-hidden rounded-lg border border-gray-500/70 transition-all duration-300 hover:border-[#7dd3fc] hover:shadow-[0_0_28px_rgba(125,211,252,0.22)]"
     >
       {/* Default dark background */}
       <div className="absolute inset-0 bg-black group-hover:opacity-0 transition-opacity duration-500" />
@@ -76,12 +76,12 @@ export default function ServiceCard({ title, description, bgImage, index }: Serv
           }}
         />
       </svg>
-      {/* Content — adjust title/description size via the classes below */}
-      <div className="relative z-10 p-6 sm:p-8 flex flex-col h-full">
-        <h3 className="text-xl sm:text-3xl lg:text-4xl font-display font-normal text-white mb-4">
+      {/* Top-aligned text; card height comes from the grid (equal fr rows on desktop) */}
+      <div className="service-card-content relative z-10 flex w-full min-w-0 flex-col justify-start">
+        <h3 className="text-service-title line-clamp-2 shrink-0 font-display font-normal text-[#7dd3fc] transition-colors duration-300 group-hover:text-white">
           {title}
         </h3>
-        <p className="text-base sm:text-lg text-white/90 leading-relaxed mt-auto max-w-md">
+        <p className="text-service-body max-w-none text-pretty text-white/90 [overflow-wrap:anywhere] line-clamp-4 min-[480px]:line-clamp-5 sm:line-clamp-5 lg:line-clamp-6 xl:line-clamp-7 2xl:line-clamp-8">
           {description}
         </p>
       </div>

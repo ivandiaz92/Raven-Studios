@@ -88,7 +88,7 @@ export default function ContactSection({ animate = true }: ContactSectionProps) 
                     name="name"
                     required
                     placeholder="Your name"
-                    className="w-full px-4 py-3 rounded-lg bg-black/40 border border-gray-700/80 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#7dd3fc]/60 focus:ring-1 focus:ring-[#7dd3fc]/30 transition-colors"
+                    className="w-full min-h-11 rounded-lg border border-gray-700/80 bg-black/40 px-4 py-3 text-white leading-normal placeholder:text-gray-500 transition-colors [overflow-wrap:anywhere] focus:border-[#7dd3fc]/60 focus:outline-none focus:ring-1 focus:ring-[#7dd3fc]/30 focus-visible:ring-2"
                   />
                 </div>
                 <div>
@@ -101,7 +101,7 @@ export default function ContactSection({ animate = true }: ContactSectionProps) 
                     name="email"
                     required
                     placeholder="you@company.com"
-                    className="w-full px-4 py-3 rounded-lg bg-black/40 border border-gray-700/80 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#7dd3fc]/60 focus:ring-1 focus:ring-[#7dd3fc]/30 transition-colors"
+                    className="w-full min-h-11 rounded-lg border border-gray-700/80 bg-black/40 px-4 py-3 text-white leading-normal placeholder:text-gray-500 transition-colors [overflow-wrap:anywhere] focus:border-[#7dd3fc]/60 focus:outline-none focus:ring-1 focus:ring-[#7dd3fc]/30 focus-visible:ring-2"
                   />
                 </div>
                 <div>
@@ -111,7 +111,7 @@ export default function ContactSection({ animate = true }: ContactSectionProps) 
                   <select
                     id="contact-service"
                     name="service"
-                    className="w-full px-4 py-3 rounded-lg bg-black/40 border border-gray-700/80 text-white focus:outline-none focus:border-[#7dd3fc]/60 focus:ring-1 focus:ring-[#7dd3fc]/30 transition-colors appearance-none cursor-pointer"
+                    className="h-auto min-h-11 w-full cursor-pointer appearance-none rounded-lg border border-gray-700/80 bg-black/40 px-4 py-3 text-white leading-normal transition-colors focus:border-[#7dd3fc]/60 focus:outline-none focus:ring-1 focus:ring-[#7dd3fc]/30 focus-visible:ring-2"
                     style={{
                       backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                       backgroundRepeat: 'no-repeat',
@@ -137,14 +137,14 @@ export default function ContactSection({ animate = true }: ContactSectionProps) 
                     name="message"
                     rows={4}
                     placeholder="Tell us about your project..."
-                    className="w-full px-4 py-3 rounded-lg bg-black/40 border border-gray-700/80 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#7dd3fc]/60 focus:ring-1 focus:ring-[#7dd3fc]/30 transition-colors resize-y min-h-[100px]"
+                    className="w-full min-h-[100px] resize-y rounded-lg border border-gray-700/80 bg-black/40 px-4 py-3 text-white leading-normal placeholder:text-gray-500 transition-colors [overflow-wrap:anywhere] focus:border-[#7dd3fc]/60 focus:outline-none focus:ring-1 focus:ring-[#7dd3fc]/30 focus-visible:ring-2"
                   />
                 </div>
                 <div className="pt-1">
                   <button
                     type="submit"
                     disabled={status === 'sending'}
-                    className="w-full sm:w-auto px-8 py-3.5 rounded-lg bg-[#7dd3fc]/15 text-[#7dd3fc] border border-[#7dd3fc]/40 font-medium text-sm tracking-wide hover:bg-[#7dd3fc]/25 hover:border-[#7dd3fc]/60 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-[#7dd3fc]/40 bg-[#7dd3fc]/15 px-8 py-3.5 text-sm font-medium tracking-wide text-[#7dd3fc] transition-colors hover:border-[#7dd3fc]/60 hover:bg-[#7dd3fc]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7dd3fc] focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                   >
                     {status === 'sending' ? 'Sending...' : status === 'done' ? 'Message sent' : status === 'error' ? 'Try again' : 'Submit'}
                   </button>

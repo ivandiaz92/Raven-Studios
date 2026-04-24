@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbo -p 3000",
+    "dev": "next dev -p 3000",
     "dev:webpack": "next dev -p 3000",
-    "dev:clean": "rm -rf .next node_modules/.cache && next dev --turbo -p 3000",
-    "dev:fresh": "rm -rf .next node_modules/.cache && next dev --turbo -p 3000",
+    "dev:clean": "rm -rf .next node_modules/.cache && next dev -p 3000",
+    "dev:reset": "rm -rf .next node_modules/.cache && next dev -p 3000",
+    "dev:fresh": "rm -rf .next node_modules/.cache && next dev -p 3000",
     "kill-ports": "npx --yes kill-port 3000 3001 3002 3003 2>/dev/null || true",
-    "dev:3001": "next dev --turbo -p 3001",
+    "dev:3001": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

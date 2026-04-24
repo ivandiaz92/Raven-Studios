@@ -87,10 +87,28 @@ export default function OurApproachSection() {
                   src={step.image}
                   alt={step.title}
                   fill
-                  className="object-cover"
+                  className={
+                    activeIndex === 0
+                      ? 'object-cover z-0 our-approach-step1-cool'
+                      : 'object-cover z-0'
+                  }
                   sizes="(max-width: 1024px) 100vw, 66vw"
                   unoptimized
                 />
+                {activeIndex === 0 && (
+                  <>
+                    {/* Blue “lamp” light — top-right, same photo; CSS only */}
+                    <div
+                      className="our-approach-step1-lamp pointer-events-none absolute inset-0 z-[1]"
+                      aria-hidden
+                    />
+                    {/* Scene-wide light balance so highlights match steps 2–4 */}
+                    <div
+                      className="our-approach-step1-scene-cool pointer-events-none absolute inset-0 z-[1]"
+                      aria-hidden
+                    />
+                  </>
+                )}
               </div>
 
               <p className="text-white/90 text-lg sm:text-xl leading-relaxed mb-6">
@@ -103,10 +121,10 @@ export default function OurApproachSection() {
                 {step.details}
               </p>
               <Link
-                href="/contact"
+                href="/agenda"
                 className="inline-flex items-center gap-2 text-[#7dd3fc] font-mono text-xs sm:text-sm tracking-[0.2em] uppercase hover:text-white transition-colors border-b border-[#7dd3fc]/60 pb-1.5 mt-8 hover:border-white"
               >
-                Begin with discovery
+                Agenda una llamada
                 <ExternalLinkIcon className="text-base ml-0.5" />
               </Link>
             </div>

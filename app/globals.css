@@ -1,20 +1,28 @@
+/* Kode Mono — loaded via Google Fonts stylesheet so we avoid next/font “font override” warnings */
+@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Roslindale Display — used for hero “for ambitious brands” and display type. */
-@font-face {
-  font-family: 'Roslindale Display';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/fonts/roslindale/Roslindale-DisplayCondensedRegular-Testing.ttf') format('truetype');
+@layer base {
+  /* Responsive media: never wider than the viewport */
+  img,
+  video,
+  embed {
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 :root {
   --background: #0a0a0a;
   --foreground: #ededed;
-  --font-roslindale: 'Roslindale Display', Georgia, serif;
+  /* Alliance (self-hosted in app/alliance-fonts.css) */
+  --font-alliance: 'Alliance No.1', ui-sans-serif, system-ui, sans-serif;
+  --font-alliance-2: 'Alliance No.2', ui-sans-serif, system-ui, sans-serif;
+  /* Matches @import above — was previously next/font --font-kode on <html> */
+  --font-kode: 'Kode Mono', ui-monospace, 'Cousine', monospace;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -27,14 +35,17 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-hanken), -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-family: var(--font-alliance);
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
-/* Font family utilities */
+/* Display headings — Alliance No.2; body/UI — Alliance No.1 via Tailwind `font-sans` */
 .font-display {
-  font-family: var(--font-roslindale), Georgia, serif;
+  font-family: var(--font-alliance-2);
 }
 
 .font-mono {
@@ -47,9 +58,16 @@ body {
   }
 }
 
-/* Smooth scrolling */
+/* Smooth scrolling; offset in-page anchors below fixed header */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5.25rem;
+}
+
+@media (min-width: 640px) {
+  html {
+    scroll-padding-top: 7rem;
+  }
 }
 
 /* Custom scrollbar */
@@ -89,6 +107,254 @@ html {
 @keyframes circuit-travel {
   to {
     stroke-dashoffset: -1;
+  }
+}
+
+/*
+ * #soluciones — fluid typography (NOT inside @layer so Tailwind order never flattens it).
+ * clamp(min, preferred using vw, max) — resize the browser width and type scales smoothly.
+ * Matches .cursor/rules/responsive-design.mdc (clamp + explicit line-height).
+ */
+#soluciones .text-soluciones-heading {
+  font-size: clamp(1.5rem, 0.35rem + 2.4vw, 2.85rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+#soluciones .text-soluciones-sub {
+  font-size: clamp(0.95rem, 0.3rem + 0.9vw, 1.35rem);
+  line-height: 1.5;
+}
+/* Service cards: must scale with viewport (vw in middle) — not sub-body size on desktop */
+#soluciones .text-service-title {
+  font-size: clamp(1.05rem, 0.3rem + 1.1vw, 1.5rem);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+#soluciones .text-service-body {
+  font-size: clamp(0.95rem, 0.25rem + 0.9vw, 1.2rem);
+  line-height: 1.6;
+}
+#soluciones .text-soluciones-cta {
+  font-size: clamp(0.85rem, 0.25rem + 0.85vw, 1.15rem);
+  line-height: 1.35;
+}
+/* Card content box: padding + gap scale with width (rules: spacing proportional) */
+#soluciones .service-card-content {
+  padding: clamp(0.75rem, 0.35rem + 1.1vw, 1.6rem);
+  gap: clamp(0.5rem, 0.25rem + 0.5vw, 0.9rem);
+}
+
+/*
+ * Our Approach: step 1 (discovery) — same JPG; lamp is top-right, warm tungsten.
+ * Simulate a cool/blue desk lamp: hotspot + re-tint, no new asset.
+ */
+.our-approach-step1-cool {
+  /* Pull global cast off tungsten; keep detail */
+  filter: brightness(0.99) contrast(0.99) saturate(0.88) hue-rotate(4deg);
+}
+
+/* Additive “blue lamp” (photo: light source is upper-right) + second cone over books/compass */
+.our-approach-step1-lamp {
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(
+      ellipse 78% 95% at 91% 4%,
+      rgba(186, 230, 254, 0.85) 0%,
+      rgba(125, 211, 252, 0.45) 14%,
+      rgba(14, 165, 233, 0.22) 36%,
+      rgba(2, 132, 199, 0) 64%
+    ),
+    radial-gradient(
+      ellipse 95% 80% at 80% 42%,
+      rgba(56, 189, 248, 0.16) 0%,
+      rgba(14, 116, 144, 0) 55%
+    );
+  opacity: 0.78;
+}
+
+@supports (mix-blend-mode: plus-lighter) {
+  .our-approach-step1-lamp {
+    mix-blend-mode: plus-lighter;
+    opacity: 0.55;
+  }
+}
+
+/* Re-hue lit surfaces toward sky blue (kills most residual yellow from the old lamp) */
+.our-approach-step1-scene-cool {
+  /* Replace remaining warm color cast; keep luminance (reads like relighting, not a flat filter) */
+  mix-blend-mode: color;
+  background: #38bdf8;
+  opacity: 0.09;
+}
+
+/* —— Global background: real gradient *circles* that move (fixed stack in layout) —— */
+.page-bg-orbits {
+  contain: paint;
+  isolation: isolate;
+}
+
+.page-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  /* Soft edges so “circles” read as orbs, not hard discs */
+  filter: blur(40px);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* Radial fill = visible round gradient; motion = translate + gentle scale */
+.page-bg-orb--1 {
+  left: -8%;
+  top: 12%;
+  width: min(42vmin, 400px);
+  height: min(42vmin, 400px);
+  background: radial-gradient(
+    circle at 32% 28%,
+    rgba(125, 211, 252, 0.5) 0%,
+    rgba(56, 189, 248, 0.2) 42%,
+    rgba(3, 105, 161, 0) 70%
+  );
+  opacity: 0.85;
+  animation: page-orb-1 32s ease-in-out infinite;
+}
+
+.page-bg-orb--2 {
+  right: -5%;
+  top: 38%;
+  width: min(36vmin, 360px);
+  height: min(36vmin, 360px);
+  background: radial-gradient(
+    circle at 62% 40%,
+    rgba(99, 102, 241, 0.45) 0%,
+    rgba(79, 70, 229, 0.18) 45%,
+    rgba(49, 46, 129, 0) 72%
+  );
+  opacity: 0.7;
+  animation: page-orb-2 40s ease-in-out infinite;
+}
+
+.page-bg-orb--3 {
+  left: 18%;
+  bottom: -6%;
+  width: min(48vmin, 440px);
+  height: min(48vmin, 440px);
+  background: radial-gradient(
+    circle at 48% 52%,
+    rgba(6, 182, 212, 0.4) 0%,
+    rgba(8, 145, 178, 0.16) 48%,
+    rgba(6, 78, 95, 0) 75%
+  );
+  opacity: 0.65;
+  animation: page-orb-3 28s ease-in-out infinite;
+}
+
+.page-bg-orb--4 {
+  left: 42%;
+  top: -10%;
+  width: min(30vmin, 300px);
+  height: min(30vmin, 300px);
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(196, 181, 253, 0.35) 0%,
+    rgba(139, 92, 246, 0.18) 50%,
+    rgba(88, 28, 135, 0) 75%
+  );
+  opacity: 0.55;
+  animation: page-orb-4 24s ease-in-out infinite;
+}
+
+.page-bg-orb--5 {
+  right: 22%;
+  bottom: 8%;
+  width: min(28vmin, 280px);
+  height: min(28vmin, 280px);
+  background: radial-gradient(
+    circle at 40% 60%,
+    rgba(14, 165, 233, 0.38) 0%,
+    rgba(2, 132, 199, 0.14) 55%,
+    rgba(7, 89, 133, 0) 78%
+  );
+  opacity: 0.6;
+  animation: page-orb-5 35s ease-in-out -6s infinite;
+}
+
+@keyframes page-orb-1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  20% {
+    transform: translate(28vw, 12vh) scale(1.12);
+  }
+  45% {
+    transform: translate(8vw, 32vh) scale(0.92);
+  }
+  70% {
+    transform: translate(-12vw, 8vh) scale(1.06);
+  }
+}
+
+@keyframes page-orb-2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(-32vw, 18vh) scale(1.08);
+  }
+  55% {
+    transform: translate(-14vw, -22vh) scale(0.9);
+  }
+  80% {
+    transform: translate(6vw, 10vh) scale(1.02);
+  }
+}
+
+@keyframes page-orb-3 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  30% {
+    transform: translate(24vw, -20vh) scale(1.1);
+  }
+  60% {
+    transform: translate(-10vw, -8vh) scale(0.95);
+  }
+  85% {
+    transform: translate(18vw, 12vh) scale(1.04);
+  }
+}
+
+@keyframes page-orb-4 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(-18vw, 22vh) scale(1.15);
+  }
+  66% {
+    transform: translate(22vw, 8vh) scale(0.88);
+  }
+}
+
+@keyframes page-orb-5 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  40% {
+    transform: translate(-20vw, -14vh) scale(1.12);
+  }
+  75% {
+    transform: translate(14vw, 20vh) scale(0.94);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-bg-orb {
+    animation: none !important;
   }
 }
 
