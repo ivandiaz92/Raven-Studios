@@ -2,10 +2,10 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { format } from 'date-fns'
-import { getBlogPostBySlug, getAllBlogSlugs, getStrapiImageUrl } from '@/lib/strapi'
+import { getBlogPostBySlug, getBlogSlugs } from '@/lib/content'
 
 export async function generateStaticParams() {
-  const slugs = await getAllBlogSlugs()
+  const slugs = await getBlogSlugs()
   return slugs.map((slug) => ({ slug }))
 }
 
@@ -18,12 +18,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     }
   }
 
-  const title = post.attributes.title ?? post.attributes.post_title
-  const description = post.attributes.excerpt ?? ''
-
   return {
-    title: `${title} - Aspect`,
-    description,
+    title: `${post.title} - Aspect`,
+    description: post.excerpt ?? '',
   }
 }
 
@@ -34,14 +31,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     notFound()
   }
 
-  const attrs = post.attributes
-  const featuredImageUrl = getStrapiImageUrl(attrs.featuredImage ?? attrs.main_image)
-  const dateStr = attrs.publishedAt ?? attrs.date_created
+  const featuredImageUrl = post.coverImage
+  const dateStr = post.date
   const publishedDate = format(new Date(dateStr), 'MMMM dd, yyyy')
-  const title = attrs.title ?? attrs.post_title
-  const excerpt = attrs.excerpt ?? ''
-  const content = attrs.content ?? ''
-  const tags = attrs.tags ?? []
+  const title = post.title
+  const excerpt = post.excerpt ?? ''
+  const tags = post.tags
 
   return (
     <div className="pt-20 pb-20">
@@ -73,7 +68,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4 text-sm text-gray-400">
             <span>{publishedDate}</span>
-            <span>By {attrs.author}</span>
+            {post.author && <span>By {post.author}</span>}
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
             {title}
@@ -102,11 +97,11 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         )}
 
         {/* Content */}
-        {content && (
+        {post.html && (
           <article className="prose prose-invert max-w-none">
             <div 
               className="text-gray-300 leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: content }}
+              dangerouslySetInnerHTML={{ __html: post.html }}
             />
           </article>
         )}

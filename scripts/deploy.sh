@@ -22,8 +22,8 @@ git reset --hard "origin/$BRANCH"
 echo "Installing dependencies..."
 npm ci
 
-echo "Building... (SKIP_STRAPI_BUILD=1 so Strapi 503s don't fail the build; data loads at runtime)"
-SKIP_STRAPI_BUILD=1 npm run build
+echo "Building..."
+npm run build
 
 echo "Restarting PM2..."
 if pm2 describe "$LEGACY_PM2" &>/dev/null; then

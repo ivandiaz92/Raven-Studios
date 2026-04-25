@@ -13,14 +13,13 @@ import OurApproachSection from '@/components/OurApproachSection'
 import ContactSection from '@/components/ContactSection'
 import ServiceCard from '@/components/ServiceCard'
 import ExternalLinkIcon from '@/components/ExternalLinkIcon'
-import { getBlogPostImageUrl } from '@/lib/strapi-helpers'
-import type { StrapiProject, StrapiBlogPost } from '@/types/strapi'
+import type { BlogPost, Project } from '@/lib/content'
 
 gsap.registerPlugin(ScrollTrigger)
 
 interface HomeClientProps {
-  projects: StrapiProject[]
-  blogPosts: StrapiBlogPost[]
+  projects: Project[]
+  blogPosts: BlogPost[]
 }
 
 const HERO_CTA_TEXT = 'Agenda una llamada'
@@ -284,17 +283,17 @@ export default function HomeClient({ projects, blogPosts = [] }: HomeClientProps
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-10 sm:mb-12">
                 {blogPosts.map((post, index) => (
                   <Link
-                    key={post.id}
-                    href={`/blog/${post.id}`}
+                    key={post.slug}
+                    href={`/blog/${post.slug}`}
                     className="fade-in-up group block"
                     data-delay={index * 0.08}
                   >
                     <article className="h-full rounded-lg border border-gray-800 bg-gray-900/80 overflow-hidden hover:border-[#7dd3fc]/50 transition-all duration-300">
-                      {post.attributes.main_image?.data?.attributes?.url && (
+                      {post.coverImage && (
                         <div className="relative aspect-[16/10] overflow-hidden">
                           <Image
-                            src={getBlogPostImageUrl(post)}
-                            alt={post.attributes.post_title}
+                            src={post.coverImage}
+                            alt={post.title}
                             fill
                             className="object-cover transition-transform duration-500 group-hover:scale-105"
                             sizes="(max-width: 768px) 100vw, 33vw"
@@ -305,17 +304,17 @@ export default function HomeClient({ projects, blogPosts = [] }: HomeClientProps
                       )}
                       <div className="p-5 sm:p-6">
                         <p className="font-mono text-xs text-white/60 mb-2">
-                          {new Date(post.attributes.date_created).toLocaleDateString('en-US', {
+                          {new Date(post.date).toLocaleDateString('en-US', {
                             month: 'short',
                             day: 'numeric',
                             year: 'numeric',
                           })}
                         </p>
                         <h3 className="font-display font-light text-lg sm:text-xl text-white group-hover:text-[#7dd3fc] transition-colors line-clamp-2">
-                          {post.attributes.post_title}
+                          {post.title}
                         </h3>
-                        {post.attributes.author && (
-                          <p className="text-white/60 text-sm mt-2">By {post.attributes.author}</p>
+                        {post.author && (
+                          <p className="text-white/60 text-sm mt-2">By {post.author}</p>
                         )}
                       </div>
                     </article>

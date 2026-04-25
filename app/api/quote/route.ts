@@ -1,9 +1,36 @@
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
-import { createQuoteRequest, type QuoteRequestPayload } from '@/lib/strapi'
 
 const QUOTE_EMAIL_TO = process.env.CONTACT_EMAIL_TO || process.env.QUOTE_EMAIL_TO || ''
 const QUOTE_FROM = process.env.CONTACT_FROM || 'Aspect <onboarding@resend.dev>'
+
+interface QuoteRequestPayload {
+  company_name: string
+  contact_name: string
+  email: string
+  social_networks?: string
+  sections_needed?: string
+  sections_modify?: string
+  sections_specify?: string
+  site_has_blog?: string
+  google_analytics_global?: string
+  measurement_tags?: string
+  site_objective?: string
+  show_products_services?: string
+  quantity_approximate?: string
+  info_level?: string
+  has_domain?: string
+  domain_provider?: string
+  has_hosting?: string
+  hosting_preference?: string
+  project_type?: string
+  current_site_url?: string
+  additional_functionality?: string
+  functionality_types?: string[]
+  functionality_description?: string
+  maintenance_plan?: string
+  support_types?: string[]
+}
 
 function escapeHtml(s: string): string {
   return s
@@ -96,14 +123,6 @@ export async function POST(request: Request) {
     support_types: Array.isArray(body.support_types) ? body.support_types.map(String) : undefined,
   }
 
-  const result = await createQuoteRequest(payload)
-  if (!result) {
-    return NextResponse.json(
-      { error: 'Could not save quote request. Check Strapi connection and permissions.' },
-      { status: 503 }
-    )
-  }
-
   // Send email notification (same Resend config as contact form)
   const to = QUOTE_EMAIL_TO.trim()
   const apiKey = process.env.RESEND_API_KEY
@@ -118,9 +137,8 @@ export async function POST(request: Request) {
       })
     } catch (err) {
       console.error('Quote email notification failed:', err)
-      // Don't fail the request — submission is already in Strapi
     }
   }
 
-  return NextResponse.json({ ok: true, id: result.id })
+  return NextResponse.json({ ok: true })
 }

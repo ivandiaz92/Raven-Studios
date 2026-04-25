@@ -1,7 +1,5 @@
-import { getBlogPosts } from '@/lib/strapi'
+import { getBlogPosts } from '@/lib/content'
 import BlogCard from '@/components/BlogCard'
-
-export const revalidate = 300 // ISR: refresh from Strapi every 5 minutes
 
 export const metadata = {
   title: 'Blog - Aspect',
@@ -26,7 +24,7 @@ export default async function BlogPage() {
         {posts.length === 0 ? (
           <div className="py-20">
             <p className="text-white/70 text-lg">
-              No posts yet. Check your Strapi connection and ensure Blog Post content is published.
+              No posts yet. Add Markdown files in content/blog.
             </p>
           </div>
         ) : (

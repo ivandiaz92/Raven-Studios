@@ -21,19 +21,16 @@ Copy the example environment file:
 cp .env.local.example .env.local
 ```
 
-Edit `.env.local` and set your Strapi API URL:
+Edit `.env.local` only if you need contact/booking variables:
 
 ```env
-NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337/api
+NEXT_PUBLIC_CALCOM_BOOKING_URL=https://cal.com/aspect/15min
 ```
 
-### 3. Set Up Strapi Backend
+### 3. Add Content
 
-Follow the instructions in `STRAPI_SETUP.md` to:
-- Install and configure Strapi
-- Create Portfolio and Blog Post content types
-- Set up permissions
-- Add your content
+Projects are JSON files in `content/projects/`; blog posts are Markdown files in `content/blog/`.
+See `content/README.md` for examples.
 
 ### 4. Run Development Server
 
@@ -58,10 +55,8 @@ aspect-digital/   # or your local clone folder name
 │   ├── Footer.tsx         # Site footer
 │   ├── PortfolioCard.tsx  # Portfolio card component
 │   └── BlogCard.tsx       # Blog card component
-├── lib/                   # Utilities
-│   └── strapi.ts          # Strapi API client
-├── types/                 # TypeScript types
-│   └── strapi.ts          # Strapi type definitions
+├── content/               # Local projects and blog posts
+├── lib/                   # Utilities and content loaders
 └── public/                # Static assets
 ```
 
@@ -70,8 +65,8 @@ aspect-digital/   # or your local clone folder name
 ✅ **Modern Design**: Dark theme with gradient accents
 ✅ **GSAP Animations**: Smooth scroll-triggered animations
 ✅ **Responsive**: Mobile-first design
-✅ **Portfolio**: Dynamic portfolio pages with Strapi
-✅ **Blog**: Dynamic blog pages with Strapi
+✅ **Portfolio**: Static portfolio pages from local JSON
+✅ **Blog**: Static blog pages from local Markdown
 ✅ **SEO Optimized**: Metadata and static generation
 ✅ **Type Safe**: Full TypeScript support
 
@@ -93,7 +88,7 @@ GSAP animations are configured in:
 
 ### Content
 
-All content is managed through Strapi CMS. See `STRAPI_SETUP.md` for content type configuration.
+All content is managed in Git through `content/projects/*.json` and `content/blog/*.md`.
 
 ## Deployment
 
@@ -120,16 +115,15 @@ npm start
 
 ## Troubleshooting
 
-### Strapi Connection Issues
+### Content Not Showing
 
-- Verify `NEXT_PUBLIC_STRAPI_API_URL` is correct
-- Check Strapi permissions (Public role should have find/findOne)
-- Ensure Strapi is running and accessible
+- Verify project files are valid JSON in `content/projects/`
+- Verify blog posts have frontmatter in `content/blog/`
+- Restart the dev server after adding new files
 
 ### Images Not Loading
 
-- Check Strapi media library permissions
-- Verify image URLs in Strapi response
+- Verify image paths start with `/` and point to files under `public/`
 - Check Next.js image configuration in `next.config.js`
 
 ### Build Errors
@@ -140,9 +134,8 @@ npm start
 
 ## Next Steps
 
-1. Set up your Strapi backend
-2. Add your portfolio items
-3. Create blog posts
+1. Add your portfolio items in `content/projects`
+2. Create blog posts in `content/blog`
 4. Customize the design to match your brand
 5. Deploy!
 

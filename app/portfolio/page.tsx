@@ -1,7 +1,5 @@
-import { getProjects } from '@/lib/strapi'
+import { getProjects } from '@/lib/content'
 import PortfolioCard from '@/components/PortfolioCard'
-
-export const dynamic = 'force-dynamic'
 
 export const metadata = {
   title: 'Portfolio - Aspect',
@@ -26,7 +24,7 @@ export default async function PortfolioPage() {
         {projects.length === 0 ? (
           <div className="py-20">
             <p className="text-white/70 text-lg">
-              No projects found. Check your Strapi connection and ensure content is published.
+              No projects found. Add JSON files in content/projects.
             </p>
           </div>
         ) : (

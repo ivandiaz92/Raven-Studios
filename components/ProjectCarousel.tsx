@@ -4,14 +4,13 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { gsap } from 'gsap'
-import type { StrapiProject } from '@/types/strapi'
-import { getProjectImageUrl, getProjectDetailSlug } from '@/lib/strapi-helpers'
+import type { Project } from '@/lib/content'
 import ExternalLinkIcon from '@/components/ExternalLinkIcon'
 
 const GAP = 32 // gap-8
 
 interface ProjectCarouselProps {
-  projects: StrapiProject[]
+  projects: Project[]
 }
 
 function CarouselCard({
@@ -22,18 +21,18 @@ function CarouselCard({
   onMouseLeave,
   copyIndex,
 }: {
-  project: StrapiProject
+  project: Project
   index: number
   isHovered: boolean
   onMouseEnter: () => void
   onMouseLeave: () => void
   copyIndex: number
 }) {
-  const imageUrl = getProjectImageUrl(project)
+  const imageUrl = project.coverImage
   return (
     <Link
-      key={`${project.id}-${copyIndex}-${index}`}
-      href={`/portfolio/${getProjectDetailSlug(project)}`}
+      key={`${project.slug}-${copyIndex}-${index}`}
+      href={`/portfolio/${project.slug}`}
       className="relative flex-shrink-0 group"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
@@ -42,7 +41,7 @@ function CarouselCard({
         {imageUrl ? (
           <Image
             src={imageUrl}
-            alt={project.attributes.project_name}
+            alt={project.title}
             fill
             className={`object-cover transition-all duration-500 ${
               isHovered ? 'grayscale-0 scale-105' : 'grayscale scale-100'
@@ -60,7 +59,7 @@ function CarouselCard({
           }`}
         >
           <h3 className="text-xl sm:text-2xl lg:text-3xl font-light text-white mb-2">
-            {project.attributes.project_name}
+            {project.title}
           </h3>
           <div className="flex items-center gap-2 text-white font-mono text-xs tracking-wider">
             <span>View Project</span>
@@ -134,7 +133,7 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
       <div className="w-full overflow-hidden py-12">
         <div className="text-center text-gray-500 font-mono text-sm max-w-md mx-auto space-y-2">
           <p>No projects showing yet.</p>
-          <p className="text-xs text-gray-600 mt-3">Check: Strapi running (port 1337)? Token in .env.local? Project content type has &quot;find&quot; permission? Entry published?</p>
+          <p className="text-xs text-gray-600 mt-3">Add project JSON files in content/projects.</p>
         </div>
       </div>
     )

@@ -3,22 +3,10 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import ExternalLinkIcon from '@/components/ExternalLinkIcon'
-import type { StrapiProject } from '@/types/strapi'
-import { getProjectImageUrl, getProjectDetailSlug } from '@/lib/strapi-helpers'
-
-function getProjectToolsList(tools: unknown): string[] {
-  if (tools == null) return []
-  if (Array.isArray(tools)) {
-    return tools.map((t) => (typeof t === 'string' ? t : (t as { name?: string })?.name ?? String(t)))
-  }
-  if (typeof tools === 'object' && tools !== null && 'tools' in tools && Array.isArray((tools as { tools: unknown }).tools)) {
-    return (tools as { tools: unknown[] }).tools.map((t) => (typeof t === 'string' ? t : (t as { name?: string })?.name ?? String(t)))
-  }
-  return []
-}
+import type { Project } from '@/lib/content'
 
 interface PortfolioScrollSectionProps {
-  projects: StrapiProject[]
+  projects: Project[]
 }
 
 export default function PortfolioScrollSection({ projects }: PortfolioScrollSectionProps) {
@@ -48,18 +36,18 @@ export default function PortfolioScrollSection({ projects }: PortfolioScrollSect
           </div>
         ) : (
           projects.map((project) => {
-            const imageUrl = getProjectImageUrl(project)
+            const imageUrl = project.coverImage
             return (
               <Link
-                key={project.id}
-                href={`/portfolio/${getProjectDetailSlug(project)}`}
+                key={project.slug}
+                href={`/portfolio/${project.slug}`}
                 className="group relative min-h-screen flex flex-col justify-end p-6 sm:p-10 lg:p-14 border-t border-gray-800/50 first:border-t-0 overflow-hidden"
               >
                 <div className="absolute inset-0">
                   {imageUrl ? (
                     <Image
                       src={imageUrl}
-                      alt={project.attributes.project_name}
+                      alt={project.title}
                       fill
                       className="object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500"
                       sizes="(max-width: 1024px) 100vw, 58vw"
@@ -72,16 +60,16 @@ export default function PortfolioScrollSection({ projects }: PortfolioScrollSect
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
                 <div className="relative z-10">
                   <h3 className="text-3xl sm:text-4xl lg:text-5xl font-display font-light text-white mb-3">
-                    {project.attributes.project_name}
+                    {project.title}
                   </h3>
-                  {project.attributes.project_overview && (
+                  {project.overview && (
                     <p className="text-sm sm:text-base text-white/80 line-clamp-2 max-w-xl mb-3">
-                      {project.attributes.project_overview}
+                      {project.overview}
                     </p>
                   )}
-                  {getProjectToolsList(project.attributes.project_tools).length > 0 && (
+                  {project.tools.length > 0 && (
                     <div className="flex flex-wrap gap-2 mb-4">
-                      {getProjectToolsList(project.attributes.project_tools).map((tool) => (
+                      {project.tools.map((tool) => (
                         <span
                           key={tool}
                           className="px-2.5 py-1 rounded-full bg-white/10 text-white/90 text-xs"

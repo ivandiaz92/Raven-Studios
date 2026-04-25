@@ -41,14 +41,14 @@ Current state of the **Aspect Digital** Next.js site (as of the latest updates).
 - Headline: “Digital crafts” / “for ambitious brands” (display font, cyan on second line).
 - Subtext + **CTA:** “Start your project” → `/contact` with **slot-machine hover** (letters cycle then land).
 - **Asteroid image** (`/images/asteroid.avif`), slightly raised; **breathing** scale animation on asteroid only (GSAP).
-- **Project carousel** below hero: Strapi projects, auto-scroll, grayscale → color on hover, “View project” → `/portfolio/[id]`.
+- **Project carousel** below hero: local projects, auto-scroll, grayscale → color on hover, “View project” → `/portfolio/[slug]`.
 
 ### Strategy / Services
 - Three cards (Digital Development, Visual Design & Narrative, Performance & Growth) with hover backgrounds and **circuit** line animation (SVG stroke along border).
 - **CTA:** “Let’s align on your objectives” → `/contact` (same style as hero CTA).
 
 ### Portfolio (vertical scroll)
-- **PortfolioScrollSection:** Sticky left (“Portfolio” + “Selected work”), right column one project per viewport; image, client name, description, “View project” → `/portfolio/[id]`.
+- **PortfolioScrollSection:** Sticky left (“Portfolio” + “Selected work”), right column one project per viewport; image, client name, description, “View project” → `/portfolio/[slug]`.
 
 ### Our Approach
 - **OurApproachSection:** Two columns: left = step list (001–004), right = content (image + description + “How we help”). Steps: Discovery & Research, Strategy, UX/UI Design, Custom Development.
@@ -65,16 +65,16 @@ Current state of the **Aspect Digital** Next.js site (as of the latest updates).
 ## Other Pages
 
 - **Portfolio listing (`/portfolio`):** Same width/typography as home; left-aligned “Our Portfolio” + grid of **PortfolioCard** (hover cyan border, display font title).
-- **Project detail (`/portfolio/[slug]):** Back link (mono, border), hero image (constrained height), client name (display), description. Uses project `id` as slug (e.g. `/portfolio/1`).
+- **Project detail (`/portfolio/[slug]`):** Back link (mono, border), hero image (constrained height), project title (display), overview, gallery, and conclusion.
 - **Blog, Contact:** Present; contact page can mirror or link to home contact section.
 
 ---
 
-## Strapi Integration
+## Local Content
 
-- **Projects API:** `client_name`, `project_description`, `main_mockup` (image). Used by carousel, portfolio scroll, portfolio listing, and project detail.
-- **Helpers:** `getProjects()`, `getProjectById(id)`, `getProjectImageUrl(project)` in `lib/strapi.ts`. Errors from Strapi are caught so the site works without a running backend.
-- **Setup:** See `STRAPI_SETUP.md`; ensure Projects content type matches the fields above and permissions are set.
+- **Projects:** one JSON file per project in `content/projects/`.
+- **Blog posts:** one Markdown file per post in `content/blog/`.
+- **Helpers:** `getProjects()`, `getProjectBySlug(slug)`, `getBlogPosts()`, and `getBlogPostBySlug(slug)` in `lib/content.ts`.
 
 ---
 
@@ -84,7 +84,7 @@ Current state of the **Aspect Digital** Next.js site (as of the latest updates).
 |----------|---------|
 | `Header.tsx` | Fixed header: ASPECT mark, logo, Menu (opens SideMenu) |
 | `SideMenu.tsx` | Slide-out nav + get in touch + logo; smooth close |
-| `ProjectCarousel.tsx` | Hero carousel of Strapi projects |
+| `ProjectCarousel.tsx` | Hero carousel of local projects |
 | `PortfolioScrollSection.tsx` | Vertical scroll portfolio on home |
 | `ServiceCard.tsx` | Strategy cards with circuit animation, hover bg image |
 | `OurApproachSection.tsx` | Two-column approach steps + CTAs |
@@ -106,13 +106,13 @@ Current state of the **Aspect Digital** Next.js site (as of the latest updates).
 
 - **Next:** `next.config.js` — **no** `assetPrefix` (avoids broken static URLs in production).
 - **Middleware:** None (removed); assets load from default `/_next/...` paths.
-- **Images:** `public/images/` (asteroid, logo, noise, service backgrounds, etc.). Project images come from Strapi.
+- **Images:** `public/images/` and any content-specific folders under `public/content/`.
 
 ---
 
 ## Possible Next Steps
 
-- Wire contact form to an API or form service (e.g. Resend, Formspree, Strapi).
+- Wire contact form to an API or form service (e.g. Resend, Formspree).
 - Add project-specific images for Our Approach steps (`approach-001.jpg` etc.) if desired.
 - Optional retouches to portfolio scroll section.
 - Add CTAs to portfolio listing/detail if desired (e.g. “Start a similar project” → contact).
@@ -122,7 +122,7 @@ Current state of the **Aspect Digital** Next.js site (as of the latest updates).
 ## Files Overview
 
 **New/notable:**  
-`app/HomeClient.tsx`, `components/SideMenu.tsx`, `components/ProjectCarousel.tsx`, `components/PortfolioScrollSection.tsx`, `components/OurApproachSection.tsx`, `components/ContactSection.tsx`, `components/ServiceCard.tsx`, `components/PortfolioCard.tsx`, `app/portfolio/page.tsx`, `app/portfolio/[slug]/page.tsx`, `lib/strapi.ts`, `types/strapi.ts`, `middleware.ts`, `app/globals.css` (circuit keyframes, fonts).
+`app/HomeClient.tsx`, `components/SideMenu.tsx`, `components/ProjectCarousel.tsx`, `components/PortfolioScrollSection.tsx`, `components/OurApproachSection.tsx`, `components/ContactSection.tsx`, `components/ServiceCard.tsx`, `components/PortfolioCard.tsx`, `app/portfolio/page.tsx`, `app/portfolio/[slug]/page.tsx`, `lib/content.ts`, `content/`, `app/globals.css` (circuit keyframes, fonts).
 
 **Layout/global:**  
 `app/layout.tsx` (fonts, shared background), `app/page.tsx` (fetches projects, renders HomeClient).

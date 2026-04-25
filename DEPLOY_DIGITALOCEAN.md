@@ -1,6 +1,6 @@
 # Deploy Aspect Digital (Next.js) to a DigitalOcean Droplet
 
-This guide walks you through deploying the Next.js site to a DigitalOcean droplet and connecting it to **Strapi Cloud** (or any Strapi instance) for content.
+This guide walks you through deploying the Next.js site to a DigitalOcean droplet. Content is stored locally in this repo under `content/`.
 
 ---
 
@@ -9,9 +9,9 @@ This guide walks you through deploying the Next.js site to a DigitalOcean drople
 | Component        | Where it runs                          |
 |-----------------|----------------------------------------|
 | **Next.js app** | Your DigitalOcean droplet (this guide) |
-| **Strapi CMS**  | Strapi Cloud (you already have this)   |
+| **Content**     | Local JSON/Markdown files in Git       |
 
-The Next.js app on the droplet will fetch content from Strapi over HTTPS using environment variables.
+The Next.js app builds portfolio and blog pages from `content/projects/*.json` and `content/blog/*.md`.
 
 ---
 
@@ -101,18 +101,11 @@ Add (replace with your real values):
 # Your live site URL (for SEO, Open Graph, etc.)
 NEXT_PUBLIC_SITE_URL=https://yourdomain.com
 
-# Strapi — use your Strapi Cloud URL (must end with /api)
-NEXT_PUBLIC_STRAPI_API_URL=https://your-project.strapiapp.com/api
-STRAPI_API_TOKEN=your_strapi_api_token_from_strapi_cloud_admin
-
 # Contact form (Resend)
 RESEND_API_KEY=re_xxxxx
 CONTACT_EMAIL_TO=hello@yourdomain.com
 # CONTACT_FROM=Aspect Digital <contact@yourdomain.com>
 ```
-
-- Get **Strapi Cloud URL** from your Strapi Cloud dashboard (e.g. `https://xxx.strapiapp.com` → API is `https://xxx.strapiapp.com/api`).
-- Create an **API token** in Strapi Cloud: Admin → Settings → API Tokens → Create (e.g. “Production Next.js”), copy the token into `STRAPI_API_TOKEN`.
 
 Save and exit (`Ctrl+X`, then `Y`, then `Enter`).
 
@@ -139,7 +132,7 @@ pm2 startup
 Follow the command PM2 prints (e.g. run the `sudo env PATH=...` line) so the app restarts on reboot.
 
 - App listens on **port 3000** by default.
-- Visit `http://YOUR_DROPLET_IP:3000` to confirm it loads and content comes from Strapi.
+- Visit `http://YOUR_DROPLET_IP:3000` to confirm it loads.
 
 ---
 
@@ -303,9 +296,9 @@ cd ~/aspect-digital && git fetch origin main && git reset --hard origin/main && 
 
 `.env.production` is not in Git — it is **not** removed by reset.
 
-### Projects disappearing when Strapi Cloud is flaky
+### Updating content
 
-The app writes a **disk cache** at `.cache/strapi-projects.json` after successful full project list loads (home + portfolio use a full fetch). If Strapi returns errors or empty data for days, the site still shows the **last good list** (up to ~90 days). Ensure the app can write under the project root (e.g. `~/aspect-digital/.cache/`). After the first successful visit when Strapi is up, the cache is populated.
+Add or edit project JSON files in `content/projects/` and blog Markdown files in `content/blog/`, then deploy from Git. See `content/README.md` for field formats.
 
 **Note:** Do not set `assetPrefix` in `next.config.js` for production at the domain root — it breaks static asset URLs. The repo leaves `assetPrefix` unset for that reason.
 
@@ -316,7 +309,7 @@ The app writes a **disk cache** at `.cache/strapi-projects.json` after successfu
 - [ ] Droplet created (Ubuntu 24.04 LTS)
 - [ ] Node 20 and Git installed
 - [ ] Repo cloned
-- [ ] `.env.production` created with Strapi Cloud URL, Strapi token, Resend, and `NEXT_PUBLIC_SITE_URL`
+- [ ] `.env.production` created with Resend and `NEXT_PUBLIC_SITE_URL`
 - [ ] `npm run build` and PM2 start work; site loads at `http://IP:3000`
 - [ ] (Optional) Domain A record → droplet IP
 - [ ] (Optional) Nginx + Certbot for HTTPS
@@ -324,11 +317,6 @@ The app writes a **disk cache** at `.cache/strapi-projects.json` after successfu
 
 ---
 
-## Strapi: Keep Using Strapi Cloud
+## Content
 
-You don’t need to install Strapi on the droplet. The Next.js app only needs:
-
-- `NEXT_PUBLIC_STRAPI_API_URL` = your Strapi Cloud API URL (e.g. `https://xxx.strapiapp.com/api`)
-- `STRAPI_API_TOKEN` = a token from Strapi Cloud admin with read access to your content types
-
-Content is managed in Strapi Cloud; the droplet just fetches it over the internet.
+This project no longer depends on Strapi Cloud. Portfolio and blog content is versioned in Git and deployed with the app.

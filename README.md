@@ -1,6 +1,6 @@
 # Aspect Digital — Next.js portfolio site
 
-A modern portfolio and blog website built with Next.js, Strapi CMS, and GSAP animations.
+A modern portfolio and blog website built with Next.js, local file-based content, and GSAP animations.
 
 ## Features
 
@@ -10,7 +10,7 @@ A modern portfolio and blog website built with Next.js, Strapi CMS, and GSAP ani
 - ✨ Smooth animations with GSAP
 - 📝 Blog functionality
 - 💼 Portfolio showcase
-- 🔌 Headless CMS with Strapi
+- 🗂️ Local JSON/Markdown content for projects and blog posts
 
 ## Getting Started
 
@@ -38,15 +38,16 @@ Open [http://localhost:3000](http://localhost:3000) to see the site.
 
 ### Manual installation
 
-**Prerequisites:** Node.js 18+ (or use nvm + `setup.sh` above). Strapi is optional for blog/portfolio content.
+**Prerequisites:** Node.js 18+ (or use nvm + `setup.sh` above).
 
 1. Install dependencies: `npm install`
-2. Create `.env.local` with: `NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337/api`
+2. Copy `.env.local.example` to `.env.local` if you need contact/booking variables.
 3. Run: `npm run dev` → open [http://localhost:3000](http://localhost:3000)
 
-## Strapi Setup
+## Content
 
-See `STRAPI_SETUP.md` for detailed instructions on setting up your Strapi backend.
+Projects live in `content/projects/*.json`; blog posts live in `content/blog/*.md`.
+See `content/README.md` for the field format and examples.
 
 ## Project Structure
 
@@ -54,8 +55,8 @@ See `STRAPI_SETUP.md` for detailed instructions on setting up your Strapi backen
 aspect-digital/        # local folder name (may differ)
 ├── app/              # Next.js app directory
 ├── components/       # React components
+├── content/          # Local projects and blog posts
 ├── lib/             # Utilities and API clients
-├── types/           # TypeScript types
 └── public/          # Static assets
 ```
 
@@ -65,6 +66,4 @@ aspect-digital/        # local folder name (may differ)
 - **TypeScript** - Type safety
 - **Tailwind CSS** - Styling
 - **GSAP** - Animations
-- **Strapi** - Headless CMS
-- **Axios** - HTTP client
 

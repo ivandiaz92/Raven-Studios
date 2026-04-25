@@ -1,0 +1,144 @@
+---
+description: Enforce bulletproof responsiveness on every code change
+globs: ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.js", "**/*.css", "**/*.html", "**/*.scss"]
+alwaysApply: true
+---
+
+# Responsive Design — Non-Negotiable Rules
+
+Every single change you make to the codebase — no matter how small — must respect these rules.
+Never ship a change that breaks responsiveness at any screen size.
+
+---
+
+## Breakpoints (use consistently across the project)
+
+| Name    | Tailwind prefix | Min-width  |
+|---------|-----------------|------------|
+| xs      | `min-[480px]:`  | 480px      |
+| sm      | `sm:`           | 640px      |
+| md      | `md:`           | 768px      |
+| lg      | `lg:`           | 1024px     |
+| xl      | `xl:`           | 1280px     |
+| 2xl     | `2xl:`          | 1536px     |
+
+Mobile-first: write base styles for the smallest screen, then use `min-width` media queries to scale up. This project uses Tailwind — always use Tailwind's breakpoint prefixes as listed above. For the 480px range (xs), use `min-[480px]:` since Tailwind's `sm:` starts at 640px.
+
+Base styles (no prefix) cover 0–479px; `min-[480px]:` is the first explicit breakpoint override.
+---
+
+## Layout & Containers
+
+- All containers must use `max-width` + `width: 100%` + horizontal `padding` (never fixed pixel widths alone).
+- Padding/margins must scale: use `clamp()`, relative units (`%`, `vw`), or responsive Tailwind classes (`px-4 md:px-8 lg:px-12`).
+- Never use fixed widths (`width: 600px`) on elements that could overflow on smaller screens.
+- Use CSS Grid or Flexbox for all multi-column layouts. Never use floats or tables for layout.
+- Multi-column layouts must collapse gracefully: `grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))` or explicit breakpoint overrides.
+- No element should ever cause horizontal scroll. Always verify `overflow-x` is controlled at the root or layout level.
+
+---
+
+## Typography
+
+- Font sizes must use `clamp()` or scale with breakpoints. No hardcoded `px` sizes that look oversized on mobile or too small on large screens.
+  - Example: `font-size: clamp(1rem, 2.5vw, 1.5rem)` — the **middle term must include `vw` (or `vi`)** so size **changes when the viewport width changes**, not only at breakpoint jumps.
+- For section-level fluid type in Tailwind projects: put the final `font-size: clamp(...)` in **`globals.css` outside `@layer`** or scope with **`#section-id .class`** so Tailwind’s layer order cannot flatten or override it; **do not** ship a section with only `text-sm` / fixed `rem` step lists and call it “fluid.”
+- **Card / dense UI copy:** The **middle and max** in `clamp()` for body text must be large enough on wide screens (e.g. **≥ `1.1rem` max** for paragraph copy) and include a strong **`vw` term** so it tracks resize; if it looks “tiny on every screen,” the caps are too low. Prefer **`#section-id .card-title`** / **`.card-body`** in `globals.css` next to the section heading rules.
+- `line-height` must be set explicitly (never rely on browser defaults).
+- Long text must have `word-break: break-word` or `overflow-wrap: break-word` to prevent overflow.
+- Heading sizes must step down meaningfully on mobile — headings sized for desktop are too large on phones.
+- Never clip or truncate text that conveys essential information without a visible affordance (tooltip, expand button).
+
+---
+
+## Spacing (Padding, Margin, Gap)
+
+- All spacing must be proportional or breakpoint-aware. No large fixed margins that consume the full screen on mobile.
+- Section padding must be reduced on smaller screens (e.g. `py-16 md:py-24 lg:py-32`).
+- Component internal padding must be reduced on mobile so content isn't cramped.
+- Gap in flex/grid must be reviewed at every breakpoint.
+
+---
+
+## Images & Media
+
+- All `<img>` elements must have `max-width: 100%` and `height: auto`.
+- Use `object-fit: cover | contain` as appropriate — never let images stretch or distort.
+- Background images must use `background-size: cover` and be tested for cropping on mobile.
+- `<video>` and `<iframe>` must be wrapped in an aspect-ratio container:
+  ```css
+  .video-wrapper { position: relative; padding-top: 56.25%; }
+  .video-wrapper iframe { position: absolute; inset: 0; width: 100%; height: 100%; }
+  ```
+  Or use the modern `aspect-ratio: 16/9` property with `width: 100%`.
+
+---
+
+## Touch & Interactive Targets
+
+- Every tappable element (button, link, icon, toggle) must be at minimum **48×48px** on mobile.
+- Add enough padding to small icons/links to meet this target without changing their visual size.
+- Never rely on `:hover` alone for critical interactions — always provide a `:focus` and tap state.
+- Inputs, selects, and textareas must be large enough to tap comfortably. Minimum `height: 44px`.
+
+---
+
+## Navigation
+
+- Desktop navigation must transform into a mobile-friendly version at `sm` or `md` breakpoints (hamburger menu, bottom nav, drawer, etc.).
+- Never let nav links overflow or stack awkwardly — they must be fully accessible on mobile.
+- Dropdowns and menus must be touch-friendly (adequate tap targets, closable on outside tap).
+
+---
+
+## Cards, Grids & Components
+
+- Cards must be tested at full-width (mobile), 2-column, and 3-column (desktop) layouts.
+- No component should have content that overflows its bounding box at any breakpoint.
+- Modals and drawers must be usable on small screens — scrollable content, close button always accessible.
+- Tables must either scroll horizontally (with a visible scroll indicator) or reflow to a stacked card layout on mobile.
+
+---
+
+## Forms
+
+- Inputs must be `width: 100%` inside their container by default.
+- Form layouts (label + input side-by-side on desktop) must stack vertically on mobile.
+- Error messages and helper text must reflow and not overflow.
+
+---
+
+## Viewport & Root Setup
+
+- Every HTML file must include: `<meta name="viewport" content="width=device-width, initial-scale=1">`
+- The root element must never have `overflow-x: hidden` applied as a band-aid — fix the actual overflowing element instead.
+- No element should ever have a fixed `height` that clips content on shorter viewports. Use `min-height` instead.
+
+---
+
+## What to Check on Every Change
+
+Before completing any task, mentally (or actually) verify:
+
+1. **Mobile (375px):** Does everything fit? No horizontal scroll? Text readable?
+2. **Tablet (768px):** Does the layout transition cleanly?
+3. **Desktop (1440px):** Does content look proportional and not too wide/too narrow?
+4. **Font sizes:** Do they scale? Is anything too big or too small?
+5. **Spacing:** Are margins/paddings proportional at all sizes?
+6. **Images/video:** Do they scale and maintain aspect ratio?
+7. **Touch targets:** Are all interactive elements large enough on mobile?
+8. **Overflow:** Does anything cause horizontal scroll?
+
+---
+
+## Forbidden Patterns
+
+- ❌ `width: 600px` on a layout element
+- ❌ `font-size: 48px` without a mobile override or `clamp()`
+- ❌ `margin: 0 80px` without a mobile override
+- ❌ `height: 500px` on a content container (use `min-height`)
+- ❌ `position: fixed` elements that cover content on small screens without a dismiss option
+- ❌ Horizontal stacking that doesn't wrap or collapse on mobile
+- ❌ Missing `max-width: 100%` on images
+- ❌ Tap targets smaller than 48×48px
+- ❌ Navigation that doesn't have a mobile variant

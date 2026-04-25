@@ -25,10 +25,11 @@ echo "✅ npm version: $(npm --version)"
 if [ ! -f .env.local ]; then
     echo "📝 Creating .env.local file..."
     cat > .env.local << EOF
-# Strapi API URL
-# For local development, use: http://localhost:1337/api
-# For production, use your Strapi deployment URL
-NEXT_PUBLIC_STRAPI_API_URL=http://localhost:1337/api
+# Optional: live site URL for SEO/canonical metadata
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+# Optional: Cal.com booking URL used by /agenda
+NEXT_PUBLIC_CALCOM_BOOKING_URL=https://cal.com/aspect/15min
 EOF
     echo "✅ Created .env.local"
 else

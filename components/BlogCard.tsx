@@ -5,13 +5,12 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { getBlogPostImageUrl } from '@/lib/strapi-helpers'
-import type { StrapiBlogPost } from '@/types/strapi'
+import type { BlogPost } from '@/lib/content'
 
 gsap.registerPlugin(ScrollTrigger)
 
 interface BlogCardProps {
-  post: StrapiBlogPost
+  post: BlogPost
   index?: number
 }
 
@@ -38,15 +37,15 @@ export default function BlogCard({ post, index = 0 }: BlogCardProps) {
     }
   }, [index])
 
-  const imageUrl = getBlogPostImageUrl(post)
-  const dateStr = new Date(post.attributes.date_created).toLocaleDateString('en-US', {
+  const imageUrl = post.coverImage
+  const dateStr = new Date(post.date).toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
   })
 
   return (
-    <Link href={`/blog/${post.id}`}>
+    <Link href={`/blog/${post.slug}`}>
       <div
         ref={cardRef}
         className="group relative overflow-hidden rounded-lg border border-gray-800 bg-gray-900/80 hover:border-[#7dd3fc]/50 transition-all duration-300"
@@ -55,7 +54,7 @@ export default function BlogCard({ post, index = 0 }: BlogCardProps) {
           <div className="relative aspect-[16/10] overflow-hidden">
             <Image
               src={imageUrl}
-              alt={post.attributes.post_title}
+              alt={post.title}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -71,10 +70,10 @@ export default function BlogCard({ post, index = 0 }: BlogCardProps) {
         <div className="p-6">
           <p className="font-mono text-xs text-white/60 mb-2">{dateStr}</p>
           <h3 className="text-xl font-display font-light mb-2 text-white group-hover:text-[#7dd3fc] transition-colors line-clamp-2">
-            {post.attributes.post_title}
+            {post.title}
           </h3>
-          {post.attributes.author && (
-            <p className="text-white/70 text-sm">By {post.attributes.author}</p>
+          {post.author && (
+            <p className="text-white/70 text-sm">By {post.author}</p>
           )}
         </div>
       </div>
