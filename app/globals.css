@@ -144,6 +144,16 @@ html {
   gap: clamp(0.5rem, 0.25rem + 0.5vw, 0.9rem);
 }
 
+/* Portfolio scroll: tall min-height only on desktop (sticky left column) */
+.portfolio-scroll-section {
+  min-height: 0;
+}
+@media (min-width: 1024px) {
+  .portfolio-scroll-section {
+    min-height: var(--portfolio-min-height);
+  }
+}
+
 /*
  * Our Approach: step 1 (discovery) — same JPG; lamp is top-right, warm tungsten.
  * Simulate a cool/blue desk lamp: hotspot + re-tint, no new asset.

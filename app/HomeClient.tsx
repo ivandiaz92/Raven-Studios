@@ -180,9 +180,9 @@ export default function HomeClient({ projects, blogPosts = [] }: HomeClientProps
       {/* Strategy / Services — desktop: full viewport below header, flex-distributed; mobile: natural height + scroll in grid if needed */}
       <section
         id="soluciones"
-        className="mb-12 flex min-h-0 flex-col overflow-hidden pt-[5.25rem] pb-6 sm:mb-16 sm:pt-28 sm:pb-8 max-lg:min-h-0 lg:mb-20 lg:h-[100svh] lg:max-h-[100svh] lg:pb-8 xl:mb-24"
+        className="mb-12 flex flex-col pt-[5.25rem] pb-6 sm:mb-16 sm:pt-28 sm:pb-8 lg:mb-20 lg:h-[100svh] lg:max-h-[100svh] lg:overflow-hidden lg:pb-8 xl:mb-24"
       >
-        <div className="mx-auto flex w-full min-h-0 max-w-[min(100%,90vw)] flex-1 flex-col px-4 min-[480px]:px-5 sm:px-6 lg:px-8 lg:h-full">
+        <div className="mx-auto flex w-full max-w-[min(100%,90vw)] flex-col px-4 min-[480px]:px-5 sm:px-6 lg:h-full lg:min-h-0 lg:flex-1 lg:px-8">
           <div className="shrink-0 text-balance sm:mb-1 lg:mb-5">
             <h2 className="title-entrance text-soluciones-heading font-display font-light text-[#7dd3fc]">
               Soluciones digitales y estratégicas
@@ -194,7 +194,7 @@ export default function HomeClient({ projects, blogPosts = [] }: HomeClientProps
               Integrando diseño, tecnología y visión de negocio
             </p>
           </div>
-          <div className="mt-3 flex min-h-0 flex-1 flex-col sm:mt-4 max-lg:max-h-[min(72svh,720px)] max-lg:overflow-y-auto max-lg:overscroll-y-contain max-lg:pr-0.5 [-ms-overflow-style:none] [scrollbar-width:thin] lg:mt-0 lg:min-h-0 lg:overflow-hidden">
+          <div className="mt-3 flex flex-col sm:mt-4 lg:mt-0 lg:min-h-0 lg:flex-1 lg:overflow-hidden">
             <div
               className="grid h-full min-h-0 w-full grid-cols-2 auto-rows-min gap-2.5 min-[480px]:gap-3 sm:gap-3.5
               max-lg:content-start

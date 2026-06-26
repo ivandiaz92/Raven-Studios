@@ -16,11 +16,11 @@ export default function PortfolioScrollSection({ projects }: PortfolioScrollSect
 
   return (
     <section
-      className="relative grid w-full max-w-[100vw] grid-cols-1 overflow-x-hidden lg:grid-cols-12"
-      style={{ minHeight: `${sectionHeight}vh` }}
+      className="portfolio-scroll-section relative grid w-full grid-cols-1 lg:grid-cols-12"
+      style={{ ['--portfolio-min-height' as string]: `${sectionHeight}vh` }}
     >
-      {/* Left: sticky title + subtitle */}
-      <div className="lg:col-span-5 flex flex-col justify-center px-6 sm:px-10 lg:px-14 py-16 lg:py-0 lg:sticky lg:top-0 lg:h-screen">
+      {/* Left: sticky title + subtitle — self-start required in grid so sticky + h-screen work */}
+      <div className="flex flex-col justify-start px-6 pt-8 pb-5 sm:px-10 sm:pt-10 sm:pb-6 lg:col-span-5 lg:sticky lg:top-0 lg:h-screen lg:justify-center lg:self-start lg:px-14 lg:py-0">
         <h2 className="title-entrance text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-display font-light text-white leading-tight">
           Portafolio
         </h2>
@@ -35,7 +35,7 @@ export default function PortfolioScrollSection({ projects }: PortfolioScrollSect
       </div>
 
       {/* Right: vertical stack of project slides (each 100vh) */}
-      <div className="lg:col-span-7 flex flex-col">
+      <div className="flex flex-col overflow-x-hidden lg:col-span-7">
         {projects.length === 0 ? (
           <div className="min-h-screen flex items-center justify-center px-6 py-16">
             <p className="text-gray-500 font-mono text-sm">Aún no hay proyectos.</p>
