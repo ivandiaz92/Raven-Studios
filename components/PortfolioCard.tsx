@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import VisitSiteLink from '@/components/VisitSiteLink'
 import type { Project } from '@/lib/content'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -39,13 +40,14 @@ export default function PortfolioCard({ project, index = 0 }: PortfolioCardProps
   const imageUrl = project.coverImage
   const name = project.title
   const overview = project.overview ?? ''
+  const liveUrl = project.liveUrl?.trim()
 
   return (
-    <Link href={`/portfolio/${project.slug}`}>
-      <div
-        ref={cardRef}
-        className="group relative overflow-hidden rounded-lg border border-gray-800 bg-gray-900/80 hover:border-[#7dd3fc]/50 transition-all duration-300"
-      >
+    <div
+      ref={cardRef}
+      className="group overflow-hidden rounded-lg border border-gray-800 bg-gray-900/80 transition-all duration-300 hover:border-[#7dd3fc]/50"
+    >
+      <Link href={`/portfolio/${project.slug}`} className="block">
         {imageUrl ? (
           <div className="relative h-64 overflow-hidden">
             <Image
@@ -59,22 +61,24 @@ export default function PortfolioCard({ project, index = 0 }: PortfolioCardProps
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
           </div>
         ) : (
-          <div className="relative h-64 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center border-b border-gray-800">
-            <span className="text-gray-500 font-mono text-xs">Project</span>
+          <div className="relative flex h-64 items-center justify-center border-b border-gray-800 bg-gradient-to-br from-gray-800 to-gray-900">
+            <span className="font-mono text-xs text-gray-500">Proyecto</span>
           </div>
         )}
         <div className="p-6">
-          <h3 className="text-xl font-display font-light mb-2 text-white group-hover:text-[#7dd3fc] transition-colors">
+          <h3 className="mb-2 font-display text-xl font-light text-white transition-colors group-hover:text-[#7dd3fc]">
             {name}
           </h3>
           {overview && (
-            <p className="text-white/70 text-sm mb-4 line-clamp-2">
-              {overview}
-            </p>
+            <p className="mb-4 line-clamp-2 text-sm text-white/70">{overview}</p>
           )}
         </div>
-      </div>
-    </Link>
+      </Link>
+      {liveUrl && (
+        <div className="border-t border-gray-800/80 px-6 pb-5 pt-0">
+          <VisitSiteLink href={liveUrl} className="mt-1" />
+        </div>
+      )}
+    </div>
   )
 }
-

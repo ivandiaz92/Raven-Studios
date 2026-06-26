@@ -132,7 +132,7 @@ export default function ProjectCarousel({ projects }: ProjectCarouselProps) {
     return (
       <div className="w-full overflow-hidden py-12">
         <div className="text-center text-gray-500 font-mono text-sm max-w-md mx-auto space-y-2">
-          <p>No projects showing yet.</p>
+          <p>Aún no hay proyectos para mostrar.</p>
           <p className="text-xs text-gray-600 mt-3">Add project JSON files in content/projects.</p>
         </div>
       </div>
