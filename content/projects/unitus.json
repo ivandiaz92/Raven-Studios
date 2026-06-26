@@ -1,0 +1,15 @@
+{
+  "slug": "unitus",
+  "title": "Unitus",
+  "date": "2025-05-09",
+  "liveUrl": "https://unitus.mx",
+  "tools": ["Next.js", "Tailwind CSS", "UX/UI", "Bienes raíces"],
+  "coverImage": "/images/Unitus/unitus_principal_1x.webp",
+  "gallery": [
+    "/images/Unitus/unitus_desktop_1x.webp",
+    "/images/Unitus/unitus_mobile_1x.webp",
+    "/images/Unitus/unitus_grid_desktop.webp"
+  ],
+  "overview": "Unitus es una plataforma mexicana de inversión inmobiliaria y estilo de vida que convierte la propiedad de lujo en un modelo de inversión accesible y fraccionada. La idea central: co-propiedad de residencias vacacionales premium en destinos de alta demanda en México, con uso personal e ingreso pasivo. El sitio comunica ubicaciones curadas, uso flexible y administración integral — en la intersección entre vida de lujo e inversión inteligente.",
+  "conclusion": "El sitio funciona como un sistema de conversión ágil: el visitante entiende la propuesta, explora el proceso y agenda una llamada sin depender de un CMS externo."
+}

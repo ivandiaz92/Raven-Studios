@@ -1,0 +1,14 @@
+{
+  "slug": "mvi",
+  "title": "MVI",
+  "date": "2025-03-28",
+  "liveUrl": "https://mvimfg.com/",
+  "tools": ["UX/UI", "Wireframes", "Diseño responsivo"],
+  "coverImage": "/images/MVI/mvi_principal.webp",
+  "gallery": [
+    "/images/MVI/mvi_desktop_1x.webp",
+    "/images/MVI/mvi_mobile_1x.webp"
+  ],
+  "overview": "Experiencia web estructurada desde wireframes iniciales hasta una interfaz responsiva, con énfasis en jerarquía, claridad y navegación simple.",
+  "conclusion": "El proyecto equilibra planificación y ejecución visual para que la interfaz final se sienta intencional en desktop y móvil."
+}

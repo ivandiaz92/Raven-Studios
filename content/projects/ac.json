@@ -1,0 +1,14 @@
+{
+  "slug": "ac",
+  "title": "AC",
+  "date": "2025-04-18",
+  "liveUrl": "https://acproyectos.com/",
+  "tools": ["Diseño web", "UI responsiva", "Experiencia de marca"],
+  "coverImage": "/images/AC/ac_principal.webp",
+  "gallery": [
+    "/images/AC/ac_desktop_1x.webp",
+    "/images/AC/ac_mobile_1x.webp"
+  ],
+  "overview": "Presencia digital pensada para comunicar la marca con claridad: layouts responsivos y un sistema visual coherente en desktop y móvil.",
+  "conclusion": "El resultado es una experiencia limpia y adaptable que le da a la marca una base sólida para presentarse en línea."
+}

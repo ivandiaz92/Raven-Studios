@@ -1,0 +1,14 @@
+{
+  "slug": "paradigm",
+  "title": "Paradigm",
+  "date": "2025-03-12",
+  "liveUrl": "https://paradigmboats.com/",
+  "tools": ["Diseño web", "UI responsiva", "Sistema visual"],
+  "coverImage": "/images/Paradigm/paradigm_principal.webp",
+  "gallery": [
+    "/images/Paradigm/paradigm_desktop_1x.webp",
+    "/images/Paradigm/paradigm_mobile_1x.webp"
+  ],
+  "overview": "Concepto web con dirección visual clara, bloques de mensaje definidos y layouts responsivos que traducen la marca en distintos tamaños de pantalla.",
+  "conclusion": "El resultado es una presentación digital pulida, con la flexibilidad para crecer en páginas o campañas adicionales."
+}

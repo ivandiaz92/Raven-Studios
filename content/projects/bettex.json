@@ -1,0 +1,14 @@
+{
+  "slug": "bettex",
+  "title": "Bettex",
+  "date": "2025-02-20",
+  "liveUrl": "https://bettex.com.mx/",
+  "tools": ["Diseño web", "Diseño responsivo", "Presentación de marca"],
+  "coverImage": "/images/Bettex/bettex_principal.webp",
+  "gallery": [
+    "/images/Bettex/bettex_desktop_1x.webp",
+    "/images/Bettex/bettex_mobile_1x.webp"
+  ],
+  "overview": "Sitio orientado a la marca, diseñado para explicar los servicios con claridad, funcionar bien en móvil y mantener un lenguaje visual consistente.",
+  "conclusion": "El diseño le da a Bettex una presencia web más coherente y una base sólida para contenido orientado a conversión."
+}

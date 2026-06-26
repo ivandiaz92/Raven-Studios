@@ -1,0 +1,14 @@
+{
+  "slug": "pixel-tower",
+  "title": "Pixel Tower",
+  "date": "2025-01-22",
+  "liveUrl": "https://pixeltower.mx/",
+  "tools": ["Diseño web", "Dirección creativa", "UI responsiva"],
+  "coverImage": "/images/Pixel Tower/pixel_principal.webp",
+  "gallery": [
+    "/images/Pixel Tower/pixel_2_1x.webp",
+    "/images/Pixel Tower/pixel_mobile_1x.webp"
+  ],
+  "overview": "Dirección web con fuerte componente visual: secciones flexibles, presentación audaz y layouts responsivos para una experiencia creativa.",
+  "conclusion": "El diseño final crea una capa de presentación memorable, sin sacrificar estructura ni espacio para crecer en contenido."
+}

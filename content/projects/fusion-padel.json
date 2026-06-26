@@ -1,0 +1,14 @@
+{
+  "slug": "fusion-padel",
+  "title": "Fusion Padel",
+  "date": "2025-02-05",
+  "liveUrl": "https://ivandiaz92.github.io/fusion-padel/",
+  "tools": ["Marca deportiva", "Diseño web", "UI responsiva"],
+  "coverImage": "/images/Fusion Padel/fusionpadel_principal.webp",
+  "gallery": [
+    "/images/Fusion Padel/fusionpadel_desktop_1x.webp",
+    "/images/Fusion Padel/fusionpadel_mobile_1x.webp"
+  ],
+  "overview": "Concepto digital para una marca de pádel: activo, moderno y fácil de navegar en desktop y móvil.",
+  "conclusion": "El proyecto consolida una presencia visual fuerte para la marca, sin perder practicidad para quien busca información rápida."
+}
