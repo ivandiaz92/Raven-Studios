@@ -16,7 +16,7 @@ export default function PortfolioScrollSection({ projects }: PortfolioScrollSect
 
   return (
     <section
-      className="relative grid grid-cols-1 lg:grid-cols-12"
+      className="relative grid w-full max-w-[100vw] grid-cols-1 overflow-x-hidden lg:grid-cols-12"
       style={{ minHeight: `${sectionHeight}vh` }}
     >
       {/* Left: sticky title + subtitle */}
@@ -47,21 +47,21 @@ export default function PortfolioScrollSection({ projects }: PortfolioScrollSect
             return (
               <div
                 key={project.slug}
-                className="group relative flex min-h-screen flex-col justify-end overflow-hidden border-t border-gray-800/50 p-6 first:border-t-0 sm:p-10 lg:p-14"
+                className="group relative flex min-h-[72dvh] flex-col justify-end overflow-hidden border-t border-gray-800/50 p-5 first:border-t-0 min-[480px]:min-h-[80dvh] min-[480px]:p-6 sm:min-h-[85dvh] sm:p-10 lg:min-h-screen lg:p-14"
               >
                 <Link
                   href={`/portfolio/${project.slug}`}
                   className="absolute inset-0 z-0"
                   aria-label={`Ver proyecto ${project.title}`}
                 />
-                <div className="absolute inset-0 z-0">
+                <div className="absolute inset-x-3 top-3 bottom-[11rem] z-0 overflow-hidden min-[480px]:inset-x-4 min-[480px]:bottom-[12rem] sm:inset-x-6 sm:bottom-[13rem] lg:inset-0 lg:bottom-0">
                   {imageUrl ? (
                     <Image
                       src={imageUrl}
                       alt=""
                       fill
-                      className="object-cover opacity-60 transition-opacity duration-500 group-hover:opacity-80"
-                      sizes="(max-width: 1024px) 100vw, 58vw"
+                      className="object-contain object-center opacity-55 transition-opacity duration-500 group-hover:opacity-75 lg:object-cover lg:opacity-60 lg:group-hover:opacity-80"
+                      sizes="(max-width: 1024px) 92vw, 58vw"
                       unoptimized
                     />
                   ) : (
