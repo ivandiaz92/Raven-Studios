@@ -2,8 +2,10 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { format } from 'date-fns'
-import { getBlogPostBySlug, getBlogSlugs } from '@/lib/content'
-
+import { es } from 'date-fns/locale'
+import { getBlogPostBySlug, getBlogPosts, getBlogSlugs } from '@/lib/content'
+import BlogCard from '@/components/BlogCard'
+import ContactSection from '@/components/ContactSection'
 export async function generateStaticParams() {
   const slugs = await getBlogSlugs()
   return slugs.map((slug) => ({ slug }))
@@ -11,10 +13,10 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const post = await getBlogPostBySlug(params.slug)
-  
+
   if (!post) {
     return {
-      title: 'Blog Post Not Found',
+      title: 'Publicación no encontrada',
     }
   }
 
@@ -25,88 +27,94 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = await getBlogPostBySlug(params.slug)
+  const [post, allPosts] = await Promise.all([
+    getBlogPostBySlug(params.slug),
+    getBlogPosts(6),
+  ])
 
   if (!post) {
     notFound()
   }
 
   const featuredImageUrl = post.coverImage
-  const dateStr = post.date
-  const publishedDate = format(new Date(dateStr), 'MMMM dd, yyyy')
-  const title = post.title
-  const excerpt = post.excerpt ?? ''
-  const tags = post.tags
+  const publishedDate = format(new Date(post.date), "d 'de' MMMM, yyyy", { locale: es })
+  const otherPosts = allPosts.filter((p) => p.slug !== post.slug).slice(0, 2)
 
   return (
-    <div className="pt-20 pb-20">
-      <div className="container mx-auto px-4 max-w-4xl">
-        {/* Back Button */}
+    <div className="pt-20 min-h-screen">
+      <div className="mx-auto w-[96%] max-w-[1280px] px-4 py-16 min-[480px]:px-5 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <Link
           href="/blog"
-          className="inline-flex items-center text-purple-400 hover:text-purple-300 mb-8 transition-colors"
+          className="mb-10 inline-flex items-center gap-2 border-b border-white/60 pb-1.5 font-mono text-xs uppercase tracking-[0.2em] text-white transition-colors hover:border-[#7dd3fc] hover:text-[#7dd3fc] sm:mb-12 sm:text-sm"
         >
-          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Back to Blog
+          <span className="text-base" aria-hidden>
+            ←
+          </span>
+          Volver al blog
         </Link>
 
-        {/* Featured Image */}
         {featuredImageUrl && (
-          <div className="relative h-96 mb-8 rounded-lg overflow-hidden">
+          <div className="relative mb-14 aspect-[16/10] w-full overflow-hidden rounded-lg bg-gray-900 sm:mb-20 lg:aspect-[21/9] lg:max-h-[520px]">
             <Image
               src={featuredImageUrl}
-              alt={title}
+              alt={post.title}
               fill
               className="object-cover"
+              sizes="(max-width: 1024px) 96vw, 1280px"
+              unoptimized
             />
           </div>
         )}
 
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4 text-sm text-gray-400">
-            <span>{publishedDate}</span>
-            {post.author && <span>By {post.author}</span>}
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-            {title}
+        <header className="mb-14 sm:mb-20">
+          <h1 className="mb-4 font-display text-4xl font-light leading-tight text-white sm:text-5xl lg:text-6xl">
+            {post.title}
           </h1>
-          {excerpt && (
-            <p className="text-xl text-gray-300 mb-6">
-              {excerpt}
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-base text-white/70">
+            <time dateTime={post.date}>{publishedDate}</time>
+            {post.author && <span>Por {post.author}</span>}
+          </div>
+          {post.excerpt && (
+            <p className="mt-6 max-w-4xl text-base leading-relaxed text-white/80 sm:text-lg">
+              {post.excerpt}
             </p>
           )}
-        </div>
-
-        {/* Tags */}
-        {tags.length > 0 && (
-          <div className="mb-8">
-            <div className="flex flex-wrap gap-2">
-              {tags.map((tag, i) => (
+          {post.tags.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {post.tags.map((tag) => (
                 <span
-                  key={i}
-                  className="bg-purple-500/20 text-purple-400 px-3 py-1 rounded text-sm"
+                  key={tag}
+                  className="rounded-full bg-white/10 px-3 py-1 text-sm text-white/90"
                 >
                   {tag}
                 </span>
               ))}
             </div>
-          </div>
+          )}
+        </header>
+
+        {post.html && (
+          <article
+            className="blog-article"
+            dangerouslySetInnerHTML={{ __html: post.html }}
+          />
         )}
 
-        {/* Content */}
-        {post.html && (
-          <article className="prose prose-invert max-w-none">
-            <div 
-              className="text-gray-300 leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: post.html }}
-            />
-          </article>
+        {otherPosts.length > 0 && (
+          <section className="mt-20 border-t border-gray-800 pt-16 sm:mt-28 sm:pt-20">
+            <h2 className="mb-8 font-display text-3xl font-light text-white sm:mb-10 sm:text-4xl">
+              Continúa leyendo
+            </h2>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
+              {otherPosts.map((p, i) => (
+                <BlogCard key={p.slug} post={p} index={i} showExcerpt={false} />
+              ))}
+            </div>
+          </section>
         )}
       </div>
+
+      <ContactSection animate={false} />
     </div>
   )
 }
-
