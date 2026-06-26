@@ -77,7 +77,7 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
           type="button"
           onClick={handleClose}
           className="absolute right-4 top-4 z-10 flex h-12 w-12 items-center justify-center rounded-md text-white transition-colors hover:text-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black min-[480px]:right-6 min-[480px]:top-6"
-          aria-label="Close menu"
+          aria-label="Cerrar menú"
         >
           <svg
             className="h-8 w-8"
@@ -113,7 +113,7 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
           {/* Contact Info + Logo */}
           <div className="side-menu-item pt-12 w-full flex flex-wrap items-end justify-between gap-6">
             <div className="space-y-4 text-sm text-gray-400">
-              <p className="font-mono text-xs tracking-wider uppercase text-gray-500">Get in touch</p>
+              <p className="font-mono text-xs tracking-wider uppercase text-gray-500">Escríbenos</p>
               <a
                 href="mailto:hello@aspect.studio"
                 className="inline-flex min-h-11 min-w-0 max-w-full items-center break-all rounded-sm py-1 text-left hover:text-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black [overflow-wrap:anywhere]"
@@ -121,7 +121,7 @@ export default function SideMenu({ isOpen, onClose }: SideMenuProps) {
                 hello@aspect.studio
               </a>
             </div>
-            <Link href="/" onClick={handleClose} className="flex-shrink-0" aria-label="Home">
+            <Link href="/" onClick={handleClose} className="flex-shrink-0" aria-label="Inicio">
               <Image
                 src={LOGO_WHITE}
                 alt=""

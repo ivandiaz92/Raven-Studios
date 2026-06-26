@@ -21,12 +21,12 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_NAME}`,
   },
   description:
-    'We design and develop clear, functional, and well-structured digital experiences. Strategy, design and performance aligned with your objectives.',
+    'Diseñamos y desarrollamos experiencias digitales claras, funcionales y bien estructuradas. Estrategia, diseño y rendimiento alineados a tus objetivos.',
   keywords: [
-    'web development',
-    'design',
-    'portfolio',
-    'digital agency',
+    'desarrollo web',
+    'diseño',
+    'portafolio',
+    'agencia digital',
     'next.js',
     'react',
     'branding',
@@ -37,12 +37,12 @@ export const metadata: Metadata = {
   creator: SITE_NAME,
   openGraph: {
     type: 'website',
-    locale: 'en_US',
+    locale: 'es_MX',
     url: siteUrl,
     siteName: SITE_NAME,
     title: `${SITE_NAME_MARK} — ${SITE_TAGLINE}`,
     description:
-      'We design and develop clear, functional, and well-structured digital experiences.',
+      'Diseñamos y desarrollamos experiencias digitales claras, funcionales y bien estructuradas.',
     images: [
       {
         url: LOGO_DARK,
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: `${SITE_NAME_MARK} — ${SITE_TAGLINE}`,
     description:
-      'We design and develop clear, functional, and well-structured digital experiences.',
+      'Diseñamos y desarrollamos experiencias digitales claras, funcionales y bien estructuradas.',
   },
   robots: {
     index: true,
@@ -80,7 +80,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body className="relative">
         {/* Single shared background for the whole page — dark base + subtle noise */}
         <div className="fixed inset-0 z-0" aria-hidden>

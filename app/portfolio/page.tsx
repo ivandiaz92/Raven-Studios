@@ -2,8 +2,8 @@ import { getProjects } from '@/lib/content'
 import PortfolioCard from '@/components/PortfolioCard'
 
 export const metadata = {
-  title: 'Portfolio - Aspect',
-  description: 'Explore our portfolio of web development and design projects',
+  title: 'Portafolio - Aspect',
+  description: 'Proyectos de diseño y desarrollo web que hemos construido',
 }
 
 export default async function PortfolioPage() {
@@ -14,17 +14,17 @@ export default async function PortfolioPage() {
       <div className="w-[90%] max-w-[90vw] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24">
         <header className="mb-12 sm:mb-16">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-light text-white leading-tight mb-4">
-            Our Portfolio
+            Portafolio
           </h1>
           <p className="text-white/80 text-base sm:text-lg max-w-2xl leading-relaxed">
-            A collection of projects showcasing our expertise in web development, design, and digital innovation.
+            Una selección de proyectos donde combinamos diseño, desarrollo e innovación digital.
           </p>
         </header>
 
         {projects.length === 0 ? (
           <div className="py-20">
             <p className="text-white/70 text-lg">
-              No projects found. Add JSON files in content/projects.
+              No hay proyectos todavía. Agrega archivos JSON en content/projects.
             </p>
           </div>
         ) : (
@@ -38,4 +38,3 @@ export default async function PortfolioPage() {
     </div>
   )
 }
-

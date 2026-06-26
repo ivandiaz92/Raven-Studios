@@ -1,26 +1,26 @@
 ---
 slug: websites-that-convert
-title: Websites That Convert Start With Clear Decisions
+title: Los sitios que convierten empiezan con decisiones claras
 date: 2026-04-24
 author: Ivan D
-excerpt: A practical look at why clarity, hierarchy, and frictionless next steps matter more than decorative complexity.
-coverImage: /images/floating-phones.png
+excerpt: Por qué la claridad, la jerarquía y los siguientes pasos sin fricción importan más que la decoración.
+coverImage: /images/blog/blog-websites-that-convert-cover.png
 tags:
-  - Strategy
-  - Design
-  - Conversion
+  - Estrategia
+  - Diseño
+  - Conversión
 ---
 
-A strong website does not start with animation, color, or a trendy layout. It starts with decisions.
+Un sitio fuerte no empieza con animaciones, colores o un layout de moda. Empieza con decisiones.
 
-Who is this for? What do they need to understand first? What action should feel obvious after the first few seconds?
+¿Para quién es? ¿Qué necesita entender primero? ¿Qué acción debería sentirse obvia después de los primeros segundos?
 
-## Clarity Before Decoration
+## Claridad antes que decoración
 
-Visual polish matters, but polish cannot rescue a confusing message. The most effective pages make the offer easy to understand, then use design to support that understanding.
+El acabado visual importa, pero no salva un mensaje confuso. Las páginas que mejor funcionan dejan la oferta clara y usan el diseño para reforzar esa comprensión.
 
-## Frictionless Next Steps
+## Siguientes pasos sin fricción
 
-Every important section should give visitors a clear way to continue. That might be a booking link, a project detail page, or a short contact form. The path should feel natural, not forced.
+Cada sección importante debería dar al visitante una forma clara de seguir adelante: agendar una llamada, ver un proyecto o llenar un formulario corto. El camino debe sentirse natural, no forzado.
 
-When the content, design, and calls to action all point in the same direction, the site starts doing real business work.
+Cuando contenido, diseño y llamadas a la acción apuntan en la misma dirección, el sitio empieza a trabajar de verdad para el negocio.

@@ -82,14 +82,14 @@ export async function POST(request: Request) {
   try {
     body = await request.json()
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
+    return NextResponse.json({ error: 'JSON inválido' }, { status: 400 })
   }
 
   for (const key of required) {
     const val = body[key]
     if (val == null || String(val).trim() === '') {
       return NextResponse.json(
-        { error: `Missing or empty required field: ${key}` },
+        { error: `Campo obligatorio vacío o faltante: ${key}` },
         { status: 400 }
       )
     }

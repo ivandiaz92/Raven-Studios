@@ -8,35 +8,43 @@ import ExternalLinkIcon from '@/components/ExternalLinkIcon'
 const STEPS = [
   {
     id: '001',
-    title: 'Discovery & Research',
+    title: 'Descubrimiento e investigación',
     image: '/images/approach-discovery-3x1.jpg',
-    description: "We uncover your brand's true value, identify your competitive edge, your authentic promise, and the positioning we aim to elevate you to.",
-    howWeHelp: 'How we help',
-    details: 'Context-driven market research. Competitive analysis and digital benchmarking. Business-relevant trend identification. Data and analytics review to generate actionable insights.',
+    description:
+      'Entendemos el valor real de tu marca, identificamos tu ventaja competitiva, la promesa auténtica que transmites y el posicionamiento al que queremos llevarte.',
+    howWeHelp: 'Cómo lo hacemos',
+    details:
+      'Investigación de mercado con contexto. Análisis competitivo y benchmark digital. Tendencias relevantes para el negocio. Revisión de datos y analítica para convertir información en decisiones.',
   },
   {
     id: '002',
-    title: 'Strategy',
+    title: 'Estrategia',
     image: '/images/approach-strategy-3x1.jpg',
-    description: 'We define clear goals, priorities, and a roadmap so every decision is aligned with your business and audience.',
-    howWeHelp: 'How we help',
-    details: 'Brand and positioning strategy. User and market insights. Content and channel strategy. Success metrics and KPIs.',
+    description:
+      'Definimos objetivos claros, prioridades y una hoja de ruta para que cada decisión esté alineada con tu negocio y tu audiencia.',
+    howWeHelp: 'Cómo lo hacemos',
+    details:
+      'Estrategia de marca y posicionamiento. Insights de usuario y mercado. Estrategia de contenido y canales. Métricas de éxito y KPIs.',
   },
   {
     id: '003',
-    title: 'UX/UI Design',
+    title: 'Diseño UX/UI',
     image: '/images/approach-design-3x1.jpg',
-    description: 'We shape your product into an intuitive, cohesive experience that feels right and performs well.',
-    howWeHelp: 'How we help',
-    details: 'User flows and wireframes. Visual design systems. Prototyping and testing. Responsive and accessible interfaces.',
+    description:
+      'Damos forma a un producto intuitivo y coherente: que se sienta bien de usar y funcione como debe.',
+    howWeHelp: 'Cómo lo hacemos',
+    details:
+      'Flujos de usuario y wireframes. Sistemas de diseño visual. Prototipado y pruebas. Interfaces responsivas y accesibles.',
   },
   {
     id: '004',
-    title: 'Custom Development',
+    title: 'Desarrollo a medida',
     image: '/images/approach-development-3x1.jpg',
-    description: 'We build fast, stable digital products with clean architecture and full control over your platform.',
-    howWeHelp: 'How we help',
-    details: 'Modern stacks (React, Next.js, etc.). APIs and integrations. Performance and SEO. Launch and iteration.',
+    description:
+      'Construimos productos digitales rápidos y estables, con arquitectura limpia y control total sobre la plataforma.',
+    howWeHelp: 'Cómo lo hacemos',
+    details:
+      'Stacks modernos (React, Next.js, etc.). APIs e integraciones. Rendimiento y SEO. Lanzamiento e iteración.',
   },
 ] as const
 
@@ -48,7 +56,7 @@ export default function OurApproachSection() {
     <section className="py-16 sm:py-20 lg:py-24">
       <div className="w-[90%] max-w-[90vw] mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="title-entrance text-4xl sm:text-5xl lg:text-6xl font-display font-light text-white mb-12 sm:mb-16">
-          Our Approach
+          Cómo trabajamos
         </h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">

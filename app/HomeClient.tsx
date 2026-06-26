@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import ServicesMarquee from '@/components/ServicesMarquee'
@@ -12,6 +11,7 @@ import PortfolioScrollSection from '@/components/PortfolioScrollSection'
 import OurApproachSection from '@/components/OurApproachSection'
 import ContactSection from '@/components/ContactSection'
 import ServiceCard from '@/components/ServiceCard'
+import BlogCard from '@/components/BlogCard'
 import ExternalLinkIcon from '@/components/ExternalLinkIcon'
 import type { BlogPost, Project } from '@/lib/content'
 
@@ -272,53 +272,19 @@ export default function HomeClient({ projects, blogPosts = [] }: HomeClientProps
         <div className="w-[90%] max-w-[90vw] mx-auto px-4 sm:px-6 lg:px-8">
           <header className="mb-12 sm:mb-16">
             <h2 className="title-entrance text-4xl sm:text-5xl lg:text-6xl font-display font-light text-white leading-tight mb-4">
-              Latest Insights
+              Blog
             </h2>
             <p className="fade-in-up text-white/80 text-base sm:text-lg max-w-2xl leading-relaxed" data-delay="0.1">
-              Thoughts, tutorials, and insights on web development and design
+              Ideas, tutoriales y reflexiones sobre desarrollo web y diseño
             </p>
           </header>
           {blogPosts.length > 0 ? (
             <>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-10 sm:mb-12">
                 {blogPosts.map((post, index) => (
-                  <Link
-                    key={post.slug}
-                    href={`/blog/${post.slug}`}
-                    className="fade-in-up group block"
-                    data-delay={index * 0.08}
-                  >
-                    <article className="h-full rounded-lg border border-gray-800 bg-gray-900/80 overflow-hidden hover:border-[#7dd3fc]/50 transition-all duration-300">
-                      {post.coverImage && (
-                        <div className="relative aspect-[16/10] overflow-hidden">
-                          <Image
-                            src={post.coverImage}
-                            alt={post.title}
-                            fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
-                            sizes="(max-width: 768px) 100vw, 33vw"
-                            unoptimized
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                        </div>
-                      )}
-                      <div className="p-5 sm:p-6">
-                        <p className="font-mono text-xs text-white/60 mb-2">
-                          {new Date(post.date).toLocaleDateString('en-US', {
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric',
-                          })}
-                        </p>
-                        <h3 className="font-display font-light text-lg sm:text-xl text-white group-hover:text-[#7dd3fc] transition-colors line-clamp-2">
-                          {post.title}
-                        </h3>
-                        {post.author && (
-                          <p className="text-white/60 text-sm mt-2">By {post.author}</p>
-                        )}
-                      </div>
-                    </article>
-                  </Link>
+                  <div key={post.slug} className="fade-in-up h-full" data-delay={index * 0.08}>
+                    <BlogCard post={post} index={index} animate={false} showExcerpt={false} />
+                  </div>
                 ))}
               </div>
               <div className="fade-in-up">
@@ -326,7 +292,7 @@ export default function HomeClient({ projects, blogPosts = [] }: HomeClientProps
                   href="/blog"
                   className="inline-flex items-center gap-2 text-white font-mono text-xs sm:text-sm tracking-[0.2em] uppercase hover:text-[#7dd3fc] transition-colors border-b border-white/60 pb-1.5 hover:border-[#7dd3fc]"
                 >
-                  Read All Posts
+                  Ver todas las publicaciones
                   <ExternalLinkIcon className="text-base ml-0.5" />
                 </Link>
               </div>
@@ -337,7 +303,7 @@ export default function HomeClient({ projects, blogPosts = [] }: HomeClientProps
                 href="/blog"
                 className="inline-flex items-center gap-2 text-white font-mono text-xs sm:text-sm tracking-[0.2em] uppercase hover:text-[#7dd3fc] transition-colors border-b border-white/60 pb-1.5 hover:border-[#7dd3fc]"
               >
-                Read All Posts
+                Ver todas las publicaciones
                 <ExternalLinkIcon className="text-base ml-0.5" />
               </Link>
             </div>

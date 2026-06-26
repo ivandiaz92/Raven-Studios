@@ -5,7 +5,7 @@
 export const SITE_NAME = 'Aspect'
 /** Short uppercase label for header edge, footer wordmark companion */
 export const SITE_NAME_MARK = 'ASPECT'
-export const SITE_TAGLINE = 'Digital Crafts for Ambitious Brands'
+export const SITE_TAGLINE = 'Diseño y desarrollo para marcas con ambición'
 /** Vertical strip text (right edge) */
 export const SITE_EDGE_LABEL = 'ASPECT DIGITAL STUDIO'
 

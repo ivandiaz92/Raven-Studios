@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Get in touch',
+  title: 'Cuéntanos tu proyecto',
   description:
     'Brief para cotización de sitio web. Completa el formulario y te enviaremos una cotización clara y bien definida.',
 }

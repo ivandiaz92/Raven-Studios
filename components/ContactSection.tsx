@@ -3,10 +3,10 @@
 import { useState } from 'react'
 
 const SERVICE_OPTIONS = [
-  'Research & Strategy',
-  'UX / UI Design',
-  'Webflow / Framer development',
-  'Custom Development',
+  'Investigación y estrategia',
+  'Diseño UX / UI',
+  'Desarrollo en Webflow / Framer',
+  'Desarrollo a medida',
 ] as const
 
 interface ContactSectionProps {
@@ -65,13 +65,12 @@ export default function ContactSection({ animate = true }: ContactSectionProps) 
             {/* Left: CTA / message */}
             <div className="lg:col-span-5 flex flex-col justify-center">
               <h2 className={`${entrance} text-3xl sm:text-6xl lg:text-[4.95rem] font-display font-light text-white leading-tight mb-4`}>
-                Ready to
+                ¿Listo para
                 <br />
-                elevate your brand?
+                llevar tu marca al siguiente nivel?
               </h2>
               <p className={`${fadeIn} text-white/80 text-base sm:text-lg leading-relaxed`} data-delay="0.12">
-                If this resonates with you, let&apos;s collaborate and bring your vision to life.
-                We&apos;re here to help!
+                Si te resuena lo que hacemos, escríbenos y construyamos tu proyecto juntos.
               </p>
             </div>
 
@@ -80,33 +79,33 @@ export default function ContactSection({ animate = true }: ContactSectionProps) 
               <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
                 <div>
                   <label htmlFor="contact-name" className="block text-sm font-medium text-white/90 mb-2">
-                    Name
+                    Nombre
                   </label>
                   <input
                     id="contact-name"
                     type="text"
                     name="name"
                     required
-                    placeholder="Your name"
+                    placeholder="Tu nombre"
                     className="w-full min-h-11 rounded-lg border border-gray-700/80 bg-black/40 px-4 py-3 text-white leading-normal placeholder:text-gray-500 transition-colors [overflow-wrap:anywhere] focus:border-[#7dd3fc]/60 focus:outline-none focus:ring-1 focus:ring-[#7dd3fc]/30 focus-visible:ring-2"
                   />
                 </div>
                 <div>
                   <label htmlFor="contact-email" className="block text-sm font-medium text-white/90 mb-2">
-                    Email
+                    Correo
                   </label>
                   <input
                     id="contact-email"
                     type="email"
                     name="email"
                     required
-                    placeholder="you@company.com"
+                    placeholder="tu@empresa.com"
                     className="w-full min-h-11 rounded-lg border border-gray-700/80 bg-black/40 px-4 py-3 text-white leading-normal placeholder:text-gray-500 transition-colors [overflow-wrap:anywhere] focus:border-[#7dd3fc]/60 focus:outline-none focus:ring-1 focus:ring-[#7dd3fc]/30 focus-visible:ring-2"
                   />
                 </div>
                 <div>
                   <label htmlFor="contact-service" className="block text-sm font-medium text-white/90 mb-2">
-                    Service of your interest
+                    Servicio de interés
                   </label>
                   <select
                     id="contact-service"
@@ -120,7 +119,7 @@ export default function ContactSection({ animate = true }: ContactSectionProps) 
                       paddingRight: '2.5rem',
                     }}
                   >
-                    <option value="">Select...</option>
+                    <option value="">Selecciona...</option>
                     {SERVICE_OPTIONS.map((opt) => (
                       <option key={opt} value={opt}>
                         {opt}
@@ -130,13 +129,13 @@ export default function ContactSection({ animate = true }: ContactSectionProps) 
                 </div>
                 <div>
                   <label htmlFor="contact-message" className="block text-sm font-medium text-white/90 mb-2">
-                    Message
+                    Mensaje
                   </label>
                   <textarea
                     id="contact-message"
                     name="message"
                     rows={4}
-                    placeholder="Tell us about your project..."
+                    placeholder="Cuéntanos sobre tu proyecto..."
                     className="w-full min-h-[100px] resize-y rounded-lg border border-gray-700/80 bg-black/40 px-4 py-3 text-white leading-normal placeholder:text-gray-500 transition-colors [overflow-wrap:anywhere] focus:border-[#7dd3fc]/60 focus:outline-none focus:ring-1 focus:ring-[#7dd3fc]/30 focus-visible:ring-2"
                   />
                 </div>
@@ -146,7 +145,13 @@ export default function ContactSection({ animate = true }: ContactSectionProps) 
                     disabled={status === 'sending'}
                     className="inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-[#7dd3fc]/40 bg-[#7dd3fc]/15 px-8 py-3.5 text-sm font-medium tracking-wide text-[#7dd3fc] transition-colors hover:border-[#7dd3fc]/60 hover:bg-[#7dd3fc]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7dd3fc] focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
                   >
-                    {status === 'sending' ? 'Sending...' : status === 'done' ? 'Message sent' : status === 'error' ? 'Try again' : 'Submit'}
+                    {status === 'sending'
+                      ? 'Enviando...'
+                      : status === 'done'
+                        ? 'Mensaje enviado'
+                        : status === 'error'
+                          ? 'Inténtalo de nuevo'
+                          : 'Enviar'}
                   </button>
                 </div>
               </form>

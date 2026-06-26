@@ -67,7 +67,7 @@ export default function Footer() {
         <div className="mx-auto w-full max-w-[min(100%,90vw)] px-4 py-12 min-[480px]:px-5 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 min-[480px]:grid-cols-2 md:grid-cols-3 gap-8">
           <div className="footer-item">
-            <Link href="/" className="inline-block mb-4" aria-label="Home">
+            <Link href="/" className="inline-block mb-4" aria-label="Inicio">
               <Image
                 src={LOGO_WHITE}
                 alt=""
@@ -79,19 +79,19 @@ export default function Footer() {
               />
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed [overflow-wrap:anywhere]">
-              We design and develop clear, functional, and well-structured digital experiences.
+              Diseñamos y desarrollamos experiencias digitales claras, funcionales y bien estructuradas.
             </p>
           </div>
 
           <div className="footer-item">
-            <h4 className="text-lg font-semibold mb-4 text-white leading-snug">Quick Links</h4>
+            <h4 className="text-lg font-semibold mb-4 text-white leading-snug">Enlaces</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
                   href="/portfolio"
                   className="inline-flex min-h-11 items-center text-gray-400 hover:text-purple-400 transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 >
-                  Portfolio
+                  Portafolio
                 </Link>
               </li>
               <li>
@@ -116,14 +116,14 @@ export default function Footer() {
                   prefetch={false}
                   className="inline-flex min-h-11 items-center text-gray-400 hover:text-purple-400 transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                 >
-                  Contact
+                  Contacto
                 </Link>
               </li>
             </ul>
           </div>
 
           <div className="footer-item">
-            <h4 className="text-lg font-semibold mb-4 text-white leading-snug">Connect</h4>
+            <h4 className="text-lg font-semibold mb-4 text-white leading-snug">Redes</h4>
             <div className="flex flex-wrap gap-2 sm:gap-3">
               <a
                 href="https://twitter.com"
@@ -152,7 +152,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 pt-8 border-t border-gray-800 text-center text-sm text-gray-400 footer-item">
-          <p>&copy; {currentYear} {SITE_NAME}. All rights reserved.</p>
+          <p>&copy; {currentYear} {SITE_NAME}. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>

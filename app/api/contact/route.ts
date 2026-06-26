@@ -8,14 +8,14 @@ export async function POST(request: Request) {
   const apiKey = process.env.RESEND_API_KEY
   if (!apiKey) {
     return NextResponse.json(
-      { error: 'Contact form is not configured (missing RESEND_API_KEY)' },
+      { error: 'El formulario de contacto no está configurado (falta RESEND_API_KEY)' },
       { status: 503 }
     )
   }
   const to = CONTACT_EMAIL_TO.trim()
   if (!to) {
     return NextResponse.json(
-      { error: 'Contact form is not configured (missing CONTACT_EMAIL_TO)' },
+      { error: 'El formulario de contacto no está configurado (falta CONTACT_EMAIL_TO)' },
       { status: 503 }
     )
   }
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
   try {
     body = await request.json()
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
+    return NextResponse.json({ error: 'JSON inválido' }, { status: 400 })
   }
 
   const name = String(body.name ?? '').trim()
@@ -35,31 +35,31 @@ export async function POST(request: Request) {
 
   if (!name || !email) {
     return NextResponse.json(
-      { error: 'Name and email are required' },
+      { error: 'Nombre y correo son obligatorios' },
       { status: 400 }
     )
   }
 
   const html = `
-    <h2>New contact form submission</h2>
-    <p><strong>Name:</strong> ${escapeHtml(name)}</p>
-    <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-    <p><strong>Service of interest:</strong> ${escapeHtml(service) || '—'}</p>
-    <p><strong>Message:</strong></p>
+    <h2>Nuevo mensaje del formulario de contacto</h2>
+    <p><strong>Nombre:</strong> ${escapeHtml(name)}</p>
+    <p><strong>Correo:</strong> ${escapeHtml(email)}</p>
+    <p><strong>Servicio de interés:</strong> ${escapeHtml(service) || '—'}</p>
+    <p><strong>Mensaje:</strong></p>
     <pre style="white-space: pre-wrap; font-family: inherit;">${escapeHtml(message) || '—'}</pre>
   `
 
   const { data, error } = await resend.emails.send({
     from: CONTACT_FROM,
     to: [to],
-    subject: `[Aspect] Contact from ${name}`,
+    subject: `[Aspect] Contacto de ${name}`,
     html,
   })
 
   if (error) {
     console.error('Resend error:', error)
     return NextResponse.json(
-      { error: error.message || 'Failed to send email' },
+      { error: error.message || 'No se pudo enviar el correo' },
       { status: 500 }
     )
   }

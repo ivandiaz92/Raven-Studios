@@ -148,7 +148,7 @@ export default function ContactPage() {
 
         <header className="mb-12">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-light text-white leading-tight mb-4">
-            Get in touch
+            Cuéntanos tu proyecto
           </h1>
           <p className="text-white/80 text-lg sm:text-xl leading-relaxed">
             Brief para cotización de sitio web. Tiempo estimado: 5–8 minutos. Con esta información te enviaremos una cotización clara.

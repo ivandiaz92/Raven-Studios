@@ -1,26 +1,26 @@
 ---
 slug: local-content-over-cms
-title: When Local Content Beats a Hosted CMS
+title: Cuándo el contenido local gana a un CMS en la nube
 date: 2026-04-20
 author: Ivan D
-excerpt: For small portfolio sites, local content can be faster, cheaper, and easier to maintain than a hosted CMS.
-coverImage: /images/HeroPhone-Left.png
+excerpt: En sitios de portafolio pequeños, el contenido local puede ser más rápido, barato y fácil de mantener que un CMS alojado.
+coverImage: /images/blog/blog-local-content-cover.png
 tags:
   - Next.js
-  - Content
-  - Workflow
+  - Contenido
+  - Flujo de trabajo
 ---
 
-A hosted CMS is useful when non-technical teams need frequent publishing workflows, roles, previews, and editorial approval.
+Un CMS en la nube tiene sentido cuando equipos no técnicos necesitan publicar seguido, con roles, previews y flujos de aprobación.
 
-For a small portfolio or studio site, that can be more infrastructure than the project needs.
+Para un portafolio o sitio de estudio pequeño, a veces es más infraestructura de la que el proyecto necesita.
 
-## Keep The Workflow Close To The Site
+## Mantén el flujo cerca del sitio
 
-Projects can live as JSON because they are structured. Blog posts can live as Markdown because they are written content. Images can live in `public/`, where Next.js can serve them directly.
+Los proyectos pueden vivir como JSON porque son datos estructurados. Las entradas del blog pueden vivir como Markdown porque son texto. Las imágenes van en `public/`, donde Next.js las sirve directo.
 
-That gives you a content workflow that is simple, versioned, and not affected by external usage limits.
+Eso te da un flujo de contenido simple, versionado y sin depender de límites de uso externos.
 
-## The Tradeoff
+## El tradeoff
 
-You lose a browser-based admin panel, but you gain reliability and control. For a lean studio site, that tradeoff is often worth it.
+Pierdes un panel de administración en el navegador, pero ganas confiabilidad y control. Para un sitio de estudio ágil, ese intercambio suele valer la pena.

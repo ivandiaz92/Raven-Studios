@@ -32,10 +32,10 @@ export default function NotFound() {
           404
         </p>
         <h2 className="text-2xl font-semibold mb-4 text-white" style={{ color: '#fff', fontSize: '1.5rem', marginBottom: '1rem' }}>
-          Page Not Found
+          Página no encontrada
         </h2>
         <p className="text-gray-400 mb-8" style={{ color: '#9ca3af', marginBottom: '2rem' }}>
-          The page you&apos;re looking for doesn&apos;t exist.
+          La página que buscas no existe.
         </p>
         <Link
           href="/"
@@ -50,7 +50,7 @@ export default function NotFound() {
             background: 'linear-gradient(to right, #a855f7, #06b6d4)',
           }}
         >
-          Go Home
+          Ir al inicio
         </Link>
       </div>
     </div>
