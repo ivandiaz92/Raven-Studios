@@ -124,24 +124,22 @@ html {
   font-size: clamp(0.95rem, 0.3rem + 0.9vw, 1.35rem);
   line-height: 1.5;
 }
-/* Service cards: must scale with viewport (vw in middle) — not sub-body size on desktop */
-#soluciones .text-service-title {
-  font-size: clamp(1.05rem, 0.3rem + 1.1vw, 1.5rem);
-  line-height: 1.25;
-  letter-spacing: -0.01em;
+#soluciones .text-service-slide-title {
+  font-size: clamp(1.65rem, 0.85rem + 2.8vw, 3.1rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
 }
-#soluciones .text-service-body {
-  font-size: clamp(0.95rem, 0.25rem + 0.9vw, 1.2rem);
-  line-height: 1.6;
+#soluciones .text-service-slide-body {
+  font-size: clamp(1rem, 0.45rem + 1.05vw, 1.35rem);
+  line-height: 1.65;
+}
+#soluciones .text-service-slide-index {
+  font-size: clamp(0.75rem, 0.35rem + 0.55vw, 0.9rem);
+  line-height: 1.35;
 }
 #soluciones .text-soluciones-cta {
   font-size: clamp(0.85rem, 0.25rem + 0.85vw, 1.15rem);
   line-height: 1.35;
-}
-/* Card content box: padding + gap scale with width (rules: spacing proportional) */
-#soluciones .service-card-content {
-  padding: clamp(0.75rem, 0.35rem + 1.1vw, 1.6rem);
-  gap: clamp(0.5rem, 0.25rem + 0.5vw, 0.9rem);
 }
 
 /* Portfolio scroll: tall min-height only on desktop (sticky left column) */

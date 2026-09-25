@@ -10,7 +10,7 @@ import HeroFloatingPhones from '@/components/HeroFloatingPhones'
 import PortfolioScrollSection from '@/components/PortfolioScrollSection'
 import OurApproachSection from '@/components/OurApproachSection'
 import ContactSection from '@/components/ContactSection'
-import ServiceCard from '@/components/ServiceCard'
+import ServicesSlider from '@/components/ServicesSlider'
 import BlogCard from '@/components/BlogCard'
 import ExternalLinkIcon from '@/components/ExternalLinkIcon'
 import type { BlogPost, Project } from '@/lib/content'
@@ -177,13 +177,13 @@ export default function HomeClient({ projects, blogPosts = [] }: HomeClientProps
         </div>
       </section>
 
-      {/* Strategy / Services — desktop: full viewport below header, flex-distributed; mobile: natural height + scroll in grid if needed */}
+      {/* Strategy / Services — featured slider with circuit frame */}
       <section
         id="soluciones"
-        className="mb-12 flex flex-col pt-[5.25rem] pb-6 sm:mb-16 sm:pt-28 sm:pb-8 lg:mb-20 lg:h-[100svh] lg:max-h-[100svh] lg:overflow-hidden lg:pb-8 xl:mb-24"
+        className="mb-12 flex flex-col pt-[5.25rem] pb-6 sm:mb-16 sm:pt-28 sm:pb-8 lg:mb-20 lg:pb-12 xl:mb-24"
       >
-        <div className="mx-auto flex w-full max-w-[min(100%,90vw)] flex-col px-4 min-[480px]:px-5 sm:px-6 lg:h-full lg:min-h-0 lg:flex-1 lg:px-8">
-          <div className="shrink-0 text-balance sm:mb-1 lg:mb-5">
+        <div className="mx-auto flex w-full max-w-[min(100%,90vw)] flex-col px-4 min-[480px]:px-5 sm:px-6 lg:px-8">
+          <div className="shrink-0 text-balance sm:mb-1 lg:mb-6">
             <h2 className="title-entrance text-soluciones-heading font-display font-light text-[#7dd3fc]">
               Soluciones digitales y estratégicas
             </h2>
@@ -194,62 +194,10 @@ export default function HomeClient({ projects, blogPosts = [] }: HomeClientProps
               Integrando diseño, tecnología y visión de negocio
             </p>
           </div>
-          <div className="mt-3 flex flex-col sm:mt-4 lg:mt-0 lg:min-h-0 lg:flex-1 lg:overflow-hidden">
-            <div
-              className="grid h-full min-h-0 w-full grid-cols-2 auto-rows-min gap-2.5 min-[480px]:gap-3 sm:gap-3.5
-              max-lg:content-start
-              lg:min-h-0 lg:grid-cols-3 lg:grid-rows-2 [&>*]:min-h-0
-              lg:gap-x-4 lg:gap-y-3 xl:gap-x-5 xl:gap-y-4"
-            >
-              {[
-                {
-                  title: 'Diseño Web Personalizado',
-                  description:
-                    'Reflejamos la esencia de tu marca a través de un sitio web adaptado a tu estilo y a tu mercado.',
-                  bgImage: '/images/visual_bg.avif',
-                },
-                {
-                  title: 'Desarrollo a la medida',
-                  description:
-                    'Construimos funcionalidades y experiencias digitales hechas para ti: código limpio, integraciones sólidas y una base técnica que escala con tu negocio.',
-                  bgImage: '/images/digital_bg.avif',
-                },
-                {
-                  title: 'Tiendas Virtuales',
-                  description:
-                    'Gestiona, posiciona y vende tus productos a través de una tienda virtual que cautive el interés de tu audiencia.',
-                  bgImage: '/images/performance_bg.avif',
-                },
-                {
-                  title: 'Optimización SEO',
-                  description:
-                    'Que tu marca se posicione orgánicamente a través de una estrategia de posicionamiento SEO.',
-                  bgImage: '/images/digital_bg.avif',
-                },
-                {
-                  title: 'Investigación de marca y redacción creativa',
-                  description:
-                    'Traducimos tus ideas a textos persuasivos que generen impacto y empaticen con tu audiencia.',
-                  bgImage: '/images/visual_bg.avif',
-                },
-                {
-                  title: 'Web Hosting y Mantenimiento',
-                  description:
-                    'Hosting confiable, actualizaciones, respaldos y soporte continuo para que tu sitio esté siempre en línea, seguro y al día.',
-                  bgImage: '/images/performance_bg.avif',
-                },
-              ].map((service, index) => (
-                <ServiceCard
-                  key={index}
-                  index={index}
-                  title={service.title}
-                  description={service.description}
-                  bgImage={service.bgImage}
-                />
-              ))}
-            </div>
+          <div className="mt-4 flex flex-col sm:mt-5 lg:mt-2">
+            <ServicesSlider />
           </div>
-          <div className="fade-in-up mt-5 shrink-0 sm:mt-6 lg:mt-5">
+          <div className="fade-in-up mt-6 shrink-0 sm:mt-8 lg:mt-8">
             <Link
               href="/agenda"
               className="text-soluciones-cta inline-flex min-h-12 items-center gap-2 border-b border-white/70 pb-1 font-mono uppercase tracking-[0.18em] text-white transition-colors hover:border-[#7dd3fc] hover:text-[#7dd3fc] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7dd3fc] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
